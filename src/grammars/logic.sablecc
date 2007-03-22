@@ -1,0 +1,73 @@
+Package nl.rug.ai.mas.prover.parser;
+
+Helpers
+	lowercase = ['a' .. 'z'];
+	uppercase = ['A' .. 'Z'];
+	digit = ['0' .. '9'];
+	tab = 9;
+	lf = 10;
+	cr = 13;
+	newline = cr lf | lf | cr;
+	any = [0x0 .. 0xffff];
+
+Tokens
+	prop = lowercase (lowercase | uppercase | digit | '_')*;
+	var = uppercase (lowercase | uppercase | digit | '_')*;
+	id = digit*;
+	and = '&';
+	or = '|';
+	impl = '>';
+	equiv = '=';
+	neg = '~';
+	box = '#';
+	dia = '%';
+	assign = ':';
+	term = ';';
+	lbrace = '{';
+	rbrace = '}';
+	comma = ',';
+	lparen = '(';
+	rparen = ')';
+	subscr = '_';
+	ignore = ' ' | newline;
+
+Ignored Tokens
+	ignore;
+
+Productions
+	command = {formula} formula term | 
+		{list} enclosed_formula_list term |
+		{assign} assignment term;
+
+	formula = {junction} junction;
+
+	simple_formula = {proposition} prop | {variable} var |
+		{negation} neg simple_formula |
+		{box} P.box simple_formula |
+		{dia} P.dia simple_formula |
+		{nest} lparen formula rparen;
+	junction = 
+		{base} [r]:simple_formula |
+		{con} [l]:junction and [r]:simple_formula |
+		{dis} [l]:junction or [r]:simple_formula |
+		{imp} [l]:junction impl [r]:simple_formula |
+		{eqv} [l]:junction equiv [r]:simple_formula;
+
+	box = {single} T.box | {multi} T.box subscr id;
+	dia = {single} T.dia | {multi} T.dia subscr id;
+
+	enclosed_formula_list = lbrace formula_list rbrace;
+
+	formula_list =
+		{formula_list_nonempty} formula_list_nonempty |
+		{fomula_list_empty} formula_list_empty;
+
+	formula_list_empty = 
+		{empty} ;
+
+	formula_list_nonempty = 
+		{base} formula |
+		{ind} formula_list_nonempty comma formula;
+
+	assignment =
+		var assign enclosed_formula_list;

@@ -4,15 +4,15 @@
 	<property name="build" location="build"/>
 	<property name="dist"  location="dist"/>
 	<property name="docs" location="docs"/>
-	<property name="sablecc.path"
-	          location=""/>
 
 	<!-- global definition of the classpath -->
 	<path id="project.class.path">
 		<pathelement location="build/"/>
-		<pathelement path="${sablecc.path}"/>
 		<pathelement path="${java.class.path}/"/>
 	</path>
+
+	<taskdef name="sablecc" classname="org.sablecc.ant.taskdef.Sablecc">
+	</taskdef>
 	
 	<target name="init">
 		<!-- Create the time stamp -->
@@ -21,10 +21,28 @@
 		<mkdir dir="${build}"/>
 	</target>
 
-	<target name="all" depends="">
+	<target name="all" depends="prover">
 	</target>
 
 	<!-- build targets here -->
+	<target name="prover-grammar" depends="init">
+		<echo message="Deleting the source directory: ${src}/nl/rug/ai/mas/prover/parser/"></echo>
+		<delete dir="${src}/nl/rug/ai/mas/prover/parser/" />
+		<sablecc src="${src}/grammars/" includes="*.sablecc, *.grammar"
+         outputdirectory="${src}"></sablecc>
+		<copy todir="${build}">
+		  <fileset dir="${src}">
+			 <include name="**/*.dat"/>
+			 <include name="**/*.txt"/>
+		  </fileset>
+		</copy>
+	</target>
+
+	<target name="prover" depends="prover-grammar">
+		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/prover/**">
+			<classpath path="${project.class.path}" />
+		</javac>
+	</target>
 
 	<!-- create jar file -->
 	<target name="dist" depends="all">
