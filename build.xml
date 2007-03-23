@@ -42,10 +42,23 @@
 	<target name="all" depends="prover">
 	</target>
 
-	<!-- build targets here -->
-	<target name="prover-grammar" depends="init">
-		<echo message="Deleting the source directory: ${src}/nl/rug/ai/mas/prover/parser/"></echo>
-		<delete dir="${src}/nl/rug/ai/mas/prover/parser/" />
+	<target name="clean" depends="clean-prover">
+		<delete dir="${build}" />
+	</target>
+
+	<target name="dist-clean" depends="clean">
+		<delete dir="${dist}" />
+		<delete dir="${docs}" />
+	</target>
+
+	<!-- PROVER build targets here -->
+	<target name="prover" depends="prover-grammar">
+		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/prover/**">
+			<classpath path="${project.class.path}" />
+		</javac>
+	</target>
+
+	<target name="prover-grammar" depends="init,clean-prover-grammar">
 		<sablecc src="${src}/grammars/" includes="*.sablecc, *.grammar"
          outputdirectory="${src}"></sablecc>
 		<copy todir="${build}">
@@ -56,10 +69,10 @@
 		</copy>
 	</target>
 
-	<target name="prover" depends="prover-grammar">
-		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/prover/**">
-			<classpath path="${project.class.path}" />
-		</javac>
+	<!-- cleaning tasks in addition to removing ${build} -->
+	<target name="clean-prover" depends="clean-prover-grammar" />
+	<target name="clean-prover-grammar">
+		<delete dir="${src}/nl/rug/ai/mas/prover/parser/" />
 	</target>
 
 	<!-- create jar file -->
