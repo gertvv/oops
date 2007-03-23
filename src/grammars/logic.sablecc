@@ -22,6 +22,7 @@ Helpers
 	lowercase = ['a' .. 'z'];
 	uppercase = ['A' .. 'Z'];
 	digit = ['0' .. '9'];
+	space = ' ';
 	tab = 9;
 	lf = 10;
 	cr = 13;
@@ -37,8 +38,10 @@ Tokens
 	impl = '>';
 	equiv = '=';
 	neg = '~';
-	box = '#';
-	dia = '%';
+	box_multi = '#_';
+	dia_multi = '%_';
+	box_single = '#';
+	dia_single = '%';
 	assign = ':';
 	term = ';';
 	lbrace = '{';
@@ -47,10 +50,11 @@ Tokens
 	lparen = '(';
 	rparen = ')';
 	subscr = '_';
-	ignore = ' ' | newline;
+	ignore = space | tab | newline;
+	comment = '/''/' [any - [cr + lf]]* newline;
 
 Ignored Tokens
-	ignore;
+	ignore, comment;
 
 Productions
 	command = {formula} formula term | 
@@ -71,8 +75,8 @@ Productions
 		{imp} [l]:junction impl [r]:simple_formula |
 		{eqv} [l]:junction equiv [r]:simple_formula;
 
-	box = {single} T.box | {multi} T.box subscr id;
-	dia = {single} T.dia | {multi} T.dia subscr id;
+	box = {single} box_single | {multi} box_multi id;
+	dia = {single} dia_single | {multi} dia_multi id;
 
 	enclosed_formula_list = lbrace formula_list rbrace;
 
