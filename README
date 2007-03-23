@@ -1,0 +1,11 @@
+In order to build the sources in this directory you need:
+
+Sun Java 1.5 or higher (or any compatible implementation)
+http://java.sun.com/
+
+Apache Ant, 1.6.5 has been tested
+http://ant.apache.org/
+
+SableCC, version 3.2 (supporting generics) or higher
+SableCC ant task, version 1.0.1 or higher
+http://sablecc.org/
