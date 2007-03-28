@@ -45,7 +45,7 @@ public class ParseTest extends DepthFirstAdapter {
 		}
 		System.out.println("");
 	}
-
+/*
 	public void inAConJunction(AConJunction node) {
 		System.out.print("&");
 	}
@@ -61,13 +61,13 @@ public class ParseTest extends DepthFirstAdapter {
 	public void inAEqvJunction(AEqvJunction node) {
 		System.out.print("=");
 	}
-
+*/
 	/*
 	public void inABaseConjunction(ABaseConjunction node) {
 		System.out.print("&");
 	}
 	*/
-
+/*
 	public void inAPropositionSimpleFormula(APropositionSimpleFormula node) {
 		System.out.print(node.getProp().getText());
 	}
@@ -108,4 +108,5 @@ public class ParseTest extends DepthFirstAdapter {
 	public void inAAssignment(AAssignment node) {
 		System.out.print(node.getVar().getText() + " : ");
 	}
+*/
 }

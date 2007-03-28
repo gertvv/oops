@@ -57,39 +57,108 @@ Ignored Tokens
 	ignore, comment;
 
 Productions
-	command = {formula} formula term | 
-		{list} enclosed_formula_list term |
-		{assign} assignment term;
+	command {->command} =
+		{formula} formula term
+			{ -> New command.formula(formula.formula) } | 
+		{list} [list]:enclosed_formula_list term 
+			{ -> New command.formula_list(list.formula_list) } |
+		{assign} assignment term
+			{ -> New command.assignment(assignment.assignment) };
 
-	formula = {junction} junction;
+	assignment {->assignment} =
+		var assign [list]:enclosed_formula_list
+			{ -> New assignment(var, list.formula_list) };
 
-	simple_formula = {proposition} prop | {variable} var |
-		{negation} neg simple_formula |
-		{box} P.box simple_formula |
-		{dia} P.dia simple_formula |
-		{nest} lparen formula rparen;
-	junction = 
-		{base} [r]:simple_formula |
-		{con} [l]:junction and [r]:simple_formula |
-		{dis} [l]:junction or [r]:simple_formula |
-		{imp} [l]:junction impl [r]:simple_formula |
-		{eqv} [l]:junction equiv [r]:simple_formula;
+	formula {-> formula} =
+		{imp} [l]:disjunction impl [r]:formula
+			{ -> New formula.implication(l.formula, r.formula) } |
+		{eqv} [l]:disjunction equiv [r]:formula
+			{ -> New formula.bi_implication(l.formula, r.formula) } |
+		{base} disjunction
+			{ -> disjunction.formula };
 
-	box = {single} box_single | {multi} box_multi id;
-	dia = {single} dia_single | {multi} dia_multi id;
+	simple_formula {->formula} =
+		{proposition} prop 
+			{ -> New formula.proposition(prop) } |
+		{variable} var
+			{ -> New formula.variable(var) } |
+		{negation} neg simple_formula 
+			{ -> New formula.negation(simple_formula.formula) } |
+		{box} P.box simple_formula 
+			{ -> New formula.box(box.box, simple_formula.formula) } |
+		{dia} P.dia simple_formula 
+			{ -> New formula.diamond(dia.diamond, simple_formula.formula) } |
+		{nest} lparen formula rparen
+			{ -> formula.formula };
 
-	enclosed_formula_list = lbrace formula_list rbrace;
+	disjunction {->formula} = 
+		{base} conjunction
+			{ -> conjunction.formula } |
+		{disj} [l]:disjunction or [r]:conjunction
+			{ -> New formula.disjunction(l.formula, r.formula) };
 
-	formula_list =
-		{formula_list_nonempty} formula_list_nonempty |
-		{fomula_list_empty} formula_list_empty;
+	conjunction {->formula} = 
+		{base} [r]:simple_formula 
+			{ -> r.formula } |
+		{conj} [l]:conjunction and [r]:simple_formula
+			{ -> New formula.conjunction(l.formula, r.formula) };
 
-	formula_list_empty = 
-		{empty} ;
+	box {-> box} =
+		{single} box_single
+			{ -> New box.empty() } |
+		{multi} box_multi P.id
+			{ -> New box.id(id.id) } ;
+	dia {-> diamond} = 
+		{single} dia_single 
+			{ -> New diamond.empty() } |
+		{multi} dia_multi P.id
+			{ -> New diamond.id(id.id) } ;
 
-	formula_list_nonempty = 
-		{base} formula |
-		{ind} formula_list_nonempty comma formula;
+	id {->P.id} =
+		T.id { -> New id(id) };
 
-	assignment =
-		var assign enclosed_formula_list;
+	enclosed_formula_list {-> formula_list} =
+		lbrace formula_list rbrace
+			{ -> formula_list.formula_list } ;
+
+	formula_list {->formula_list} =
+		{formula_list_nonempty} [list]:formula_list_nonempty 
+			{ -> New formula_list([list.formula]) } |
+		{fomula_list_empty} [list]:formula_list_empty
+			{ -> New formula_list([list.formula]) } ;
+
+	formula_list_empty {->formula*} = 
+		{empty} { -> [] };
+
+	formula_list_nonempty {-> formula*} = 
+		{base} formula
+			{ -> [formula.formula] } |
+		{ind} [list]:formula_list_nonempty comma formula
+			{ -> [list.formula, formula.formula] };
+
+Abstract Syntax Tree
+	command = {formula} formula |
+		{formula_list} formula_list |
+		{assignment} assignment;
+
+	assignment = [l]:var [r]:formula_list;
+
+	formula_list = formula*;
+
+	formula = 
+		{proposition} prop |
+		{variable} var |
+		{negation} formula |
+		{box} box formula |
+		{diamond} diamond formula |
+		{conjunction} [l]:formula [r]:formula |
+		{disjunction} [l]:formula [r]:formula |
+		{implication} [l]:formula [r]:formula |
+		{bi_implication} [l]:formula [r]:formula;
+
+	proposition = proposition;
+	variable = variable;
+	id = T.id;
+
+	box = {empty} | {id} P.id;
+	diamond = {empty} | {id} P.id;
