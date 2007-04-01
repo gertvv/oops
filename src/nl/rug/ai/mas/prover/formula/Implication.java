@@ -20,5 +20,49 @@
 package nl.rug.ai.mas.prover.formula;
 
 public class Implication extends PropositionalF {
+	private Formula d_left;
+	private Formula d_right;
 
+	public Implication(Formula l, Formula r) {
+		d_left = l;
+		d_right = r;
+	}
+
+	public Formula getLeft() {
+		return d_left;
+	}
+
+	public Formula getRight() {
+		return d_right;
+	}
+
+	public boolean equals(Object o) {
+		if (o != null) {
+			try {
+				Implication other = (Implication) o;
+				if (other.d_left.equals(d_left) && other.d_right.equals(d_right)) {
+					return true;
+				}
+			} catch (ClassCastException e) {
+			}
+		}
+		return false;
+	}
+
+	public String toString() {
+		return "(" + d_left + " > " + d_right + ")";
+	}
+
+	public Substitution match(Formula f) {
+		try {
+			Implication x = (Implication)f;
+			Substitution l = d_left.match(x.d_left);
+			Substitution r = d_right.match(x.d_right);
+			if (l == null || r == null || l.merge(r) == false)
+				return null;
+			return l;
+		} catch (ClassCastException e) {
+		}
+		return null;
+	}
 }

@@ -19,6 +19,44 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class Variable extends Formula {
+import java.util.*;
 
+public class Variable extends Formula {
+	private String d_name;
+	private Vector<VariableReference> d_refs;
+	
+	public Variable(String name) {
+		d_name = name;
+		d_refs = new Vector<VariableReference>();
+	}
+
+	public void add(VariableReference r) {
+		d_refs.add(r);
+	}
+
+	public void merge(Variable other) {
+		for (VariableReference r : other.d_refs) {
+			r.set(this);
+			d_refs.add(r);
+		}
+		other.d_refs.clear();
+	}
+
+	public String getName() {
+		return d_name;
+	}
+
+	public String toString() {
+		return d_name;
+	}
+
+	public boolean equals(Object other) {
+		return other == this;
+	}
+
+	public Substitution match(Formula f) {
+		Substitution s = new Substitution();
+		s.put(this, f);
+		return s;
+	}
 }

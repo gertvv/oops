@@ -19,8 +19,40 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class UniBox extends UniModalF {
-	public Substitution match(Formula f) {
-		return null;
+import java.util.*;
+
+/**
+ * A substitution of formulas for variables
+ */
+public class Substitution extends HashMap<Variable, Formula> {
+	public Substitution() {
+		super();
+	}
+
+	public boolean merge(Substitution other) {
+		for (Map.Entry<Variable, Formula> e : other.entrySet()) {
+			Formula f = get(e.getKey());
+			if (f == null) {
+				put(e.getKey(), e.getValue());
+			} else {
+				if (!f.equals(e.getValue())) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public String toString() {
+		Iterator<Map.Entry<Variable, Formula>> it = entrySet().iterator();
+		String s = "[";
+		while (it.hasNext()) {
+			Map.Entry<Variable, Formula> e = it.next();
+			s += e.getValue() + "/" + e.getKey();
+			if (it.hasNext())
+				s += ", ";
+		}
+		s += "]";
+		return s;
 	}
 }

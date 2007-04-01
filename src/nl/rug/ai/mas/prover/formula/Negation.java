@@ -20,5 +20,39 @@
 package nl.rug.ai.mas.prover.formula;
 
 public class Negation extends PropositionalF {
+	private Formula d_right;
 
+	public Negation(Formula r) {
+		d_right = r;
+	}
+
+	public Formula getRight() {
+		return d_right;
+	}
+
+	public String toString() {
+		return "~" + d_right;
+	}
+
+	public boolean equals(Object o) {
+		if (o != null) {
+			try {
+				Negation other = (Negation) o;
+				if (other.d_right.equals(d_right)) {
+					return true;
+				}
+			} catch (ClassCastException e) {
+			}
+		}
+		return false;
+	}
+
+	public Substitution match(Formula f) {
+		try {
+			Negation n = (Negation)f;
+			return d_right.match(n.d_right);
+		} catch (ClassCastException e) {
+		}
+		return null;
+	}
 }

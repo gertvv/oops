@@ -20,5 +20,7 @@
 package nl.rug.ai.mas.prover.formula;
 
 public class UniDiamond extends UniModalF {
-
+	public Substitution match(Formula f) {
+		return null;
+	}
 }

@@ -19,6 +19,10 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class Formula {
-
+abstract public class Formula {
+	/**
+	 * Attempt to match this formula to another formula, returning a
+	 * substitution for the variables in this formula.
+	 */
+	abstract public Substitution match(Formula f);
 }

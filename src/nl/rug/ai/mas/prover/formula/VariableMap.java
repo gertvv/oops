@@ -19,8 +19,35 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class UniBox extends UniModalF {
-	public Substitution match(Formula f) {
-		return null;
+import java.util.*;
+
+/**
+ * A map from variable names to a class implementing them.
+ */
+public class VariableMap extends HashMap<String, Variable> {
+	public VariableMap() {
+		super();
+	}
+
+	public Variable getOrCreate(String name) {
+		Variable v = get(name);
+		if (v != null)
+			return v;
+		v = new Variable(name);
+		put(name, v);
+		return v;
+	}
+
+	public void merge(VariableMap other) {
+		for (Map.Entry<String, Variable> e : other.entrySet()) {
+			String name = e.getKey();
+			Variable var = get(name);
+			if (var != null) {
+				var.merge(e.getValue());
+			} else {
+				put(name, e.getValue());
+			}
+		}
+		other.clear();
 	}
 }

@@ -19,8 +19,23 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class UniBox extends UniModalF {
-	public Substitution match(Formula f) {
-		return null;
+import java.util.*;
+
+/**
+ * A map from proposition symbols to a class implementing them. This enables
+ * identification of different propositions.
+ */
+public class PropositionMap extends HashMap<String, Proposition> {
+	public PropositionMap() {
+		super();
+	}
+
+	public Proposition getOrCreate(String name) {
+		Proposition p = get(name);
+		if (p != null)
+			return p;
+		p = new Proposition(name);
+		put(name, p);
+		return p;
 	}
 }

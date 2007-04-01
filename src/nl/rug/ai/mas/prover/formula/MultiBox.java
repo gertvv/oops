@@ -20,5 +20,7 @@
 package nl.rug.ai.mas.prover.formula;
 
 public class MultiBox extends MultiModalF {
-
+	public Substitution match(Formula f) {
+		return null;
+	}
 }

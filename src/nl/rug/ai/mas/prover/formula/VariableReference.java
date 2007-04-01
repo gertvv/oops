@@ -19,8 +19,38 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class UniBox extends UniModalF {
+/**
+ * Holds a reference to a Variable object, used for unification of variables.
+ */
+public class VariableReference extends Formula {
+	private Variable d_var;
+
+	public VariableReference(Variable var) {
+		d_var = var;
+	}
+
+	public Variable get() {
+		return d_var;
+	}
+
+	public void set(Variable var) {
+		d_var = var;
+	}
+
+	public String toString() {
+		return d_var.toString();
+	}
+
+	public boolean equals(Object o) {
+		try {
+			VariableReference other = (VariableReference)o;
+			return other.d_var == d_var;
+		} catch (ClassCastException e) {
+		}
+		return false;
+	}
+
 	public Substitution match(Formula f) {
-		return null;
+		return d_var.match(f);
 	}
 }
