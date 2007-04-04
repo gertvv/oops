@@ -49,6 +49,7 @@ class TransformTest extends DepthFirstAdapter {
 	private class StackEntry {
 		public Formula d_formula;
 		public VariableMap<Formula> d_variableMap;
+		public VariableMap<Agent> d_agentMap;
 
 		public String toString() {
 			return d_formula.toString();
@@ -58,12 +59,40 @@ class TransformTest extends DepthFirstAdapter {
 	private LinkedList<StackEntry> d_stack = new LinkedList<StackEntry>(); 
 	private LinkedList<StackEntry> d_formulaList = new LinkedList<StackEntry>();
 	PropositionMap d_propMap = new PropositionMap();
+	Agent d_currentAgent = null;
+	AgentIdMap d_aidMap = new AgentIdMap();
 
 	public void outAPropositionFormula(APropositionFormula node) {
 		StackEntry entry = new StackEntry();
 		entry.d_formula = d_propMap.getOrCreate(node.getProp().getText());
 		entry.d_variableMap = new VariableMap<Formula>();
 		d_stack.addLast(entry);
+	}
+
+	public void outAId(AId node) {
+		d_currentAgent = d_aidMap.getOrCreate(node.getId().getText());
+	}
+
+	public void outABoxFormula(ABoxFormula node) {
+		StackEntry e = d_stack.removeLast();
+		if (d_currentAgent != null) {
+			e.d_formula = new MultiBox(d_currentAgent, e.d_formula);
+		} else {
+			e.d_formula = new UniBox(e.d_formula);
+		}
+		d_stack.addLast(e);
+		d_currentAgent = null;
+	}
+
+	public void outADiamondFormula(ADiamondFormula node) {
+		StackEntry e = d_stack.removeLast();
+		if (d_currentAgent != null) {
+			e.d_formula = new MultiDiamond(d_currentAgent, e.d_formula);
+		} else {
+			e.d_formula = new UniDiamond(e.d_formula);
+		}
+		d_stack.addLast(e);
+		d_currentAgent = null;
 	}
 
 	public void outAVariableFormula(AVariableFormula node) {
@@ -124,6 +153,9 @@ class TransformTest extends DepthFirstAdapter {
 	}
 
 	public void outAFormulaCommand(AFormulaCommand Node) {
+		// print the list of agents
+		System.out.println(d_aidMap);
+		// print the formula
 		System.out.println(d_stack.removeLast().d_formula);
 	}
 

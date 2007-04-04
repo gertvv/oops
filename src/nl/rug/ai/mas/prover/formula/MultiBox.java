@@ -20,7 +20,42 @@
 package nl.rug.ai.mas.prover.formula;
 
 public class MultiBox implements MultiModalF {
+	Formula d_right;
+	Agent d_agent;
+
+	public MultiBox(Agent a, Formula f) {
+		d_agent = a;
+		d_right = f;
+	}
+
+	public String toString() {
+		return "#_" + d_agent.toString() + d_right;
+	}
+
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		try {
+			MultiBox other = (MultiBox)o;
+			return d_right.equals(other.d_right) && d_agent.equals(other.d_agent);
+		} catch (ClassCastException e) {
+		}
+		return false;
+	}
+
 	public FullSubstitution match(Formula f) {
+		try {
+			MultiBox m = (MultiBox)f;
+			Substitution<Agent> a = d_agent.match(m.d_agent);
+			FullSubstitution r = d_right.match(m.d_right);
+			if (a == null || r == null)
+				return null;
+			FullSubstitution l = new FullSubstitution(a);
+			if (l.merge(r) == false)
+				return null;
+			return l;
+		} catch (ClassCastException e) {
+		}
 		return null;
 	}
 }

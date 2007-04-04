@@ -20,7 +20,33 @@
 package nl.rug.ai.mas.prover.formula;
 
 public class UniDiamond implements UniModalF {
+	Formula d_right;
+
+	public UniDiamond(Formula f) {
+		d_right = f;
+	}
+
+	public String toString() {
+		return "%" + d_right;
+	}
+
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		try {
+			UniDiamond other = (UniDiamond)o;
+			return d_right.equals(other.d_right);
+		} catch (ClassCastException e) {
+		}
+		return false;
+	}
+
 	public FullSubstitution match(Formula f) {
+		try {
+			UniDiamond m = (UniDiamond)f;
+			return d_right.match(m.d_right);
+		} catch (ClassCastException e) {
+		}
 		return null;
 	}
 }

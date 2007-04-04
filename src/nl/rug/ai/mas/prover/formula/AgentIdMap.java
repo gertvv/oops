@@ -19,34 +19,23 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class UniBox implements UniModalF {
-	Formula d_right;
+import java.util.*;
 
-	public UniBox(Formula f) {
-		d_right = f;
+/**
+ * A map from proposition symbols to a class implementing them. This enables
+ * identification of different propositions.
+ */
+public class AgentIdMap extends HashMap<String, AgentId> {
+	public AgentIdMap() {
+		super();
 	}
 
-	public String toString() {
-		return "#" + d_right;
-	}
-
-	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		try {
-			UniBox other = (UniBox)o;
-			return d_right.equals(other.d_right);
-		} catch (ClassCastException e) {
-		}
-		return false;
-	}
-
-	public FullSubstitution match(Formula f) {
-		try {
-			UniBox m = (UniBox)f;
-			return d_right.match(m.d_right);
-		} catch (ClassCastException e) {
-		}
-		return null;
+	public AgentId getOrCreate(String name) {
+		AgentId id = get(name);
+		if (id != null)
+			return id;
+		id = new AgentId(name);
+		put(name, id);
+		return id;
 	}
 }
