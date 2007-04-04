@@ -1,0 +1,44 @@
+\documentclass[a4paper, 10pt]{article}
+\usepackage{algorithm2e}
+
+\newcommand{\fn}[1]{{\sc #1}}
+
+\begin{document}
+\begin{algorithm}[H]
+\SetLine
+\KwIn{Formula, Branch, Queue}
+\KwOut{Open or Closed}
+Queue := \fn{clone}(Queue) \;
+Branch := \fn{newBranch}(Branch) \;
+\If{not Branch contains Formula}{
+	\If{Formula closes Branch}{
+		\Return{Closed}
+	}
+	\fn{add}(Branch, Formula) \;
+	\fn{add}(Queue, \fn{match}(Formula)) \;
+}
+\While{Queue non-empty}{
+	Match := \fn{removeFirst}(Queue) \;
+	\eIf{Match dictates a split}{
+		\For{Element $\in$ Match}{
+			Result := \fn{tableau}(Element) \;
+			\If{Result = Open}{
+				\Return{Open}
+			}
+		}
+		\Return{Closed}
+	}{ 
+		\For{Element $\in$ Match}{
+			\If{not Branch contains Element}{
+				\If{Element closes Branch}{
+					\Return{Closed}
+				}
+				\fn{add}(Branch, Element) \;
+				\fn{add}(Queue, Element) \;
+			}
+		}
+	}
+}
+\Return{Open}
+\end{algorithm}
+\end{document}

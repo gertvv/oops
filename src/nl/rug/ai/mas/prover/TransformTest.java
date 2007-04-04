@@ -157,7 +157,7 @@ class TransformTest extends DepthFirstAdapter {
 				if (s != null) {
 					System.out.println(s.toString() + f0 + " = " + f1);
 				} else {
-					System.out.println(f0 + " = " + f1);
+					System.out.println(f0 + " != " + f1);
 				}
 			}
 		}
