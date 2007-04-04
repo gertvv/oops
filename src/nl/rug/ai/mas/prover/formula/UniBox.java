@@ -19,8 +19,8 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class UniBox extends UniModalF {
-	public Substitution match(Formula f) {
+public class UniBox implements UniModalF {
+	public FullSubstitution match(Formula f) {
 		return null;
 	}
 }

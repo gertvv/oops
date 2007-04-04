@@ -22,20 +22,20 @@ package nl.rug.ai.mas.prover.formula;
 import java.util.*;
 
 /**
- * A substitution of formulas for variables
+ * A substitution of values for variables
  */
-public class Substitution extends HashMap<Variable, Formula> {
+public class Substitution<T> extends HashMap<Variable<T>, T> {
 	public Substitution() {
 		super();
 	}
 
-	public boolean merge(Substitution other) {
-		for (Map.Entry<Variable, Formula> e : other.entrySet()) {
-			Formula f = get(e.getKey());
-			if (f == null) {
+	public boolean merge(Substitution<T> other) {
+		for (Map.Entry<Variable<T>, T> e : other.entrySet()) {
+			T v = get(e.getKey());
+			if (v == null) {
 				put(e.getKey(), e.getValue());
 			} else {
-				if (!f.equals(e.getValue())) {
+				if (!v.equals(e.getValue())) {
 					return false;
 				}
 			}
@@ -44,10 +44,10 @@ public class Substitution extends HashMap<Variable, Formula> {
 	}
 
 	public String toString() {
-		Iterator<Map.Entry<Variable, Formula>> it = entrySet().iterator();
+		Iterator<Map.Entry<Variable<T>, T>> it = entrySet().iterator();
 		String s = "[";
 		while (it.hasNext()) {
-			Map.Entry<Variable, Formula> e = it.next();
+			Map.Entry<Variable<T>, T> e = it.next();
 			s += e.getValue() + "/" + e.getKey();
 			if (it.hasNext())
 				s += ", ";

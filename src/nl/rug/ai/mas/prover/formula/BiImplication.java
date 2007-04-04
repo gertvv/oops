@@ -19,7 +19,7 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class BiImplication extends PropositionalF {
+public class BiImplication implements PropositionalF {
 	private Formula d_left;
 	private Formula d_right;
 
@@ -53,11 +53,11 @@ public class BiImplication extends PropositionalF {
 		return false;
 	}
 
-	public Substitution match(Formula f) {
+	public FullSubstitution match(Formula f) {
 		try {
 			BiImplication x = (BiImplication)f;
-			Substitution l = d_left.match(x.d_left);
-			Substitution r = d_right.match(x.d_right);
+			FullSubstitution l = d_left.match(x.d_left);
+			FullSubstitution r = d_right.match(x.d_right);
 			if (l == null || r == null || l.merge(r) == false)
 				return null;
 			return l;

@@ -19,8 +19,6 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class UniDiamond implements UniModalF {
-	public FullSubstitution match(Formula f) {
-		return null;
-	}
+public interface Agent {
+	public Substitution<Agent> match(Agent other);
 }

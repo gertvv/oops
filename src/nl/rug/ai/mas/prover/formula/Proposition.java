@@ -19,7 +19,7 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class Proposition extends PropositionalF {
+public class Proposition implements PropositionalF {
 	private String d_name;
 	
 	public Proposition(String name) {
@@ -42,9 +42,9 @@ public class Proposition extends PropositionalF {
 		return this == other;
 	}
 
-	public Substitution match(Formula f) {
+	public FullSubstitution match(Formula f) {
 		if (equals(f)) {
-			return new Substitution();
+			return new FullSubstitution();
 		}
 		return null;
 	}

@@ -21,21 +21,21 @@ package nl.rug.ai.mas.prover.formula;
 
 import java.util.*;
 
-public class Variable extends Formula {
+public class Variable<T> {
 	private String d_name;
-	private Vector<VariableReference> d_refs;
+	private Vector<VariableReference<T>> d_refs;
 	
 	public Variable(String name) {
 		d_name = name;
-		d_refs = new Vector<VariableReference>();
+		d_refs = new Vector<VariableReference<T>>();
 	}
 
-	public void add(VariableReference r) {
+	public void add(VariableReference<T> r) {
 		d_refs.add(r);
 	}
 
-	public void merge(Variable other) {
-		for (VariableReference r : other.d_refs) {
+	public void merge(Variable<T> other) {
+		for (VariableReference<T> r : other.d_refs) {
 			r.set(this);
 			d_refs.add(r);
 		}
@@ -52,11 +52,5 @@ public class Variable extends Formula {
 
 	public boolean equals(Object other) {
 		return other == this;
-	}
-
-	public Substitution match(Formula f) {
-		Substitution s = new Substitution();
-		s.put(this, f);
-		return s;
 	}
 }

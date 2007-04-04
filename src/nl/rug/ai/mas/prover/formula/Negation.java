@@ -19,7 +19,7 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class Negation extends PropositionalF {
+public class Negation implements PropositionalF {
 	private Formula d_right;
 
 	public Negation(Formula r) {
@@ -47,7 +47,7 @@ public class Negation extends PropositionalF {
 		return false;
 	}
 
-	public Substitution match(Formula f) {
+	public FullSubstitution match(Formula f) {
 		try {
 			Negation n = (Negation)f;
 			return d_right.match(n.d_right);

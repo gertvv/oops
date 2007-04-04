@@ -19,5 +19,5 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-abstract public class PropositionalF extends Formula {
+public interface PropositionalF extends Formula {
 }

@@ -19,8 +19,8 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class MultiDiamond extends MultiModalF {
-	public Substitution match(Formula f) {
+public class MultiDiamond implements MultiModalF {
+	public FullSubstitution match(Formula f) {
 		return null;
 	}
 }

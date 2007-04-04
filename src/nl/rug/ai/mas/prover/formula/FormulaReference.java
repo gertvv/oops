@@ -19,8 +19,18 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-public class UniDiamond implements UniModalF {
+/**
+ * Holds a reference to a Variable object, used for unification of variables.
+ */
+public class FormulaReference extends VariableReference<Formula>
+implements Formula {
+	public FormulaReference(Variable<Formula> var) {
+		super(var);
+	}
+
 	public FullSubstitution match(Formula f) {
-		return null;
+		FullSubstitution s = new FullSubstitution();
+		s.put(get(), f);
+		return s;
 	}
 }

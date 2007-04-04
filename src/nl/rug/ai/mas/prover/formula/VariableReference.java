@@ -22,18 +22,18 @@ package nl.rug.ai.mas.prover.formula;
 /**
  * Holds a reference to a Variable object, used for unification of variables.
  */
-public class VariableReference extends Formula {
-	private Variable d_var;
+public class VariableReference<T> {
+	private Variable<T> d_var;
 
-	public VariableReference(Variable var) {
+	public VariableReference(Variable<T> var) {
 		d_var = var;
 	}
 
-	public Variable get() {
+	public Variable<T> get() {
 		return d_var;
 	}
 
-	public void set(Variable var) {
+	public void set(Variable<T> var) {
 		d_var = var;
 	}
 
@@ -43,14 +43,10 @@ public class VariableReference extends Formula {
 
 	public boolean equals(Object o) {
 		try {
-			VariableReference other = (VariableReference)o;
+			VariableReference<T> other = (VariableReference<T>)o;
 			return other.d_var == d_var;
 		} catch (ClassCastException e) {
 		}
 		return false;
-	}
-
-	public Substitution match(Formula f) {
-		return d_var.match(f);
 	}
 }

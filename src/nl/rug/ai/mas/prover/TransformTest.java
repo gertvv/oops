@@ -48,7 +48,7 @@ class TransformTest extends DepthFirstAdapter {
 
 	private class StackEntry {
 		public Formula d_formula;
-		public VariableMap d_variableMap;
+		public VariableMap<Formula> d_variableMap;
 
 		public String toString() {
 			return d_formula.toString();
@@ -62,14 +62,14 @@ class TransformTest extends DepthFirstAdapter {
 	public void outAPropositionFormula(APropositionFormula node) {
 		StackEntry entry = new StackEntry();
 		entry.d_formula = d_propMap.getOrCreate(node.getProp().getText());
-		entry.d_variableMap = new VariableMap();
+		entry.d_variableMap = new VariableMap<Formula>();
 		d_stack.addLast(entry);
 	}
 
 	public void outAVariableFormula(AVariableFormula node) {
-		VariableMap m = new VariableMap();
-		Variable v = m.getOrCreate(node.getVar().getText());
-		VariableReference r = new VariableReference(v);
+		VariableMap<Formula> m = new VariableMap<Formula>();
+		Variable<Formula> v = m.getOrCreate(node.getVar().getText());
+		FormulaReference r = new FormulaReference(v);
 		v.add(r);
 
 		StackEntry entry = new StackEntry();
@@ -153,7 +153,7 @@ class TransformTest extends DepthFirstAdapter {
 				d_formulaList.listIterator(0);
 			while (it1.hasNext()) {
 				Formula f1 = it1.next().d_formula;
-				Substitution s = f0.match(f1);
+				FullSubstitution s = f0.match(f1);
 				if (s != null) {
 					System.out.println(s.toString() + f0 + " = " + f1);
 				} else {

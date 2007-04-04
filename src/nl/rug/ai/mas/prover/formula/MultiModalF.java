@@ -19,6 +19,5 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-abstract public class MultiModalF extends ModalF {
-
+public interface MultiModalF extends ModalF {
 }

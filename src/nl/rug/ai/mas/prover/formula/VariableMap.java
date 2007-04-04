@@ -24,24 +24,24 @@ import java.util.*;
 /**
  * A map from variable names to a class implementing them.
  */
-public class VariableMap extends HashMap<String, Variable> {
+public class VariableMap<T> extends HashMap<String, Variable<T>> {
 	public VariableMap() {
 		super();
 	}
 
-	public Variable getOrCreate(String name) {
-		Variable v = get(name);
+	public Variable<T> getOrCreate(String name) {
+		Variable<T> v = get(name);
 		if (v != null)
 			return v;
-		v = new Variable(name);
+		v = new Variable<T>(name);
 		put(name, v);
 		return v;
 	}
 
-	public void merge(VariableMap other) {
-		for (Map.Entry<String, Variable> e : other.entrySet()) {
+	public void merge(VariableMap<T> other) {
+		for (Map.Entry<String, Variable<T>> e : other.entrySet()) {
 			String name = e.getKey();
-			Variable var = get(name);
+			Variable<T> var = get(name);
 			if (var != null) {
 				var.merge(e.getValue());
 			} else {

@@ -19,6 +19,5 @@
 
 package nl.rug.ai.mas.prover.formula;
 
-abstract public class ModalF extends Formula {
-
+public interface ModalF extends Formula {
 }
