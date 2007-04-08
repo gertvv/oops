@@ -68,4 +68,12 @@ public class Conjunction implements PropositionalF {
 		}
 		return null;
 	}
+
+	public Formula substitute(FullSubstitution s) {
+		return new Conjunction(d_left.substitute(s), d_right.substitute(s));
+	}
+
+	public Formula opposite() {
+		return new Negation(this);
+	}
 }

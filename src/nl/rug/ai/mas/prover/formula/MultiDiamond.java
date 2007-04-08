@@ -58,4 +58,14 @@ public class MultiDiamond implements MultiModalF {
 		}
 		return null;
 	}
+
+	public Formula substitute(FullSubstitution s) {
+		return new MultiDiamond(
+				d_agent.substitute(s.getAgentSubstitution()),
+				d_right.substitute(s));
+	}
+
+	public Formula opposite() {
+		return new Negation(this);
+	}
 }

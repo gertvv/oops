@@ -17,43 +17,44 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.formula;
+package nl.rug.ai.mas.prover.tableau;
 
-public class Proposition implements PropositionalF {
-	private String d_name;
-	
-	public Proposition(String name) {
-		d_name = name;
+import java.util.*;
+import nl.rug.ai.mas.prover.formula.*;
+
+public class Rule {
+	public enum Type {
+		LINEAR, SPLIT
 	}
 
-	public String getName() {
-		return d_name;
+	private String d_name;
+	private Type d_type;
+	private Formula d_template;
+	private Vector<Formula> d_rewrite;
+
+	public Rule(String name, Formula tpl, Type type, Vector<Formula> rwt) {
+		d_name = name;
+		d_template = tpl;
+		d_type = type;
+		d_rewrite = rwt;
+	}
+
+	public Type getType() {
+		return d_type;
+	}
+
+	public Match match(Formula f) {
+		FullSubstitution sub = d_template.match(f);
+		if (sub == null)
+			return null;
+		Vector<Formula> result = new Vector<Formula>(d_rewrite.size());
+		for (int i = 0; i < d_rewrite.size(); ++i) {
+			result.add(d_rewrite.get(i).substitute(sub));
+		}
+		return new Match(this, result);
 	}
 
 	public String toString() {
 		return d_name;
-	}
-
-	/**
-	 * Propositions are only considered equal if they are references to the same
-	 * Proposition object.
-	 */
-	public boolean equals(Object other) {
-		return this == other;
-	}
-
-	public FullSubstitution match(Formula f) {
-		if (equals(f)) {
-			return new FullSubstitution();
-		}
-		return null;
-	}
-
-	public Formula substitute(FullSubstitution s) {
-		return this;
-	}
-
-	public Formula opposite() {
-		return new Negation(this);
 	}
 }

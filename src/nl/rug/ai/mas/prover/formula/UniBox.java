@@ -49,4 +49,12 @@ public class UniBox implements UniModalF {
 		}
 		return null;
 	}
+
+	public Formula substitute(FullSubstitution s) {
+		return new UniBox(d_right.substitute(s));
+	}
+
+	public Formula opposite() {
+		return new Negation(this);
+	}
 }

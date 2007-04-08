@@ -17,43 +17,41 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.formula;
+package nl.rug.ai.mas.prover.tableau;
 
-public class Proposition implements PropositionalF {
-	private String d_name;
-	
-	public Proposition(String name) {
-		d_name = name;
+import java.util.*;
+import nl.rug.ai.mas.prover.formula.*;
+
+public class Branch {
+	private Branch d_parent;
+	private Vector<Formula> d_current;
+
+	public Branch(Branch parent) {
+		d_parent = parent;
+		d_current = new Vector<Formula>();
 	}
 
-	public String getName() {
-		return d_name;
+	public boolean contains(Formula f) {
+		if (d_current.contains(f))
+			return true;
+		if (d_parent != null)
+			return d_parent.contains(f);
+		return false;
+	}
+
+	public void add(Formula f) {
+		d_current.add(f);
 	}
 
 	public String toString() {
-		return d_name;
-	}
-
-	/**
-	 * Propositions are only considered equal if they are references to the same
-	 * Proposition object.
-	 */
-	public boolean equals(Object other) {
-		return this == other;
-	}
-
-	public FullSubstitution match(Formula f) {
-		if (equals(f)) {
-			return new FullSubstitution();
+		String s = new String();
+		if (d_parent == null)
+			s = "\t***\n";
+		else
+			s = d_parent.toString() + "\t---\n";
+		for (Formula f : d_current) {
+			s += f.toString() + "\n";
 		}
-		return null;
-	}
-
-	public Formula substitute(FullSubstitution s) {
-		return this;
-	}
-
-	public Formula opposite() {
-		return new Negation(this);
+		return s;
 	}
 }

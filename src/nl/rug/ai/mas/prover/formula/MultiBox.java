@@ -58,4 +58,14 @@ public class MultiBox implements MultiModalF {
 		}
 		return null;
 	}
+
+	public Formula substitute(FullSubstitution s) {
+		return new MultiBox(
+				d_agent.substitute(s.getAgentSubstitution()),
+				d_right.substitute(s));
+	}
+
+	public Formula opposite() {
+		return new Negation(this);
+	}
 }

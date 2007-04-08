@@ -25,4 +25,12 @@ public interface Formula {
 	 * substitution for the variables in this formula.
 	 */
 	public FullSubstitution match(Formula f);
+	/**
+	 * Substitute for all variables the values in the substitution s.
+	 */
+	public Formula substitute(FullSubstitution s);
+	/**
+	 * Return the simplest opposite for the formula
+	 */
+	public Formula opposite();
 }

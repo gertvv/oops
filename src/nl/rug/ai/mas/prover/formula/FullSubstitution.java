@@ -48,8 +48,20 @@ public class FullSubstitution {
 		return d_fsub.put(k, v);
 	}
 
+	public Formula get(Variable<Formula> k) {
+		return d_fsub.get(k);
+	}
+
 	public Agent put(Variable<Agent> k, Agent v) {
 		return d_asub.put(k, v);
+	}
+
+	public Agent get(Variable<Agent> k) {
+		return d_asub.get(k);
+	}
+
+	public Substitution<Agent> getAgentSubstitution() {
+		return d_asub;
 	}
 
 	public String toString() {

@@ -33,4 +33,11 @@ implements Formula {
 		s.put(get(), f);
 		return s;
 	}
+
+	public Formula substitute(FullSubstitution s) {
+		Formula f = s.get(get());
+		if (f != null)
+			return f;
+		return this;
+	}
 }

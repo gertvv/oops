@@ -21,4 +21,5 @@ package nl.rug.ai.mas.prover.formula;
 
 public interface Agent {
 	public Substitution<Agent> match(Agent other);
+	public Agent substitute(Substitution<Agent> s);
 }

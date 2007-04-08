@@ -40,4 +40,8 @@ public class AgentId implements Agent {
 		}
 		return null;
 	}
+
+	public Agent substitute(Substitution<Agent> s) {
+		return this;
+	}
 }

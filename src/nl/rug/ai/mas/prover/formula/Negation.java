@@ -55,4 +55,12 @@ public class Negation implements PropositionalF {
 		}
 		return null;
 	}
+
+	public Formula substitute(FullSubstitution s) {
+		return new Negation(d_right.substitute(s));
+	}
+
+	public Formula opposite() {
+		return d_right;
+	}
 }

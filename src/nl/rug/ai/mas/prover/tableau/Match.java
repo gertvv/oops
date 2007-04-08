@@ -17,43 +17,46 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.formula;
+package nl.rug.ai.mas.prover.tableau;
 
-public class Proposition implements PropositionalF {
-	private String d_name;
-	
-	public Proposition(String name) {
-		d_name = name;
-	}
+import java.util.*;
+import nl.rug.ai.mas.prover.formula.*;
 
-	public String getName() {
-		return d_name;
-	}
+public class Match implements Comparable<Match> {
+	private Rule d_rule;
+	private Vector<Formula> d_fml;
+	private int d_badness;
 
-	public String toString() {
-		return d_name;
-	}
-
-	/**
-	 * Propositions are only considered equal if they are references to the same
-	 * Proposition object.
-	 */
-	public boolean equals(Object other) {
-		return this == other;
-	}
-
-	public FullSubstitution match(Formula f) {
-		if (equals(f)) {
-			return new FullSubstitution();
+	public Match(Rule rule, Vector<Formula> fml) {
+		d_rule = rule;
+		d_fml = fml;
+		d_badness = 1;
+		if (rule.getType() == Rule.Type.LINEAR) {
+			if (fml.size() > 1) {
+				d_badness = 2;
+			}
+		} else if (rule.getType() == Rule.Type.SPLIT) {
+			d_badness = 3;
 		}
-		return null;
 	}
 
-	public Formula substitute(FullSubstitution s) {
-		return this;
+	public Rule.Type getType() {
+		return d_rule.getType();
 	}
 
-	public Formula opposite() {
-		return new Negation(this);
+	public Vector<Formula> getFormulas() {
+		return d_fml;
+	}
+
+	public Rule getRule() {
+		return d_rule;
+	}
+
+	public int compareTo(Match other) {
+		return other.d_badness - d_badness;
+	}
+	
+	public String toString() {
+		return d_rule.toString() + d_fml.toString();
 	}
 }

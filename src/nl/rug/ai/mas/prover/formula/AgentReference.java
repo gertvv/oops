@@ -28,10 +28,16 @@ implements Agent {
 		super(var);
 	}
 
-	public Substitution<Agent> match(Agent f) {
+	public Substitution<Agent> match(Agent a) {
 		Substitution<Agent> s = new Substitution<Agent>();
-		s.put(get(), f);
+		s.put(get(), a);
 		return s;
 	}
-}
 
+	public Agent substitute(Substitution<Agent> s) {
+		Agent a = s.get(get());
+		if (a != null)
+			return a;
+		return this;
+	}
+}

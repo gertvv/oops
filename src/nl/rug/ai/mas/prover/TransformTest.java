@@ -16,6 +16,7 @@
   * with this program; if not, write to the Free Software Foundation, Inc.,
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
+
 package nl.rug.ai.mas.prover;
 
 import java.io.*;
@@ -27,6 +28,7 @@ import nl.rug.ai.mas.prover.parser.analysis.*;
 import nl.rug.ai.mas.prover.parser.node.*;
 
 import nl.rug.ai.mas.prover.formula.*;
+import nl.rug.ai.mas.prover.tableau.*;
 
 /**
  * Class to transform a parse tree into a formula tree.
@@ -193,5 +195,36 @@ class TransformTest extends DepthFirstAdapter {
 				}
 			}
 		}
+
+		testRuleMatch();
+
+		testTableau();
+	}
+
+	private void testRuleMatch() {
+		System.out.println();
+		Vector<Rule> rules = PropositionalRuleFactory.build();
+
+		ListIterator<StackEntry> it = d_formulaList.listIterator(0);
+		while (it.hasNext()) {
+			Formula f = it.next().d_formula;
+			for (Rule r : rules) {
+				Match m = r.match(f);
+				if (m != null) 
+					System.out.println(f + " -- " + m);
+			}
+		}
+	}
+
+	private void testTableau() {
+		System.out.println();
+		Tableau t = new Tableau(PropositionalRuleFactory.build());
+
+		ListIterator<StackEntry> it = d_formulaList.listIterator(0);
+		while (it.hasNext()) {
+			Formula f = it.next().d_formula;
+			System.out.println(f + " is " + t.tableau(f));
+		}
+		
 	}
 }
