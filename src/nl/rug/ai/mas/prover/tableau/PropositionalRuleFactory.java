@@ -32,9 +32,11 @@ public class PropositionalRuleFactory {
 		rules.add(buildCon1());
 		rules.add(buildCon2());
 		rules.add(buildCon3());
+		rules.add(buildCon4());
 		rules.add(buildDis1());
 		rules.add(buildDis2());
 		rules.add(buildDis3());
+		rules.add(buildDis4());
 		return rules;
 	}
 
@@ -117,6 +119,29 @@ public class PropositionalRuleFactory {
 		return new Rule("CON3", f, Rule.Type.LINEAR, rwt);
 	}
 
+	public static Rule buildCon4() {
+		// variables
+		Variable<Formula> l = new Variable<Formula>("L");
+		FormulaReference lref = new FormulaReference(l);
+		l.add(lref);
+
+		Variable<Formula> r = new Variable<Formula>("R");
+		FormulaReference rref = new FormulaReference(r);
+		r.add(rref);
+
+		// formula
+		Formula f = new Negation(new BiImplication(lref, rref));
+
+		// rewrites
+		Vector<Formula> rwt = new Vector<Formula>(2);
+		rwt.add(new Negation(new Conjunction(
+						new Negation(lref), new Negation(rref))));
+		rwt.add(new Negation(new Conjunction(
+						lref, rref)));
+
+		return new Rule("CON4", f, Rule.Type.LINEAR, rwt);
+	}
+
 	public static Rule buildDis1() {
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
@@ -178,5 +203,26 @@ public class PropositionalRuleFactory {
 		rwt.add(rref);
 
 		return new Rule("DIS3", f, Rule.Type.SPLIT, rwt);
+	}
+
+	public static Rule buildDis4() {
+		// variables
+		Variable<Formula> l = new Variable<Formula>("L");
+		FormulaReference lref = new FormulaReference(l);
+		l.add(lref);
+
+		Variable<Formula> r = new Variable<Formula>("R");
+		FormulaReference rref = new FormulaReference(r);
+		r.add(rref);
+
+		// formula
+		Formula f = new BiImplication(lref, rref);
+
+		// rewrites
+		Vector<Formula> rwt = new Vector<Formula>(2);
+		rwt.add(new Conjunction(new Negation(lref), new Negation(rref)));
+		rwt.add(new Conjunction(lref, rref));
+
+		return new Rule("DIS4", f, Rule.Type.SPLIT, rwt);
 	}
 }
