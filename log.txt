@@ -30,5 +30,11 @@ Tableaus beschrijving in LaTeX
 2007-04-04	4	4
 Tableaus doorspreken, algoritme prop.log., nieuwe afspraken
 
-2007-03-28	0	2
+2007-04-04	0	2
 matching modale formules
+
+2007-04-08	0	4
+Tableau implementatie prop.log.
+
+2007-04-11	3	3
+Algoritme modale tableaus bedenken, representatie en matching labels
