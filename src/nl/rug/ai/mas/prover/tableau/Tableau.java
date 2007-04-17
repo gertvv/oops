@@ -119,9 +119,9 @@ public class Tableau {
 
 	private BranchState matchPut(Node n, Branch b, PriorityQueue<Match> q) {
 		b.add(n);
-		Match m = match(n);
-		if (m != null) {
-			q.add(m);
+		Vector<Match> m = match(n);
+		if (!m.isEmpty()) {
+			q.addAll(m);
 		} else {
 			if (!n.getFormula().isSimple()) {
 				d_error = n.getFormula().toString() +
@@ -132,13 +132,14 @@ public class Tableau {
 		return BranchState.OPEN;
 	}
 
-	private Match match(Node f) {
+	private Vector<Match> match(Node f) {
+		Vector<Match> result = new Vector<Match>();
 		for (Rule r : d_rules) {
 			Match m = r.match(f);
 			if (m != null)
-				return m;
+				result.add(m);
 		}
-		return null;
+		return result;
 	}
 
 	public String getError() {
