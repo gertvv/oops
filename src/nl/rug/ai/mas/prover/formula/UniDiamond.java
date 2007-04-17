@@ -57,4 +57,8 @@ public class UniDiamond implements UniModalF {
 	public Formula opposite() {
 		return new Negation(this);
 	}
+
+	public boolean isSimple() {
+		return false;
+	}
 }

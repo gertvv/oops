@@ -40,4 +40,12 @@ implements Formula {
 			return f;
 		return this;
 	}
+
+	public Formula opposite() {
+		return new Negation(this);
+	}
+
+	public boolean isSimple() {
+		return false;
+	}
 }

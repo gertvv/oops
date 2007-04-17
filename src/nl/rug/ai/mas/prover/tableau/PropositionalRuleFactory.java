@@ -53,7 +53,7 @@ public class PropositionalRuleFactory {
 		Vector<Formula> rwt = new Vector<Formula>(1);
 		rwt.add(rref);
 
-		return new Rule("NEG", f, Rule.Type.LINEAR, rwt);
+		return new LinearRule("NEG", f, rwt);
 	}
 
 	public static Rule buildCon1() {
@@ -74,7 +74,7 @@ public class PropositionalRuleFactory {
 		rwt.add(lref);
 		rwt.add(rref);
 
-		return new Rule("CON1", f, Rule.Type.LINEAR, rwt);
+		return new LinearRule("CON1", f, rwt);
 	}
 
 	public static Rule buildCon2() {
@@ -95,7 +95,7 @@ public class PropositionalRuleFactory {
 		rwt.add(new Negation(lref));
 		rwt.add(new Negation(rref));
 
-		return new Rule("CON2", f, Rule.Type.LINEAR, rwt);
+		return new LinearRule("CON2", f, rwt);
 	}
 
 	public static Rule buildCon3() {
@@ -116,7 +116,7 @@ public class PropositionalRuleFactory {
 		rwt.add(lref);
 		rwt.add(new Negation(rref));
 
-		return new Rule("CON3", f, Rule.Type.LINEAR, rwt);
+		return new LinearRule("CON3", f, rwt);
 	}
 
 	public static Rule buildCon4() {
@@ -139,7 +139,7 @@ public class PropositionalRuleFactory {
 		rwt.add(new Negation(new Conjunction(
 						lref, rref)));
 
-		return new Rule("CON4", f, Rule.Type.LINEAR, rwt);
+		return new LinearRule("CON4", f, rwt);
 	}
 
 	public static Rule buildDis1() {
@@ -160,7 +160,7 @@ public class PropositionalRuleFactory {
 		rwt.add(lref);
 		rwt.add(rref);
 
-		return new Rule("DIS1", f, Rule.Type.SPLIT, rwt);
+		return new SplitRule("DIS1", f, rwt);
 	}
 
 	public static Rule buildDis2() {
@@ -181,7 +181,7 @@ public class PropositionalRuleFactory {
 		rwt.add(new Negation(lref));
 		rwt.add(new Negation(rref));
 
-		return new Rule("DIS2", f, Rule.Type.SPLIT, rwt);
+		return new SplitRule("DIS2", f, rwt);
 	}
 
 	public static Rule buildDis3() {
@@ -202,7 +202,7 @@ public class PropositionalRuleFactory {
 		rwt.add(new Negation(lref));
 		rwt.add(rref);
 
-		return new Rule("DIS3", f, Rule.Type.SPLIT, rwt);
+		return new SplitRule("DIS3", f, rwt);
 	}
 
 	public static Rule buildDis4() {
@@ -223,6 +223,6 @@ public class PropositionalRuleFactory {
 		rwt.add(new Conjunction(new Negation(lref), new Negation(rref)));
 		rwt.add(new Conjunction(lref, rref));
 
-		return new Rule("DIS4", f, Rule.Type.SPLIT, rwt);
+		return new SplitRule("DIS4", f, rwt);
 	}
 }

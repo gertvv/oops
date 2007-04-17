@@ -63,4 +63,12 @@ public class Negation implements PropositionalF {
 	public Formula opposite() {
 		return d_right;
 	}
+
+	public boolean isSimple() {
+		if (d_right.match(
+					new Negation(new FormulaReference(new Variable<Formula>("F")))
+					) == null && d_right.isSimple())
+			return true;
+		return false;
+	}
 }

@@ -38,3 +38,11 @@ Tableau implementatie prop.log.
 
 2007-04-11	3	3
 Algoritme modale tableaus bedenken, representatie en matching labels
+
+2007-04-17	7	7
+Algoritme tableaus uitwerken (grotendeels), matching nodes, modal rules
+
+TODO 2007-04-27
+ * unit tests (G)
+ * algoritme uitwerken / werkend krijgen (E)
+ * log bijwerken (E)

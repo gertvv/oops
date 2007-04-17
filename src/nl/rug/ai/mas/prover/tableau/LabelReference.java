@@ -24,8 +24,8 @@ import nl.rug.ai.mas.prover.formula.*;
 
 public class LabelReference extends VariableReference<Label>
 implements Label {
-	public Label(String name) {
-		super(name);
+	public LabelReference(Variable<Label> l) {
+		super(l);
 	}
 
 	public LabelSubstitution match(Label other) {

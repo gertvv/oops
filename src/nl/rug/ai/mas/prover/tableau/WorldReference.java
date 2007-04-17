@@ -24,8 +24,8 @@ import nl.rug.ai.mas.prover.formula.*;
 
 public class WorldReference extends VariableReference<World>
 implements World {
-	public WorldReference(String name) {
-		super(name);
+	public WorldReference(Variable<World> w) {
+		super(w);
 	}
 
 	public Substitution<World> match(World other) {

@@ -17,48 +17,23 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.formula;
+package nl.rug.ai.mas.prover.tableau;
 
-public class UniBox implements UniModalF {
-	Formula d_right;
+import nl.rug.ai.mas.prover.formula.*;
 
-	public UniBox(Formula f) {
-		d_right = f;
+public class NotEqualConstraint implements Constraint {
+	private Variable<Agent> d_a1;
+	private Variable<Agent> d_a2;
+
+	public NotEqualConstraint(Variable<Agent> a1, Variable<Agent> a2) {
+		d_a1 = a1;
+		d_a2 = a2;
 	}
 
-	public String toString() {
-		return "#" + d_right;
-	}
-
-	public boolean equals(Object o) {
-		if (o == null)
+	public boolean validate(NodeSubstitution s) {
+		if (s.getAgentSubstitution().get(d_a1).equals(
+					s.getAgentSubstitution().get(d_a2)))
 			return false;
-		try {
-			UniBox other = (UniBox)o;
-			return d_right.equals(other.d_right);
-		} catch (ClassCastException e) {
-		}
-		return false;
-	}
-
-	public FullSubstitution match(Formula f) {
-		try {
-			UniBox m = (UniBox)f;
-			return d_right.match(m.d_right);
-		} catch (ClassCastException e) {
-		}
-		return null;
-	}
-
-	public Formula substitute(FullSubstitution s) {
-		return new UniBox(d_right.substitute(s));
-	}
-
-	public Formula opposite() {
-		return new Negation(this);
-	}
-
-	public boolean isSimple() {
-		return false;
+		return true;
 	}
 }

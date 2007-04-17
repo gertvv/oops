@@ -22,77 +22,64 @@ package nl.rug.ai.mas.prover.tableau;
 import java.util.*;
 import nl.rug.ai.mas.prover.formula.*;
 
-public class LabelSubstitution {
+public class NodeSubstitution {
 	Substitution<Label> d_lsub;
 	Substitution<World> d_wsub;
 	Substitution<Agent> d_asub;
+	Substitution<Formula> d_fsub;
+	Constraint d_constraint;
 
-	public LabelSubstitution() {
+	public NodeSubstitution() {
 		d_lsub = new Substitution<Label>();
 		d_wsub = new Substitution<World>();
 		d_asub = new Substitution<Agent>();
+		d_fsub = new Substitution<Formula>();
+		d_constraint = null;
 	}
 
-	public LabelSubstitution(Substitution<World> w, Substitution<Agent> a) {
-		d_lsub = new Substitution<Label>();
-		d_wsub = w;
-		d_asub = a;
+	public NodeSubstitution(Constraint c) {
+		this();
+		d_constraint = c;
 	}
 
-	public LabelSubstitution(Substitution<Label> l,
-			Substitution<World> w, Substitution<Agent> a) {
-		d_lsub = l;
-		d_wsub = w;
-		d_asub = a;
-	}
+	public boolean merge(LabelSubstitution ls, FullSubstitution fs) {
+		if (!d_lsub.merge(ls.getLabelSubstitution()))
+			return false;
+		if (!d_wsub.merge(ls.getWorldSubstitution()))
+			return false;
+		if (!d_fsub.merge(fs.getFormulaSubstitution()))
+			return false;
 
-	public boolean merge(LabelSubstitution other) {
-		if (!d_lsub.merge(other.d_lsub))
+		if (!d_asub.merge(ls.getAgentSubstitution()))
 			return false;
-		if (!d_wsub.merge(other.d_wsub))
+		if (!d_asub.merge(fs.getAgentSubstitution()))
 			return false;
-		if (!d_asub.merge(other.d_asub))
+
+		if (d_constraint == null || !d_constraint.validate(this))
 			return false;
+
 		return true;
-	}
-
-	public Label put(Variable<Label> k, Label v) {
-		return d_lsub.put(k, v);
-	}
-
-	public Label get(Variable<Label> k) {
-		return d_lsub.get(k);
 	}
 
 	public Substitution<Label> getLabelSubstitution() {
 		return d_lsub;
 	}
 
-	public World put(Variable<World> k, World v) {
-		return d_wsub.put(k, v);
-	}
-
-	public World get(Variable<World> k) {
-		return d_wsub.get(k);
-	}
-
 	public Substitution<World> getWorldSubstitution() {
 		return d_wsub;
-	}
-
-	public Agent put(Variable<Agent> k, Agent v) {
-		return d_asub.put(k, v);
-	}
-
-	public Agent get(Variable<Agent> k) {
-		return d_asub.get(k);
 	}
 
 	public Substitution<Agent> getAgentSubstitution() {
 		return d_asub;
 	}
 
+	public Substitution<Formula> getFormulaSubstitution() {
+		return d_fsub;
+	}
+
 	public String toString() {
-		return d_lsub.toString() + d_wsub.toString() + d_asub.toString();
+		return d_lsub.toString() + d_wsub.toString() + d_asub.toString()
+			+ d_fsub.toString();
 	}
 }
+

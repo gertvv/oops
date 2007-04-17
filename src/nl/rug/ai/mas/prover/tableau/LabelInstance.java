@@ -33,15 +33,33 @@ public class LabelInstance implements Label {
 		d_agent = agent;
 	}
 
-	public LabelSubstitution match(Label other) {
-		Substitution<World> sw = d_world.match(other.d_world);
-		Substitution<Agent> sa = d_agent.match(other.d_agent);
-		LabelSubstitution s = new LabelSubstitution(sw, sa);
+	public LabelSubstitution match(Label o) {
+		try {
+			LabelInstance other = (LabelInstance)o;
 
-		LabelSubstitution ps = d_parent.match(other.d_parent);
+			Substitution<World> sw = d_world.match(other.d_world);
+			if (sw == null)
+				return null;
 
-		if (s.merge(ps)) {
-			return s;
+			Substitution<Agent> sa = d_agent.match(other.d_agent);
+			if (sa == null)
+				return null;
+
+			LabelSubstitution s = new LabelSubstitution(sw, sa);
+
+			if (d_parent == null) {
+				if (other.d_parent == null) {
+					return s;
+				}
+				return null;
+			}
+
+			LabelSubstitution ps = d_parent.match(other.d_parent);
+
+			if (s.merge(ps)) {
+				return s;
+			}
+		} catch (ClassCastException e) {
 		}
 		return null;
 	}
@@ -50,6 +68,28 @@ public class LabelInstance implements Label {
 		Agent a = d_agent.substitute(s.getAgentSubstitution());
 		World w = d_world.substitute(s.getWorldSubstitution());
 		Label p = d_parent.substitute(s);
-		return new Label(p, w, a);
+		return new LabelInstance(p, w, a);
+	}
+
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		try {
+			LabelInstance other = (LabelInstance)o;
+			if (((d_parent == null && other.d_parent == null) ||
+					(d_parent != null && d_parent.equals(other.d_parent))) &&
+					d_world.equals(other.d_world) && d_agent.equals(other.d_agent))
+				return true;
+		} catch (ClassCastException e) {
+		}
+		return false;
+	}
+
+	public String toString() {
+		String s = "";
+		if (d_parent != null)
+			s = d_parent.toString() + ".";
+		s += "(" + d_world + "," + d_agent + ")";
+		return s;
 	}
 }

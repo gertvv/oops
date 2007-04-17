@@ -17,48 +17,30 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.formula;
+package nl.rug.ai.mas.prover.tableau;
 
-public class UniBox implements UniModalF {
-	Formula d_right;
+import java.util.*;
+import nl.rug.ai.mas.prover.formula.*;
 
-	public UniBox(Formula f) {
-		d_right = f;
+public class ModalRule extends Rule {
+	protected Node d_template;
+	protected Node d_rewrite;
+	protected Constraint d_constraint;
+
+	protected ModalRule(String name, Type type,
+			Node tpl, Node rwt, Constraint c) {
+		super(name, type);
+		d_template = tpl;
+		d_rewrite = rwt;
+		d_constraint = c;
 	}
 
-	public String toString() {
-		return "#" + d_right;
-	}
-
-	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		try {
-			UniBox other = (UniBox)o;
-			return d_right.equals(other.d_right);
-		} catch (ClassCastException e) {
-		}
-		return false;
-	}
-
-	public FullSubstitution match(Formula f) {
-		try {
-			UniBox m = (UniBox)f;
-			return d_right.match(m.d_right);
-		} catch (ClassCastException e) {
-		}
-		return null;
-	}
-
-	public Formula substitute(FullSubstitution s) {
-		return new UniBox(d_right.substitute(s));
-	}
-
-	public Formula opposite() {
-		return new Negation(this);
-	}
-
-	public boolean isSimple() {
-		return false;
+	public Match match(Node n) {
+		NodeSubstitution s = d_template.match(n, d_constraint);
+		if (s == null)
+			return null;
+		Vector<Node> v = new Vector<Node>();
+		v.add(d_rewrite.substitute(s));
+		return new Match(this, v);
 	}
 }

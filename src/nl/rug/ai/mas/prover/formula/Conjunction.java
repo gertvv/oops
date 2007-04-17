@@ -76,4 +76,8 @@ public class Conjunction implements PropositionalF {
 	public Formula opposite() {
 		return new Negation(this);
 	}
+
+	public boolean isSimple() {
+		return false;
+	}
 }

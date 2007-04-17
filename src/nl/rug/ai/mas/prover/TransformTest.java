@@ -204,26 +204,36 @@ class TransformTest extends DepthFirstAdapter {
 	private void testRuleMatch() {
 		System.out.println();
 		Vector<Rule> rules = PropositionalRuleFactory.build();
+		rules.addAll(ModalRuleFactory.build());
 
 		ListIterator<StackEntry> it = d_formulaList.listIterator(0);
 		while (it.hasNext()) {
 			Formula f = it.next().d_formula;
+			nl.rug.ai.mas.prover.tableau.Node n = 
+				new nl.rug.ai.mas.prover.tableau.Node(
+					new LabelInstance(
+						new NullLabel(), new WorldInstance(), new AgentId("NoAgent")
+						), f);
 			for (Rule r : rules) {
-				Match m = r.match(f);
+				Match m = r.match(n);
 				if (m != null) 
-					System.out.println(f + " -- " + m);
+					System.out.println(n + " -- " + m);
 			}
 		}
 	}
 
 	private void testTableau() {
 		System.out.println();
-		Tableau t = new Tableau(PropositionalRuleFactory.build());
+		Vector<Rule> rules = PropositionalRuleFactory.build();
+		rules.addAll(ModalRuleFactory.build());
+		Tableau t = new Tableau(rules);
 
 		ListIterator<StackEntry> it = d_formulaList.listIterator(0);
 		while (it.hasNext()) {
 			Formula f = it.next().d_formula;
-			System.out.println(f + " is " + t.tableau(f));
+			Tableau.BranchState result = t.tableau(f);
+			System.out.println(f + " is " + result + 
+					(result == Tableau.BranchState.ERROR ? " " + t.getError() : ""));
 		}
 		
 	}

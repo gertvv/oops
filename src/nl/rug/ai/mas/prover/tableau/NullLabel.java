@@ -1,4 +1,4 @@
-/**
+/** 
   * This program (working title: MAS Prover) is an automated tableaux prover
   * for epistemic logic (S5n).
   * Copyright (C) 2007  Elske van der Vaart and Gert van Valkenhoef
@@ -17,48 +17,36 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.formula;
+package nl.rug.ai.mas.prover.tableau;
 
-public class UniBox implements UniModalF {
-	Formula d_right;
+import java.util.*;
+import nl.rug.ai.mas.prover.formula.*;
 
-	public UniBox(Formula f) {
-		d_right = f;
+public class NullLabel implements Label {
+	public NullLabel() {
 	}
 
-	public String toString() {
-		return "#" + d_right;
-	}
-
-	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		try {
-			UniBox other = (UniBox)o;
-			return d_right.equals(other.d_right);
-		} catch (ClassCastException e) {
-		}
-		return false;
-	}
-
-	public FullSubstitution match(Formula f) {
-		try {
-			UniBox m = (UniBox)f;
-			return d_right.match(m.d_right);
-		} catch (ClassCastException e) {
+	public LabelSubstitution match(Label o) {
+		if (equals(o)) {
+			return new LabelSubstitution();
 		}
 		return null;
 	}
 
-	public Formula substitute(FullSubstitution s) {
-		return new UniBox(d_right.substitute(s));
+	public Label substitute(LabelSubstitution s) {
+		return this;
 	}
 
-	public Formula opposite() {
-		return new Negation(this);
-	}
-
-	public boolean isSimple() {
+	public boolean equals(Object o) {
+		try {
+			NullLabel other = (NullLabel)o;
+			return true;
+		} catch (ClassCastException e) {
+		}
 		return false;
+	}
+
+	public String toString() {
+		return "NullLabel";
 	}
 }

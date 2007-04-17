@@ -24,33 +24,65 @@ import nl.rug.ai.mas.prover.formula.*;
 
 public class Branch {
 	private Branch d_parent;
-	private Vector<Formula> d_current;
+//	private Vector<Node> d_current;
+	private HashMap<Label, Vector<Node>> d_current;
 
 	public Branch(Branch parent) {
 		d_parent = parent;
-		d_current = new Vector<Formula>();
+		d_current = new HashMap<Label, Vector<Node>>();
 	}
 
-	public boolean contains(Formula f) {
-		if (d_current.contains(f))
+	public boolean contains(Node n) {
+		Vector<Node> v = d_current.get(n.getLabel());
+		if (v != null && v.contains(n))
 			return true;
 		if (d_parent != null)
-			return d_parent.contains(f);
+			return d_parent.contains(n);
 		return false;
 	}
 
-	public void add(Formula f) {
-		d_current.add(f);
+	public void add(Node n) {
+		Vector<Node> v = d_current.get(n.getLabel());
+		if (v == null) {
+			v = new Vector<Node>();
+			v.add(n);
+			d_current.put(n.getLabel(), v);
+		} else {
+			v.add(n);
+		}
+	}
+
+	public Set<Label> getLabels() {
+		Set<Label> l = d_current.keySet();
+		if (d_parent != null)
+			l.addAll(d_parent.getLabels());
+		return l;
+	}
+
+	public Vector<Node> apply(Node n) {
+		Vector<Node> result = new Vector<Node>();
+		for (Label l : getLabels()) {
+			LabelSubstitution lsub = n.getLabel().match(l);
+			if (lsub != null) {
+				NodeSubstitution nsub = new NodeSubstitution();
+				nsub.merge(lsub, new FullSubstitution());
+				result.add(n.substitute(nsub));
+			}
+		}
+		return result;
 	}
 
 	public String toString() {
 		String s = new String();
 		if (d_parent == null)
-			s = "\t***\n";
+			s = "***\n";
 		else
-			s = d_parent.toString() + "\t---\n";
-		for (Formula f : d_current) {
-			s += f.toString() + "\n";
+			s = d_parent.toString() + "---\n";
+		for (Map.Entry<Label, Vector<Node>> w : d_current.entrySet()) {
+			s += w.getKey() + "\n";
+			for (Node n : w.getValue()) {
+				s += "\t" + n.toString() + "\n";
+			}
 		}
 		return s;
 	}

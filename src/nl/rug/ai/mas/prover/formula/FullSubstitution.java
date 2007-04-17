@@ -36,6 +36,11 @@ public class FullSubstitution {
 		d_fsub = new Substitution<Formula>();
 	}
 
+	public FullSubstitution(Substitution<Agent> a, Substitution<Formula> f) {
+		d_asub = a;
+		d_fsub = f;
+	}
+
 	public boolean merge(FullSubstitution other) {
 		if (!d_fsub.merge(other.d_fsub))
 			return false;
@@ -62,6 +67,10 @@ public class FullSubstitution {
 
 	public Substitution<Agent> getAgentSubstitution() {
 		return d_asub;
+	}
+
+	public Substitution<Formula> getFormulaSubstitution() {
+		return d_fsub;
 	}
 
 	public String toString() {

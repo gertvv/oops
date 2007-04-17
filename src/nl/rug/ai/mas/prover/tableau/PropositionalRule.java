@@ -17,48 +17,31 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.formula;
+package nl.rug.ai.mas.prover.tableau;
 
-public class UniBox implements UniModalF {
-	Formula d_right;
+import java.util.*;
+import nl.rug.ai.mas.prover.formula.*;
 
-	public UniBox(Formula f) {
-		d_right = f;
+public class PropositionalRule extends Rule {
+	private Formula d_template;
+	private Vector<Formula> d_rewrite;
+
+	protected PropositionalRule(String name, Type type,
+			Formula tpl, Vector<Formula> rwt) {
+		super(name, type);
+		d_template = tpl;
+		d_rewrite = rwt;
 	}
 
-	public String toString() {
-		return "#" + d_right;
-	}
-
-	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		try {
-			UniBox other = (UniBox)o;
-			return d_right.equals(other.d_right);
-		} catch (ClassCastException e) {
+	public Match match(Node n) {
+		FullSubstitution sub = d_template.match(n.getFormula());
+		if (sub == null)
+			return null;
+		Vector<Node> result = new Vector<Node>(d_rewrite.size());
+		for (int i = 0; i < d_rewrite.size(); ++i) {
+			result.add(new Node(n.getLabel(),
+					d_rewrite.get(i).substitute(sub)));
 		}
-		return false;
-	}
-
-	public FullSubstitution match(Formula f) {
-		try {
-			UniBox m = (UniBox)f;
-			return d_right.match(m.d_right);
-		} catch (ClassCastException e) {
-		}
-		return null;
-	}
-
-	public Formula substitute(FullSubstitution s) {
-		return new UniBox(d_right.substitute(s));
-	}
-
-	public Formula opposite() {
-		return new Negation(this);
-	}
-
-	public boolean isSimple() {
-		return false;
+		return new Match(this, result);
 	}
 }

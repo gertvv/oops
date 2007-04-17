@@ -22,50 +22,48 @@ package nl.rug.ai.mas.prover.tableau;
 import java.util.*;
 import nl.rug.ai.mas.prover.formula.*;
 
-/**
- * Tableau rule. Matches labels and formulas.
- */
-abstract public class Rule {
-	private String d_name;
-	private Type d_type;
+public class Necessities {
+	private Necessities d_parent;
+//	private Vector<Node> d_current;
+	private Vector<Node> d_current;
 
-	protected Rule(String name, Type type) {
-		d_name = name;
-		d_type = type;
+	public Necessities(Necessities parent) {
+		d_parent = parent;
+		d_current = new Vector<Node>();
 	}
 
-	public Type getType() {
-		return d_type;
+	public void add(Node n) {
+		d_current.add(n);
 	}
 
-	abstract public Match match(Node f);
+	public Vector<Node> apply(Label l) {
+		Vector<Node> result = null;
+		if (d_parent != null)
+			result = d_parent.apply(l);
+		else
+			result = new Vector<Node>();
+
+		for (Node n : d_current) {
+			LabelSubstitution lsub = n.getLabel().match(l);
+			if (lsub != null) {
+				NodeSubstitution nsub = new NodeSubstitution();
+				nsub.merge(lsub, new FullSubstitution());
+				result.add(n.substitute(nsub));
+			}
+		}
+		return result;
+	}
 
 	public String toString() {
-		return d_name;
-	}
-
-	/**
-	 * Rule type enumeration.
-	 */
-	public enum Type {
-		/**
-		 * Propositional rule not creating new branches.
-		 */
-		LINEAR,
-		
-		/**
-		 * Propositional rule creating new branches.
-		 */
-		SPLIT,
-		
-		/**
-		 * Modal rule matching existing worlds.
-		 */
-		ACCESS,
-		
-		/**
-		 * Modal rule introducing new worlds.
-		 */
-		CREATE
+		String s = new String();
+		if (d_parent == null)
+			s = "###\n";
+		else
+			s = d_parent.toString() + "---\n";
+		for (Node n : d_current) {
+			s += "\t" + n.toString() + "\n";
+		}
+		return s;
 	}
 }
+

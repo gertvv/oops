@@ -68,4 +68,8 @@ public class MultiBox implements MultiModalF {
 	public Formula opposite() {
 		return new Negation(this);
 	}
+
+	public boolean isSimple() {
+		return false;
+	}
 }

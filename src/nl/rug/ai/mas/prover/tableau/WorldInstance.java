@@ -33,4 +33,12 @@ public class WorldInstance implements World {
 	public World substitute(Substitution<World> s) {
 		return this;
 	}
+
+	public boolean equals(Object other) {
+		return this == other;
+	}
+
+	public String toString() {
+		return "World(" + Integer.toHexString(hashCode()) + ")";
+	}
 }

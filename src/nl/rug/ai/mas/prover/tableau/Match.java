@@ -24,19 +24,23 @@ import nl.rug.ai.mas.prover.formula.*;
 
 public class Match implements Comparable<Match> {
 	private Rule d_rule;
-	private Vector<Formula> d_fml;
+	private Vector<Node> d_nodes;
 	private int d_badness;
 
-	public Match(Rule rule, Vector<Formula> fml) {
+	public Match(Rule rule, Vector<Node> nodes) {
 		d_rule = rule;
-		d_fml = fml;
+		d_nodes = nodes;
 		d_badness = 1;
 		if (rule.getType() == Rule.Type.LINEAR) {
-			if (fml.size() > 1) {
+			if (nodes.size() > 1) {
 				d_badness = 2;
 			}
 		} else if (rule.getType() == Rule.Type.SPLIT) {
+			d_badness = 5;
+		} else if (rule.getType() == Rule.Type.ACCESS) {
 			d_badness = 3;
+		} else if (rule.getType() == Rule.Type.CREATE) {
+			d_badness = 4;
 		}
 	}
 
@@ -44,8 +48,8 @@ public class Match implements Comparable<Match> {
 		return d_rule.getType();
 	}
 
-	public Vector<Formula> getFormulas() {
-		return d_fml;
+	public Vector<Node> getNodes() {
+		return d_nodes;
 	}
 
 	public Rule getRule() {
@@ -57,6 +61,6 @@ public class Match implements Comparable<Match> {
 	}
 	
 	public String toString() {
-		return d_rule.toString() + d_fml.toString();
+		return d_rule.toString() + d_nodes.toString();
 	}
 }

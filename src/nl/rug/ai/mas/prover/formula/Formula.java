@@ -33,4 +33,8 @@ public interface Formula {
 	 * Return the simplest opposite for the formula
 	 */
 	public Formula opposite();
+	/**
+	 * Return wether the formula is simple (an atom or a negation of an atom).
+	 */
+	public boolean isSimple();
 }
