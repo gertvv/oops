@@ -1,0 +1,78 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[english]{babel}
+\usepackage{latexsym}
+\usepackage{amssymb,amsmath}
+
+\author{Elske van der Vaart \and Gert van Valkenhoef}
+\title{MAS Project Proposal: An Automated Logics Toolkit}
+
+\begin{document}
+
+\maketitle
+
+\section*{Problem Statement}
+
+Automated toolkits are very useful tools for users of epistemic logic. They
+provide quick non-labor intensive solutions to problems such as consistency,
+provability, satisfiability, proof generation, formula simplification or
+normalform generation.
+
+The Logics Workbench (LWB) is one such toolkit that allows checking for
+provability and consistency in epistemic logic, among others. For this reason
+it is used in e.g.  the Multi-Agent Systems course.
+
+However, the LWB is problematic in several respects. Its code base appears to
+be outdated and does not support modern Unix environments very well. Several
+archaic libraries are required by the LWB distribution. These are often not
+available in modern Unix variants such as Linux or MacOS X. 
+
+Furthermore, the usability of the LWB leaves a lot to be desired. Terminal
+support for the ASCII version is poor and the X11 interface appears to be
+non-functional.
+
+Finally, the LWB does not offer support for the $\textbf{S5}_{(n)}$ system.
+For the MAS course, support for this system would be a very useful addition.
+
+However, given the restrictive copyright license, which forbids modification
+of the program and the fact that the source code is not publicly available, it
+is not feasible to remedy these flaws within the LWB distribution within the
+timeframe of a MAS project. Even if we get permission to modify the source
+code, the next group wanting to work on a new addition will have to go
+through the same process to get permission.
+
+\section*{Project Proposal}
+
+We propose to build a new library that is able to do provability and
+consistency checks in $\textbf{S5}_{(n)}$. The library will be implemented in
+Java, because of several advantages:
+
+\begin{itemize}
+\item Large available class library 
+\item Many useful open source third party libraries 
+\item Familiarity with the language
+\item High portability
+\item Easy creation of a web interface (applet)
+\end{itemize}
+
+The focus of this project will be on the provability engine. Work on a good
+user interface (command line or graphical) will only be done to the extent
+necessary to verify that the library works. The program should be in a state
+such that it is usable by third parties at the end of the project.
+
+We hope to have full support of $\textbf{S5}_{(n)}$, however if this proves to
+be impossible within the available time, a simpler system may be chosen.
+
+It is our hope that this library will provide a basis for further development
+either in the form of future MAS projects or final assignments for  some
+usability course. Therefore we will select a liberal license for the software
+we create.
+
+We do not have an extensive background in automated reasoning, but as this
+project appears on the list of possible projects, we assume that it is in
+principle possible to do this in the allotted time. We are experienced with
+tableau proofs and have written quite extensive programs in Java, though. Gert
+is also familiar with parser generation, build systems, unit tests and XML
+parsing, among other things, so the peripheral issues don't need to take up an
+excessive amount of time.
+
+\end{document}
