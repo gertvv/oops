@@ -53,7 +53,7 @@
 
 	<!-- PROVER build targets here -->
 	<target name="prover" depends="prover-grammar">
-		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/prover/**">
+		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/prover/**" debug="true">
 			<classpath path="${project.class.path}" />
 		</javac>
 	</target>

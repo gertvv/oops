@@ -37,8 +37,9 @@ public class Tableau {
 
 	public BranchState tableau(Formula f) {
 		d_error = null;
-		Node n = new Node(new LabelInstance(null,
-					new WorldInstance(), new AgentId(null)), f);
+		Node n = new Node(
+				new LabelInstance(new NullLabel(), new WorldInstance(),
+					new AgentId("NoAgent")), f);
 		return tableau(n, null, null, new PriorityQueue<Match>());
 	}
 
