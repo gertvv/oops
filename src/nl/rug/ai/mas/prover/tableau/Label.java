@@ -22,7 +22,19 @@ package nl.rug.ai.mas.prover.tableau;
 import java.util.*;
 import nl.rug.ai.mas.prover.formula.*;
 
+/**
+ * A semantic tableau Label.
+ */
 public interface Label {
+	/**
+	 * Match this Label to another Label, returing a substitution for the
+	 * variables occuring in this Label.
+	 */
 	public LabelSubstitution match(Label other);
+	/**
+	 * Apply a substitution for variables to this Label, replacing occurences
+	 * of variables with their substitution. This function should not modify
+	 * existing objects, but create new ones instead.
+	 */
 	public Label substitute(LabelSubstitution s);
 }

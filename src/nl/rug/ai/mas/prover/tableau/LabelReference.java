@@ -22,6 +22,9 @@ package nl.rug.ai.mas.prover.tableau;
 import java.util.*;
 import nl.rug.ai.mas.prover.formula.*;
 
+/**
+ * A reference to a Label variable.
+ */
 public class LabelReference extends VariableReference<Label>
 implements Label {
 	public LabelReference(Variable<Label> l) {

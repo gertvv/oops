@@ -22,10 +22,19 @@ package nl.rug.ai.mas.prover.tableau;
 import java.util.*;
 import nl.rug.ai.mas.prover.formula.*;
 
+/**
+ * A null Label, used to terminate a label chain in a way that a Label variable
+ * will match.
+ */
 public class NullLabel implements Label {
 	public NullLabel() {
 	}
 
+	/**
+	 * A NullLabel matches only those Label objects it equals().
+	 * @param o The Label to match.
+	 * @return The empty subsitution if it matches o, null otherwise.
+	 */
 	public LabelSubstitution match(Label o) {
 		if (equals(o)) {
 			return new LabelSubstitution();
@@ -33,10 +42,17 @@ public class NullLabel implements Label {
 		return null;
 	}
 
+	/**
+	 * Substitute all occuring variables.
+	 * @return this.
+	 */ 
 	public Label substitute(LabelSubstitution s) {
 		return this;
 	}
 
+	/**
+	 * A NullLabel equals() all other NullLabel instances.
+	 */
 	public boolean equals(Object o) {
 		try {
 			NullLabel other = (NullLabel)o;
@@ -44,6 +60,13 @@ public class NullLabel implements Label {
 		} catch (ClassCastException e) {
 		}
 		return false;
+	}
+
+	/**
+	 * The hashcode for a NullLabel is always 0.
+	 */
+	public int hashCode() {
+		return 0;
 	}
 
 	public String toString() {

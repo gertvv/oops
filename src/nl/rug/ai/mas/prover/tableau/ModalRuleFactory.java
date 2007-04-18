@@ -48,27 +48,21 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
 		AgentReference jref = new AgentReference(j);
-		j.add(jref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// new world
 		Variable<World> n = new Variable<World>("n");
 		WorldReference nref = new WorldReference(n);
-		n.add(nref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, jref);
@@ -85,27 +79,21 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
 		AgentReference jref = new AgentReference(j);
-		j.add(jref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// new world
 		Variable<World> n = new Variable<World>("n");
 		WorldReference nref = new WorldReference(n);
-		n.add(nref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, jref);
@@ -122,23 +110,18 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// new world
 		Variable<World> n = new Variable<World>("n");
 		WorldReference nref = new WorldReference(n);
-		n.add(nref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, iref);
@@ -154,23 +137,18 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// new world
 		Variable<World> n = new Variable<World>("n");
 		WorldReference nref = new WorldReference(n);
-		n.add(nref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, iref);
@@ -186,27 +164,21 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
 		AgentReference jref = new AgentReference(j);
-		j.add(jref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// new world
 		Variable<World> n = new Variable<World>("n");
 		WorldReference nref = new WorldReference(n);
-		n.add(nref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, jref);
@@ -223,27 +195,21 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
 		AgentReference jref = new AgentReference(j);
-		j.add(jref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// new world
 		Variable<World> n = new Variable<World>("n");
 		WorldReference nref = new WorldReference(n);
-		n.add(nref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, jref);
@@ -260,23 +226,18 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// new world
 		Variable<World> n = new Variable<World>("n");
 		WorldReference nref = new WorldReference(n);
-		n.add(nref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, iref);
@@ -292,23 +253,18 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// new world
 		Variable<World> n = new Variable<World>("n");
 		WorldReference nref = new WorldReference(n);
-		n.add(nref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, iref);
@@ -324,23 +280,18 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
 		AgentReference jref = new AgentReference(j);
-		j.add(jref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, jref);
@@ -357,23 +308,18 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
 		AgentReference jref = new AgentReference(j);
-		j.add(jref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, jref);
@@ -390,19 +336,15 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, iref);
@@ -418,19 +360,15 @@ public class ModalRuleFactory {
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
 		FormulaReference fref = new FormulaReference(f);
-		f.add(fref);
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
 		AgentReference iref = new AgentReference(i);
-		i.add(iref);
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
-		k.add(kref);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
-		l.add(lref);
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, iref);

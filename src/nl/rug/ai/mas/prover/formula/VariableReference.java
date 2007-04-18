@@ -27,6 +27,7 @@ public class VariableReference<T> {
 
 	public VariableReference(Variable<T> var) {
 		d_var = var;
+		d_var.add(this);
 	}
 
 	public Variable<T> get() {
@@ -34,7 +35,9 @@ public class VariableReference<T> {
 	}
 
 	public void set(Variable<T> var) {
+		d_var.remove(this);
 		d_var = var;
+		d_var.add(this);
 	}
 
 	public String toString() {
@@ -48,5 +51,9 @@ public class VariableReference<T> {
 		} catch (ClassCastException e) {
 		}
 		return false;
+	}
+
+	public int hashCode() {
+		return 31 + d_var.hashCode();
 	}
 }

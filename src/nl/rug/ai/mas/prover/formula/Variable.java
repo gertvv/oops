@@ -34,12 +34,13 @@ public class Variable<T> {
 		d_refs.add(r);
 	}
 
+	public void remove(VariableReference<T> r) {
+		d_refs.remove(r);
+	}
+
 	public void merge(Variable<T> other) {
-		for (VariableReference<T> r : other.d_refs) {
+		for (VariableReference<T> r : other.d_refs)
 			r.set(this);
-			d_refs.add(r);
-		}
-		other.d_refs.clear();
 	}
 
 	public String getName() {

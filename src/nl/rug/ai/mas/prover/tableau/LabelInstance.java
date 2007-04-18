@@ -22,6 +22,9 @@ package nl.rug.ai.mas.prover.tableau;
 import java.util.*;
 import nl.rug.ai.mas.prover.formula.*;
 
+/**
+ * A concrete Label, consisting of a parent Label, a World and an Agent.
+ */
 public class LabelInstance implements Label {
 	private Label d_parent;
 	private World d_world;
@@ -71,6 +74,10 @@ public class LabelInstance implements Label {
 		return new LabelInstance(p, w, a);
 	}
 
+	/**
+	 * A LabelInstance equals() other LabelInstance objects if they have
+	 * equal parent, world and agent fields.
+	 */
 	public boolean equals(Object o) {
 		if (o == null)
 			return false;
@@ -83,6 +90,18 @@ public class LabelInstance implements Label {
 		} catch (ClassCastException e) {
 		}
 		return false;
+	}
+
+	/**
+	 * The hashCode() is equal to 1 * 31 + parent.hashCode * 31 + 
+	 * world.hashCode * 31 + agent.hashCode * 31.
+	 */
+	public int hashCode() {
+		int hash = 1;
+		hash = hash * 31 + d_parent.hashCode();
+		hash = hash * 31 + d_world.hashCode();
+		hash = hash * 31 + d_agent.hashCode();
+		return hash;
 	}
 
 	public String toString() {

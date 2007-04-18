@@ -44,7 +44,6 @@ public class PropositionalRuleFactory {
 		// variables occuring
 		Variable<Formula> r = new Variable<Formula>("R");
 		FormulaReference rref = new FormulaReference(r);
-		r.add(rref);
 
 		// the formula
 		Formula f = new Negation(new Negation(rref));
@@ -60,11 +59,9 @@ public class PropositionalRuleFactory {
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
-		l.add(lref);
 
 		Variable<Formula> r = new Variable<Formula>("R");
 		FormulaReference rref = new FormulaReference(r);
-		r.add(rref);
 
 		// formula
 		Formula f = new Conjunction(lref, rref);
@@ -81,11 +78,9 @@ public class PropositionalRuleFactory {
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
-		l.add(lref);
 
 		Variable<Formula> r = new Variable<Formula>("R");
 		FormulaReference rref = new FormulaReference(r);
-		r.add(rref);
 
 		// formula
 		Formula f = new Negation(new Disjunction(lref, rref));
@@ -102,11 +97,9 @@ public class PropositionalRuleFactory {
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
-		l.add(lref);
 
 		Variable<Formula> r = new Variable<Formula>("R");
 		FormulaReference rref = new FormulaReference(r);
-		r.add(rref);
 
 		// formula
 		Formula f = new Negation(new Implication(lref, rref));
@@ -123,11 +116,9 @@ public class PropositionalRuleFactory {
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
-		l.add(lref);
 
 		Variable<Formula> r = new Variable<Formula>("R");
 		FormulaReference rref = new FormulaReference(r);
-		r.add(rref);
 
 		// formula
 		Formula f = new Negation(new BiImplication(lref, rref));
@@ -146,11 +137,9 @@ public class PropositionalRuleFactory {
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
-		l.add(lref);
 
 		Variable<Formula> r = new Variable<Formula>("R");
 		FormulaReference rref = new FormulaReference(r);
-		r.add(rref);
 
 		// formula
 		Formula f = new Disjunction(lref, rref);
@@ -167,11 +156,9 @@ public class PropositionalRuleFactory {
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
-		l.add(lref);
 
 		Variable<Formula> r = new Variable<Formula>("R");
 		FormulaReference rref = new FormulaReference(r);
-		r.add(rref);
 
 		// formula
 		Formula f = new Negation(new Conjunction(lref, rref));
@@ -188,11 +175,9 @@ public class PropositionalRuleFactory {
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
-		l.add(lref);
 
 		Variable<Formula> r = new Variable<Formula>("R");
 		FormulaReference rref = new FormulaReference(r);
-		r.add(rref);
 
 		// formula
 		Formula f = new Implication(lref, rref);
@@ -209,11 +194,9 @@ public class PropositionalRuleFactory {
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
-		l.add(lref);
 
 		Variable<Formula> r = new Variable<Formula>("R");
 		FormulaReference rref = new FormulaReference(r);
-		r.add(rref);
 
 		// formula
 		Formula f = new BiImplication(lref, rref);
