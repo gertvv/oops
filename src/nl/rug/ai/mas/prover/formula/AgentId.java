@@ -19,9 +19,16 @@
 
 package nl.rug.ai.mas.prover.formula;
 
+/**
+ * Class representing a concrete Agent
+ */
 public class AgentId implements Agent {
 	private String d_name;
 	
+	/**
+	 * Constructor.
+	 * @param name The name for this Agent.
+	 */
 	public AgentId(String name) {
 		d_name = name;
 	}
@@ -30,10 +37,17 @@ public class AgentId implements Agent {
 		return "Agent(" + d_name + ")";
 	}
 
+	/**
+	 * A concrete Agent is equal only to itself.
+	 */
 	public boolean equals(Object other) {
 		return this == other;
 	}
 
+	/**
+	 * A concrete Agent matches only itself. In that case it returns the empty
+	 * Substitution.
+	 */
 	public Substitution<Agent> match(Agent other) {
 		if (equals(other)) {
 			return new Substitution<Agent>();
@@ -41,6 +55,9 @@ public class AgentId implements Agent {
 		return null;
 	}
 
+	/**
+	 * Substituting yields this Agent itself.
+	 */
 	public Agent substitute(Substitution<Agent> s) {
 		return this;
 	}

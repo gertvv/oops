@@ -20,7 +20,7 @@
 package nl.rug.ai.mas.prover.formula;
 
 /**
- * Holds a reference to a Variable object, used for unification of variables.
+ * Wraps a VariableReference&lt;Agent&gt; such that it can be used as an Agent.
  */
 public class AgentReference extends VariableReference<Agent>
 implements Agent {
@@ -28,12 +28,22 @@ implements Agent {
 		super(var);
 	}
 
+	/**
+	 * An AgentReference matches any other Agent, returning a substitution of
+	 * it's own Variable to the provided Agent.
+	 * @param a The agent to match.
+	 */
 	public Substitution<Agent> match(Agent a) {
 		Substitution<Agent> s = new Substitution<Agent>();
 		s.put(get(), a);
 		return s;
 	}
 
+	/**
+	 * Substitutes this Variable for the value it is given in the Substitution.
+	 * If the Variable does not occur in the Substitution, the Variable itself
+	 * is returned.
+	 */
 	public Agent substitute(Substitution<Agent> s) {
 		Agent a = s.get(get());
 		if (a != null)

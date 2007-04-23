@@ -81,9 +81,26 @@
 		<jar jarfile="${dist}/mas.jar" basedir="${build}"/>
 	</target>
 
+	<!-- build documentation -->
 	<target name="docs">
 		<mkdir dir="${docs}" />
 		<javadoc sourcepath="${src}" access="private" destdir="${docs}" 
 			packageNames="nl.rug.ai.mas.*"/>
+	</target>
+
+	<!-- run tests -->
+	<target name="test">
+		<junit showoutput="true">
+			<classpath>
+				<pathelement location="${dist}/mas.jar" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+			<formatter type="plain" />
+			<batchtest todir="test">
+				<fileset dir="${src}">
+					<include name="nl/rug/ai/mas/**/test/*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
 	</target>
 </project>

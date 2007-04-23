@@ -17,29 +17,13 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.formula;
+package nl.rug.ai.mas.prover.tableau;
 
 import java.util.*;
+import nl.rug.ai.mas.prover.formula.*;
 
-/**
- * A map from agent symbols to a class implementing them. This enables
- * identification of different agents.
- */
-public class AgentIdMap extends HashMap<String, AgentId> {
-	public AgentIdMap() {
-		super();
-	}
-
-	/**
-	 * Get a reference to an AgentId, either an existing one having the supplied
-	 * name, or a new one if one doesn't exist.
-	 */
-	public AgentId getOrCreate(String name) {
-		AgentId id = get(name);
-		if (id != null)
-			return id;
-		id = new AgentId(name);
-		put(name, id);
-		return id;
+public class LinearRule extends PropositionalRule {
+	public LinearRule(String name, Formula tpl, Vector<Formula> rwt) {
+		super(name, Type.LINEAR, tpl, rwt);
 	}
 }
