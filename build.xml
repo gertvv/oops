@@ -22,6 +22,7 @@
 	<property name="build" location="build"/>
 	<property name="dist"  location="dist"/>
 	<property name="docs" location="docs"/>
+	<property name="test" location="test"/>
 
 	<!-- global definition of the classpath -->
 	<path id="project.class.path">
@@ -37,6 +38,7 @@
 		<tstamp/>
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${build}"/>
+		<mkdir dir="${test}"/>
 	</target>
 
 	<target name="all" depends="prover">
@@ -44,6 +46,7 @@
 
 	<target name="clean" depends="clean-prover">
 		<delete dir="${build}" />
+		<delete dir="${test}" />
 	</target>
 
 	<target name="dist-clean" depends="clean">
@@ -89,14 +92,14 @@
 	</target>
 
 	<!-- run tests -->
-	<target name="test">
+	<target name="test" depends="init">
 		<junit showoutput="true">
 			<classpath>
 				<pathelement location="${dist}/mas.jar" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
 			<formatter type="plain" />
-			<batchtest todir="test">
+			<batchtest todir="${test}">
 				<fileset dir="${src}">
 					<include name="nl/rug/ai/mas/**/test/*.java" />
 				</fileset>
