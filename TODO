@@ -1,0 +1,24 @@
+Implementatie:
+- bugs fixen in unittest.txt
+- JUnit test van testformules
+- bende Unit testen bijmaken
+- TransformTest omzetten naar iets netters
+- de parser aanpassen zodat hij alleen formules pakt
+- API documentatie aanpassen
+
+Verslag:
+- de semantische tableau uitleg verbeteren
+- "gebruikers beschrijving" komen van het programma
+- beschrijving van het algoritme
+- lijst van geteste formules & uitslag
+- opsomming verdere wensen
+	* hooks tableau generator voor:
+		tableau weergeven
+		tegenvoorbeelden genereren
+	* soundness & completeness systeem
+	* uitgebreidere testset
+- logfile (appendix)
+
+Anders:
+- webpagina met link naar subversion & gezipte versie van verslag & API documentatie
+- beschrijving benodigde packages
