@@ -24,7 +24,6 @@ import nl.rug.ai.mas.prover.formula.*;
 
 public class Branch {
 	private Branch d_parent;
-//	private Vector<Node> d_current;
 	private HashMap<Label, Vector<Node>> d_current;
 
 	public Branch(Branch parent) {
@@ -53,7 +52,7 @@ public class Branch {
 	}
 
 	public Set<Label> getLabels() {
-		Set<Label> l = d_current.keySet();
+		HashSet<Label> l = new HashSet(d_current.keySet());
 		if (d_parent != null)
 			l.addAll(d_parent.getLabels());
 		return l;
