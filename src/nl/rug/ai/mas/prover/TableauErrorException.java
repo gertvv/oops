@@ -17,42 +17,7 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.tableau;
+package nl.rug.ai.mas.prover;
 
-import java.util.*;
-import nl.rug.ai.mas.prover.formula.*;
-
-public class ModalRule extends Rule {
-	protected Node d_template;
-	protected Node d_rewrite;
-	protected Constraint d_constraint;
-
-	protected ModalRule(String name, Type type,
-			Node tpl, Node rwt, Constraint c) {
-		super(name, type);
-		d_template = tpl;
-		d_rewrite = rwt;
-		d_constraint = c;
-	}
-
-	public Match match(Node n) {
-		NodeSubstitution s = d_template.match(n, d_constraint);
-		if (s == null)
-			return null;
-		Vector<Node> v = new Vector<Node>();
-		v.add(d_rewrite.substitute(s));
-		return new Match(this, v);
-	}
-
-	public Node getTemplate() {
-		return d_template;
-	}
-
-	public Node getRewrite() {
-		return d_rewrite;
-	}
-
-	public Constraint getConstraint() {
-		return d_constraint;
-	}
+public class TableauErrorException extends Exception {
 }

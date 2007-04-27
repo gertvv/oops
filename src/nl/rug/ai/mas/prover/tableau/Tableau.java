@@ -88,13 +88,14 @@ public class Tableau {
 				case ACCESS:
 					for (Node n : match.getNodes()) {
 						System.out.println("ACCESS: " + n);
-						System.out.println("BRANCH: ");
 						necessities.add(n);
 						for (Node m : branch.apply(n)) {
+							System.out.println("Applied to " + m.getLabel());
 							result = handleNode(m, branch, queue);
 							if (result != BranchState.OPEN)
 								return result;
 						}
+						System.out.println("BRANCH: ");
 						System.out.println(branch);
 						System.out.println("QUEUE: ");
 						System.out.println(queue);
@@ -125,7 +126,7 @@ public class Tableau {
 			q.addAll(m);
 		} else {
 			if (!n.getFormula().isSimple()) {
-				d_error = n.getFormula().toString() +
+				d_error = n.toString() +
 					" is not simple, and does not match any rules";
 				return BranchState.ERROR;
 			}

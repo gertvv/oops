@@ -55,7 +55,7 @@ public class NodeSubstitution {
 		if (!d_asub.merge(fs.getAgentSubstitution()))
 			return false;
 
-		if (d_constraint == null || !d_constraint.validate(this))
+		if (d_constraint != null && !d_constraint.validate(this))
 			return false;
 
 		return true;

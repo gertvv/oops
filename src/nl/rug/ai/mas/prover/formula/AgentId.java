@@ -34,7 +34,7 @@ public class AgentId implements Agent {
 	}
 
 	public String toString() {
-		return "Agent(" + d_name + ")";
+		return d_name;
 	}
 
 	/**

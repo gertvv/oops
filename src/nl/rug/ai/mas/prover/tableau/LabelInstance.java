@@ -58,6 +58,8 @@ public class LabelInstance implements Label {
 			}
 
 			LabelSubstitution ps = d_parent.match(other.d_parent);
+			if (ps == null)
+				return null;
 
 			if (s.merge(ps)) {
 				return s;

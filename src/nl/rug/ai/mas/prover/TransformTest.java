@@ -49,9 +49,10 @@ class TransformTest extends DepthFirstAdapter {
 	}
 
 	private class StackEntry {
-		public Formula d_formula;
-		public VariableMap<Formula> d_variableMap;
-		public VariableMap<Agent> d_agentMap;
+		public Formula d_formula = null;
+		public Agent d_agent = null;
+		public VariableMap<Formula> d_variableMap = null;
+		public VariableMap<Agent> d_agentMap = null;
 
 		public String toString() {
 			return d_formula.toString();
@@ -60,9 +61,8 @@ class TransformTest extends DepthFirstAdapter {
 
 	private LinkedList<StackEntry> d_stack = new LinkedList<StackEntry>(); 
 	private LinkedList<StackEntry> d_formulaList = new LinkedList<StackEntry>();
-	PropositionMap d_propMap = new PropositionMap();
-	Agent d_currentAgent = null;
-	AgentIdMap d_aidMap = new AgentIdMap();
+	private PropositionMap d_propMap = new PropositionMap();
+	private AgentIdMap d_aidMap = new AgentIdMap();
 
 	public void outAPropositionFormula(APropositionFormula node) {
 		StackEntry entry = new StackEntry();
@@ -72,29 +72,33 @@ class TransformTest extends DepthFirstAdapter {
 	}
 
 	public void outAId(AId node) {
-		d_currentAgent = d_aidMap.getOrCreate(node.getId().getText());
+		StackEntry entry = new StackEntry();
+		entry.d_agent = d_aidMap.getOrCreate(node.getId().getText());
+		d_stack.addLast(entry);
 	}
 
 	public void outABoxFormula(ABoxFormula node) {
 		StackEntry e = d_stack.removeLast();
-		if (d_currentAgent != null) {
-			e.d_formula = new MultiBox(d_currentAgent, e.d_formula);
+		StackEntry a = d_stack.getLast();
+		if (a.d_agent != null) {
+			d_stack.removeLast();
+			e.d_formula = new MultiBox(a.d_agent, e.d_formula);
 		} else {
 			e.d_formula = new UniBox(e.d_formula);
 		}
 		d_stack.addLast(e);
-		d_currentAgent = null;
 	}
 
 	public void outADiamondFormula(ADiamondFormula node) {
 		StackEntry e = d_stack.removeLast();
-		if (d_currentAgent != null) {
-			e.d_formula = new MultiDiamond(d_currentAgent, e.d_formula);
+		StackEntry a = d_stack.getLast();
+		if (a.d_agent != null) {
+			d_stack.removeLast();
+			e.d_formula = new MultiDiamond(a.d_agent, e.d_formula);
 		} else {
 			e.d_formula = new UniDiamond(e.d_formula);
 		}
 		d_stack.addLast(e);
-		d_currentAgent = null;
 	}
 
 	public void outAVariableFormula(AVariableFormula node) {

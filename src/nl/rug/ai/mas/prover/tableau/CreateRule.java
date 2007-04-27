@@ -68,4 +68,3 @@ public class CreateRule extends ModalRule {
 		return new Match(this, v);
 	}
 }
-

@@ -1,0 +1,43 @@
+Unit testing
+ - gedrag bij null argumenten
+ - reflexiviteit etc van equals()
+ - consistentie van equals() en hashCode()
+ - Reference<T> should add itself to the variable
+
+Bugs
+ v #_1 #_2 p
+   parsed als ##_2p
+   Oplossing: agents op de stack gooien
+ v #_1 p | ~p
+   geeft een UnsupportedOperationException
+java.lang.UnsupportedOperationException
+	at java.util.AbstractCollection.add(AbstractCollection.java:221)
+	at java.util.AbstractCollection.addAll(AbstractCollection.java:305)
+	at nl.rug.ai.mas.prover.tableau.Branch.getLabels(Branch.java:58)
+	at nl.rug.ai.mas.prover.tableau.Branch.apply(Branch.java:64)
+	at nl.rug.ai.mas.prover.tableau.Tableau.tableau(Tableau.java:93)
+	at nl.rug.ai.mas.prover.tableau.Tableau.tableau(Tableau.java:63)
+	at nl.rug.ai.mas.prover.tableau.Tableau.tableau(Tableau.java:43)
+	at nl.rug.ai.mas.prover.TransformTest.testTableau(TransformTest.java:234)
+	....
+   Oplossing : HashMap.keySet() is niet writeable
+ v {NullLabel.(World(dd87b2),Agent(NoAgent)).(World(15601ea),Agent(1)),
+	~%_Agent(1)p}
+   is not simple, and does not match any rules
+	de volgende regel zou moeten matchen:
+	 s.k_i ~%_i F
+	 ------------
+	 s.n_i ~F
+   (BNECS2)
+   De oplossing: null constraint fout afgehandeld in LabelSubstitution
+ v Het volgende tableau sluit niet vanwege niet toepassen BNecS2 (5 met S.A_1)
+	 1. S     ~(%_1 #_1 p > #_1 p)
+	 2. S     %_1 #_1 p
+	 3. S     ~#_1 p
+	 4. S.A_1 ~p
+	 5. S.B_1 #_1 p
+	 6. S     p
+   De oplossing: fout in BNecS1 (verkeerd rewrite label)
+ - Oneindige recursie door herhaald toepassen zelfde Pos regel
+   ~((%_1p & #_1q) > %_1(p & #_1q))
+ - Prioriteiten kloppen niet

@@ -57,6 +57,7 @@ public class Match implements Comparable<Match> {
 	}
 
 	public int compareTo(Match other) {
+		// FIXME: d_badness - other.d_badness;
 		return other.d_badness - d_badness;
 	}
 	

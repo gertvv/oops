@@ -70,7 +70,7 @@ public class ModalRuleFactory {
 		Formula templateFormula = new MultiDiamond(iref, fref);
 		Formula rewriteFormula = fref;
 		Constraint c = new NotEqualConstraint(i, j);
-		return new CreateRule("POSx1", new Node(templateLabel, templateFormula),
+		return new CreateRule("PosO1", new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
@@ -101,7 +101,7 @@ public class ModalRuleFactory {
 		Formula templateFormula = new Negation(new MultiBox(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new CreateRule("POSx2", new Node(templateLabel, templateFormula),
+		return new CreateRule("PosO2", new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
@@ -125,10 +125,10 @@ public class ModalRuleFactory {
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, iref);
-		Label rewriteLabel = new LabelInstance(templateLabel, nref, iref);
+		Label rewriteLabel = new LabelInstance(lref, nref, iref);
 		Formula templateFormula = new MultiDiamond(iref, fref);
 		Formula rewriteFormula = fref;
-		return new CreateRule("POS*1", new Node(templateLabel, templateFormula),
+		return new CreateRule("PosS1", new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
 
@@ -152,10 +152,10 @@ public class ModalRuleFactory {
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, iref);
-		Label rewriteLabel = new LabelInstance(templateLabel, nref, iref);
+		Label rewriteLabel = new LabelInstance(lref, nref, iref);
 		Formula templateFormula = new Negation(new MultiBox(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
-		return new CreateRule("POS*2", new Node(templateLabel, templateFormula),
+		return new CreateRule("PosS2", new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
 
@@ -186,7 +186,8 @@ public class ModalRuleFactory {
 		Formula templateFormula = new MultiBox(iref, fref);
 		Formula rewriteFormula = fref;
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("BNECx1", new Node(templateLabel, templateFormula),
+		return new AccessRule("BNecO1",
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
@@ -217,7 +218,8 @@ public class ModalRuleFactory {
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("BNECx2", new Node(templateLabel, templateFormula),
+		return new AccessRule("BNecO2",
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
@@ -241,10 +243,11 @@ public class ModalRuleFactory {
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, iref);
-		Label rewriteLabel = new LabelInstance(templateLabel, nref, iref);
+		Label rewriteLabel = new LabelInstance(lref, nref, iref);
 		Formula templateFormula = new MultiBox(iref, fref);
 		Formula rewriteFormula = fref;
-		return new AccessRule("BNEC*1", new Node(templateLabel, templateFormula),
+		return new AccessRule("BNecS1",
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
 
@@ -268,10 +271,11 @@ public class ModalRuleFactory {
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, iref);
-		Label rewriteLabel = new LabelInstance(templateLabel, nref, iref);
+		Label rewriteLabel = new LabelInstance(lref, nref, iref);
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
-		return new AccessRule("BNEC*2", new Node(templateLabel, templateFormula),
+		return new AccessRule("BNecS2",
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
 
@@ -299,7 +303,7 @@ public class ModalRuleFactory {
 		Formula templateFormula = new MultiBox(iref, fref);
 		Formula rewriteFormula = fref;
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("SNECx1", new Node(templateLabel, templateFormula),
+		return new AccessRule("SNecO1", new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
@@ -327,7 +331,7 @@ public class ModalRuleFactory {
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("SNECx2", new Node(templateLabel, templateFormula),
+		return new AccessRule("SNecO2", new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
@@ -351,7 +355,8 @@ public class ModalRuleFactory {
 		Label rewriteLabel = lref; 
 		Formula templateFormula = new MultiBox(iref, fref);
 		Formula rewriteFormula = fref;
-		return new AccessRule("SNEC*1", new Node(templateLabel, templateFormula),
+		return new AccessRule("SNecS1",
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
 
@@ -375,7 +380,8 @@ public class ModalRuleFactory {
 		Label rewriteLabel = lref;
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
-		return new AccessRule("SNEC*2", new Node(templateLabel, templateFormula),
+		return new AccessRule("SNecS2", 
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
 }

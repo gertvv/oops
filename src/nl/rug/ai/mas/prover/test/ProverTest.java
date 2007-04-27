@@ -17,42 +17,26 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.tableau;
+package nl.rug.ai.mas.prover;
 
-import java.util.*;
-import nl.rug.ai.mas.prover.formula.*;
+import org.junit.Test;
+import org.junit.BeforeClass;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
-public class ModalRule extends Rule {
-	protected Node d_template;
-	protected Node d_rewrite;
-	protected Constraint d_constraint;
+import java.util.Vector;
+import nl.rug.ai.mas.prover.tableau.*;
 
-	protected ModalRule(String name, Type type,
-			Node tpl, Node rwt, Constraint c) {
-		super(name, type);
-		d_template = tpl;
-		d_rewrite = rwt;
-		d_constraint = c;
+public class ProverTest {
+	private static Prover s_prover;
+
+	@BeforeClass public static void initProver() {
+		Vector<Rule> rules = PropositionalRuleFactory.build();
+		rules.addAll(ModalRuleFactory.build());
+		s_prover = new Prover(rules);
 	}
 
-	public Match match(Node n) {
-		NodeSubstitution s = d_template.match(n, d_constraint);
-		if (s == null)
-			return null;
-		Vector<Node> v = new Vector<Node>();
-		v.add(d_rewrite.substitute(s));
-		return new Match(this, v);
-	}
-
-	public Node getTemplate() {
-		return d_template;
-	}
-
-	public Node getRewrite() {
-		return d_rewrite;
-	}
-
-	public Constraint getConstraint() {
-		return d_constraint;
+	@Test public void test0() throws TableauErrorException {
+		assertTrue(s_prover.proveable("#_1 %_1 %_3 #_3 #_2 #_1 a > a"));
 	}
 }
