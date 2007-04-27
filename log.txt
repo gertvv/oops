@@ -48,6 +48,14 @@ Algoritme modale tableaus bedenken, representatie en matching labels
 2007-04-17	7	7
 Algoritme tableaus uitwerken (grotendeels), matching nodes, modal rules
 
+2007-04-18	0	2
+2007-04-19	0	2
+2007-04-22	0	4
+build.xml fixen, hashCode(), JUnit aan de praat krijgen, unit tests schrijven
+
+2007-04-27	5	5
+Debugging, testing, bespreking
+
 TODO 2007-04-27
  * unit tests (G)
  * algoritme uitwerken / werkend krijgen (E)
