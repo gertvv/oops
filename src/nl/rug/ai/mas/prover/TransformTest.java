@@ -34,6 +34,7 @@ import nl.rug.ai.mas.prover.tableau.*;
  * Class to transform a parse tree into a formula tree.
  */
 class TransformTest extends DepthFirstAdapter {
+	
 	public static void main (String[] argv) {
 		try {
 			Lexer l = new Lexer (new PushbackReader (new BufferedReader(

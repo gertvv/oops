@@ -36,6 +36,12 @@ matching modale formules
 2007-04-08	0	4
 Tableau implementatie prop.log.
 
+2007-04-08	6	0
+Tableaus beschrijving in LaTeX.
+
+2007-04-08	6	0
+Tableaus beschrijving in LaTeX.
+
 2007-04-11	3	3
 Algoritme modale tableaus bedenken, representatie en matching labels
 
