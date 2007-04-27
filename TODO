@@ -1,23 +1,28 @@
 Implementatie:
-- bugs fixen in unittest.txt
-- JUnit test van testformules
-- bende Unit testen bijmaken
-- TransformTest omzetten naar iets netters
-- de parser aanpassen zodat hij alleen formules pakt
-- API documentatie aanpassen
+- bugs fixen in unittest.txt GERT
+- JUnit test van testformules ELSKE
+- bende Unit testen bijmaken GERT
+- TransformTest omzetten naar iets netters GERT
+- de parser aanpassen zodat hij alleen formules pakt GERT
+- API documentatie aanpassen GERT
 
 Verslag:
-- de semantische tableau uitleg verbeteren
-- "gebruikers beschrijving" komen van het programma
+- de semantische tableau uitleg verbeteren ELSKE
+- "gebruikers beschrijving" komen van het programma ELSKE
 - beschrijving van het algoritme
-- lijst van geteste formules & uitslag
+- lijst van geteste formules & uitslag ELSKE
 - opsomming verdere wensen
-	* hooks tableau generator voor:
-		tableau weergeven
-		tegenvoorbeelden genereren
+	*	hooks tableau generator voor:
+						tableau weergeven
+						tegenvoorbeelden genereren
 	* soundness & completeness systeem
 	* uitgebreidere testset
+ * onafhankelijk van S5n
 - logfile (appendix)
+
+Presentatie:
+- maken
+- geven
 
 Anders:
 - webpagina met link naar subversion & gezipte versie van verslag & API documentatie
