@@ -57,6 +57,7 @@ Ignored Tokens
 	ignore, comment;
 
 Productions
+/*
 	command {->command} =
 		{formula} formula term
 			{ -> New command.formula(formula.formula) } | 
@@ -68,6 +69,7 @@ Productions
 	assignment {->assignment} =
 		var assign [list]:enclosed_formula_list
 			{ -> New assignment(var, list.formula_list) };
+*/
 
 	formula {-> formula} =
 		{imp} [l]:disjunction impl [r]:formula
@@ -116,7 +118,7 @@ Productions
 
 	id {->P.id} =
 		T.id { -> New id(id) };
-
+/*
 	enclosed_formula_list {-> formula_list} =
 		lbrace formula_list rbrace
 			{ -> formula_list.formula_list } ;
@@ -135,8 +137,9 @@ Productions
 			{ -> [formula.formula] } |
 		{ind} [list]:formula_list_nonempty comma formula
 			{ -> [list.formula, formula.formula] };
-
+*/
 Abstract Syntax Tree
+/*
 	command = {formula} formula |
 		{formula_list} formula_list |
 		{assignment} assignment;
@@ -144,6 +147,7 @@ Abstract Syntax Tree
 	assignment = [l]:var [r]:formula_list;
 
 	formula_list = formula*;
+*/
 
 	formula = 
 		{proposition} prop |

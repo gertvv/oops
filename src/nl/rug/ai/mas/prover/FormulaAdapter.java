@@ -33,20 +33,51 @@ import nl.rug.ai.mas.prover.tableau.*;
 /**
  * Class to transform a parse tree into a formula tree.
  */
-class TransformTest extends DepthFirstAdapter {
+class FormulaAdapter extends DepthFirstAdapter {
 	
 	public static void main (String[] argv) {
+		FormulaAdapter fa = new FormulaAdapter();
+		if (fa.parse(System.in)) {
+			testTableau(fa.getFormula());
+		} else {
+			System.out.println(fa.getErrorCause());
+		}
+	}
+
+	private static void testTableau(Formula f) {
+		Vector<Rule> rules = PropositionalRuleFactory.build();
+		rules.addAll(ModalRuleFactory.build());
+		Tableau t = new Tableau(rules);
+
+		Tableau.BranchState result = t.tableau(f);
+		System.out.println(f + " is " + result + 
+			(result == Tableau.BranchState.ERROR ? " " + t.getError() : ""));
+	}
+
+	public boolean parse(InputStream is) {
 		try {
+			reset(); // reset internal variables
+
 			Lexer l = new Lexer (new PushbackReader (new BufferedReader(
 							new InputStreamReader (System.in))));
 			Parser p = new Parser (l);
 			Start start = p.parse ();
 
-			TransformTest tr = new TransformTest();
-			start.apply(tr);
+			start.apply(this);
 		} catch (Exception e) {
-			e.printStackTrace();
+			d_errorCause = e;
+			return false;
 		}
+		return true;
+	}
+
+	public Formula getFormula() {
+		StackEntry first = d_stack.getFirst();
+		return (first != null ? first.d_formula : null);
+	}
+
+	public Exception getErrorCause() {
+		return d_errorCause;
 	}
 
 	private class StackEntry {
@@ -60,10 +91,17 @@ class TransformTest extends DepthFirstAdapter {
 		}
 	}
 
-	private LinkedList<StackEntry> d_stack = new LinkedList<StackEntry>(); 
-	private LinkedList<StackEntry> d_formulaList = new LinkedList<StackEntry>();
-	private PropositionMap d_propMap = new PropositionMap();
-	private AgentIdMap d_aidMap = new AgentIdMap();
+	private LinkedList<StackEntry> d_stack;
+	private PropositionMap d_propMap;
+	private AgentIdMap d_aidMap;
+	private Exception d_errorCause;
+
+	private void reset() {
+		d_stack = new LinkedList<StackEntry>(); 
+		d_propMap = new PropositionMap();
+		d_aidMap = new AgentIdMap();
+		d_errorCause = null;
+	}
 
 	public void outAPropositionFormula(APropositionFormula node) {
 		StackEntry entry = new StackEntry();
@@ -153,6 +191,7 @@ class TransformTest extends DepthFirstAdapter {
 		d_stack.addLast(left);
 	}
 
+/*
 	public void outAFormulaList(AFormulaList node) {
 		while(!d_stack.isEmpty()) {
 			d_formulaList.add(d_stack.removeFirst());
@@ -242,4 +281,5 @@ class TransformTest extends DepthFirstAdapter {
 		}
 		
 	}
+	*/
 }
