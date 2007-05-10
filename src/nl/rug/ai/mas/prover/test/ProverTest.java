@@ -37,6 +37,31 @@ public class ProverTest {
 	}
 
 	@Test public void test0() throws TableauErrorException {
-		assertTrue(s_prover.proveable("#_1 %_1 %_3 #_3 #_2 #_1 a > a"));
+		/* 	#1  */	assertTrue(s_prover.proveable("#_1 %_1 %_3 #_3 #_2 #_1 a > a"));
+		/* 	#2  */	assertTrue(s_prover.proveable("~(#_1(a | b) & %_1 ~a & %_1(~a & b))"));
+		/* 	#3 	*/	assertTrue(s_prover.proveable("~%_1(~a & a)"));
+		/* 	#4 	*/	assertTrue(s_prover.proveable("#_1 %_1 %_3 #_3 #_2 #_3 a > %_1 %_3 a");
+		/* 	#5 	*/	assertTrue(s_prover.proveable("~(#_1(a | b) & %_1 ~a & %_1 #_1 %_3 ~b & (%_1 #_2 %_1(~a & ~b) | %_1(~a & ~b) | #_1 a))");
+		/* 	#6 	*/	assertTrue(s_prover.proveable("~(#_1 %_1 %_3 #_3 #_2 #_3 a & #_1 %_3 %_2 #_3 %_2 ~a)");
+		/* 	#7 	*/	assertTrue(s_prover.proveable("#_1 %_1 %_3 #_3 #_2 #_3 a & #_1 %_3 #_2 (~a | x) & #_1 ~x)");
+		/* 	#8 	*/	assertTrue(s_prover.proveable("#_1 (a > b) > ( #_1 a > #_1 b)");
+		/* 	#9 	*/	assertTrue(s_prover.proveable("#_1 a > a");
+		/* #10	*/	assertTrue(s_prover.proveable("#_1 a > #_1 #_1 a");
+		/* #11	*/	assertTrue(s_prover.proveable("%_1 a > #_1 %_1 a");
+		/* #12	*/	assertTrue(s_prover.proveable("%_1 (#_1 p | %_2 #_2 #_1 q > #_1 (~q > p)");
+		/* #13	*/	assertTrue(s_prover.proveable("((p & ~#_1 p) > ~p | ((p & ~#_1 p) > ~((p & ~#_1 p) > ~#_1((p & ~#_1 p) > p )))");
+		/* #14	*/	assertTrue(s_prover.proveable("(#_1 (a | b) & (c > #_1 ~b) & (#_1 a > d)) > (c > d)");
+		/* #15	*/	assertTrue(s_prover.proveable("(#_1(g = #_1 p) & %_1 g) > (g & p)");
+		/* #16	*/	assertTrue(s_prover.proveable("(#_1(g = #_1 p) & %_1 ~g) > ~g");
+		/* #17	*/	assertTrue(s_prover.proveable("(#_1p & #_1((a & p) > b)) > #_1 (a > b)");
+		
+		/* #18  */	assertFalse(s_prover.proveable("(#_1 p & #_1 ((a & p) > b)) > (%_1 ~b & #_1 (a > b))");
+		/* #19  */	assertFalse(s_prover.proveable("#_1 %_1 %_3 #_3 #_2 #_3 a > b");
+		/* #20	*/	assertFalse(s_prover.proveable("#_1 (a | ~b) & %_1 ~a & %_1 b)");
+		/* #21	*/	assertFalse(s_prover.proveable("#_1 %_1 %_3 #_3 #_2 %_3 a > #_1 #_3 a");
+		/* #22	*/	assertFalse(s_prover.proveable("~(#_1 (a | b) & %_1 ~a & (%_1 (~a & ~b) | %_1 a))");
+		/* #23	*/	assertFalse(s_prover.proveable("~(#_1 %_1 %_3 $_3 #_2 #_3 a & %_1 %_3 #_3 #_2 (~a | x) & ~x)");
+		/* #24	*/	assertFalse(s_prover.proveable("((p & ~#_1 p) > p | ((p & ~#_1 p) > ~((p & ~#_1 p) > #_1((p & ~#_1 p) > p )))");
+		/* #25	*/	assertFalse(s_prover.proveable("~(#_1 %_3 (%_1 a | #_4 b) & #_3 (#_1 #_3 ~a & %_3 #_4 #_3 %_6))");
 	}
 }
