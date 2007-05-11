@@ -1,1 +1,76 @@
-Implementation
+{\tt OOPS} is implemented as a Java package (code library) in order to
+facilitate reuse in a Logics Workbench-like tool as well as an online applet.
+The choice for Java sets {\tt OOPS} apart from similar tools written in Prolog
+or C in terms of portability and deployment options.
+
+The package makes extensive use of the new `generics' feature in Java 1.5 in
+order to ensure readability and type safety. Most of the code is covered by
+Javadoc-style comments that enable automatic generation of API documentation,
+which is also available online.
+
+A JUnit 4 testing framework is in place, providing partial testing coverage
+for the library. Whenever bugs were encountered, a unit test was added to the
+test suite to prevent them from reappearing.
+
+Additionally, several critical parts of the package are covered by an array of
+basic tests (although more elaborate tests are desirable) and a set of 25
+test formulas (both positive and negative) is available. Tests can be run
+automatically by the build tool.
+
+A SableCC based parser for multi modal formulas is included in the package and
+a command-line tool that can prove multi modal formulas is provided for
+testing and reference purposes. 
+
+Formulas are represented by a collection of objects that implement the {\tt
+Formula} interface. Each formula implements functions that check for equality,
+perform matching and perform substitution for variables. A formula $\varphi$
+is defined to match another formula $\psi$ if a substitution $S$ for the free
+variables in $\varphi$ can be found such that $\left[ S \right] \varphi =
+\psi$. Formulas and agents can both be variables within a formula, so matching
+will return a substitution of formulas for variables and a substitution of
+agents for variables.
+
+Labels are defined recursively as a structure containing a world, an agent and
+a parent label. All labels implement the {\tt Label} interface. The recursion
+is terminated by a {\tt NullLabel} parent label. For any world, the top label
+is represented as {\tt NullLabel.Label(world0, NullAgent)}. By definition, no
+agent is equal to the {\tt NullAgent}. Using this representation of the top
+world, the $k_i = null$ (and similar) conditions for rules do not need to be
+implemented explicitly, but follow automatically from the form of the top
+label. Labels also have methods to check for equality, perform matching
+(returning a substitution for variables) and substitution.
+
+A {\tt Node} in a semantic tableau is a combination of a Label and a Formula.
+Nodes can be checked for equality, matched and variables can be substituted
+for.
+
+Rules are represented by objects implementing the {\tt Rule} interface. Rules
+can be matched to Nodes and contain rewrite rules that result in new Nodes.
+There are two types of propositional rules (linear and split) and two types of
+modal rules (create - introducing new worlds and access - introducing new
+formulas that are necessarily true in a certain set of worlds).
+
+The tableau operates on a queue of matches. On every iteration a new match is
+taken from the front of the queue and handled based on the type of rule it
+resulted from. For a linear rule, the resultant nodes are placed on the branch
+and the matches that can be created from these nodes are put in the queue. For
+a split rule, a new tableau is created for each of the resultant nodes. Create
+rules create a new world (if this hasn't been attempted yet) and known
+necessities are applied to this new world. Access rules introduce new
+necessities which are applied to all existing worlds immediately.
+
+A tableau closes if all branches (created by split rules) close. A branch
+closes if it closes for any label on the branch.
+
+Infinite recursion is avoided by storing matches from the create rules and
+ignoring any duplicates. Non-determinism and backtracking are avoided by
+eventually applying all possible rules (when a node matches more that one
+rule, all possibilities are explored). The implications for computational
+complexity have not been explored in-depth.
+
+The queue used by the tableau is a priority queue, in which rules that are
+less `bad' are given higher priority. We hope that this heuristic will prevent
+the unnecessary introduction of branches and worlds in many cases, thus
+closing the tableau as early as possible. The optimal assignment of badness
+values to rules is not known (although a good approximation has been
+implemented).
