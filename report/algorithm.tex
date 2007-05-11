@@ -12,7 +12,7 @@ Queue := \fn{clone}(Queue) \;
 Branch := \fn{newBranch}(Branch) \;
 \If{not Branch contains Formula}{
 	\If{Formula closes Branch}{
-		\Return{Closed}
+		\Return{Closed} \;
 	}
 	\fn{add}(Branch, Formula) \;
 	\fn{add}(Queue, \fn{match}(Formula)) \;
@@ -21,24 +21,25 @@ Branch := \fn{newBranch}(Branch) \;
 	Match := \fn{removeFirst}(Queue) \;
 	\eIf{Match dictates a split}{
 		\For{Element $\in$ Match}{
-			Result := \fn{tableau}(Element) \;
+			Result := \fn{tableau}(Element, Branch, Queue) \;
 			\If{Result = Open}{
 				\Return{Open}
 			}
 		}
-		\Return{Closed}
+		\Return{Closed} \;
 	}{ 
 		\For{Element $\in$ Match}{
 			\If{not Branch contains Element}{
 				\If{Element closes Branch}{
-					\Return{Closed}
+					\Return{Closed} \;
 				}
 				\fn{add}(Branch, Element) \;
-				\fn{add}(Queue, Element) \;
+				\fn{add}(Queue, \fn{match}(Element) \;
 			}
 		}
 	}
 }
-\Return{Open}
+\Return{Open} \;
+\caption{tableau (propositional logic)}
 \end{algorithm}
 \end{document}
