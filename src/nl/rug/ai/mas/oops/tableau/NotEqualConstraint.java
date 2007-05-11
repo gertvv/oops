@@ -17,9 +17,9 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.tableau;
+package nl.rug.ai.mas.oops.tableau;
 
-import nl.rug.ai.mas.prover.formula.*;
+import nl.rug.ai.mas.oops.formula.*;
 
 public class NotEqualConstraint implements Constraint {
 	private Variable<Agent> d_a1;

@@ -41,10 +41,10 @@
 		<mkdir dir="${test}"/>
 	</target>
 
-	<target name="all" depends="prover">
+	<target name="all" depends="test">
 	</target>
 
-	<target name="clean" depends="clean-prover">
+	<target name="clean" depends="clean-oops">
 		<delete dir="${build}" />
 		<delete dir="${test}" />
 	</target>
@@ -55,13 +55,13 @@
 	</target>
 
 	<!-- PROVER build targets here -->
-	<target name="prover" depends="prover-grammar">
-		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/prover/**" debug="true">
+	<target name="oops" depends="oops-grammar">
+		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/oops/**" debug="true">
 			<classpath path="${project.class.path}" />
 		</javac>
 	</target>
 
-	<target name="prover-grammar" depends="init,clean-prover-grammar">
+	<target name="oops-grammar" depends="init,clean-oops-grammar">
 		<sablecc src="${src}/grammars/" includes="*.sablecc, *.grammar"
          outputdirectory="${src}"></sablecc>
 		<copy todir="${build}">
@@ -73,15 +73,15 @@
 	</target>
 
 	<!-- cleaning tasks in addition to removing ${build} -->
-	<target name="clean-prover" depends="clean-prover-grammar" />
-	<target name="clean-prover-grammar">
-		<delete dir="${src}/nl/rug/ai/mas/prover/parser/" />
+	<target name="clean-oops" depends="clean-oops-grammar" />
+	<target name="clean-oops-grammar">
+		<delete dir="${src}/nl/rug/ai/mas/oops/parser/" />
 	</target>
 
 	<!-- create jar file -->
-	<target name="dist" depends="all">
+	<target name="dist" depends="oops">
 		<mkdir dir="${dist}"/>
-		<jar jarfile="${dist}/mas.jar" basedir="${build}"/>
+		<jar jarfile="${dist}/oops.jar" basedir="${build}"/>
 	</target>
 
 	<!-- build documentation -->
@@ -92,10 +92,10 @@
 	</target>
 
 	<!-- run tests -->
-	<target name="test" depends="init">
+	<target name="test" depends="init, dist">
 		<junit showoutput="true">
 			<classpath>
-				<pathelement location="${dist}/mas.jar" />
+				<pathelement location="${dist}/oops.jar" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
 			<formatter type="plain" />

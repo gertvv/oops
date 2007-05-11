@@ -17,12 +17,12 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover;
+package nl.rug.ai.mas.oops;
 
 import java.util.*;
 import java.io.ByteArrayInputStream;
-import nl.rug.ai.mas.prover.formula.*;
-import nl.rug.ai.mas.prover.tableau.*;
+import nl.rug.ai.mas.oops.formula.*;
+import nl.rug.ai.mas.oops.tableau.*;
 
 /**
  * Proves formulas using a tableau.

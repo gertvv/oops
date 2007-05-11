@@ -4,7 +4,7 @@
   * ee&gt; in July-August 2003.
   */
 
-package nl.rug.ai.mas.prover;
+package nl.rug.ai.mas.oops;
 
 import java.io.*;
 import java.util.*;
@@ -12,10 +12,10 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 
-import nl.rug.ai.mas.prover.parser.parser.*;
-import nl.rug.ai.mas.prover.parser.lexer.*;
-import nl.rug.ai.mas.prover.parser.analysis.*;
-import nl.rug.ai.mas.prover.parser.node.*;
+import nl.rug.ai.mas.oops.parser.parser.*;
+import nl.rug.ai.mas.oops.parser.lexer.*;
+import nl.rug.ai.mas.oops.parser.analysis.*;
+import nl.rug.ai.mas.oops.parser.node.*;
 
 public class ASTDisplay extends DepthFirstAdapter
 {

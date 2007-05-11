@@ -17,14 +17,14 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.formula.test;
+package nl.rug.ai.mas.oops.formula.test;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 
-import nl.rug.ai.mas.prover.formula.*;
+import nl.rug.ai.mas.oops.formula.*;
 
 /**
  * Test functionality related to Formula.

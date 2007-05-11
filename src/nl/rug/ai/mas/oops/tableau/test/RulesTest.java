@@ -17,7 +17,7 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.tableau.test;
+package nl.rug.ai.mas.oops.tableau.test;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -25,8 +25,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotSame;
 
-import nl.rug.ai.mas.prover.formula.*;
-import nl.rug.ai.mas.prover.tableau.*;
+import nl.rug.ai.mas.oops.formula.*;
+import nl.rug.ai.mas.oops.tableau.*;
 
 /**
  * Test functionality related to rules.

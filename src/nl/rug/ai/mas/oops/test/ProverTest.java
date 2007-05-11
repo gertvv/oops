@@ -17,7 +17,7 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.test;
+package nl.rug.ai.mas.oops.test;
 
 import org.junit.Test;
 import org.junit.BeforeClass;
@@ -26,8 +26,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.util.Vector;
-import nl.rug.ai.mas.prover.tableau.*;
-import nl.rug.ai.mas.prover.*;
+import nl.rug.ai.mas.oops.tableau.*;
+import nl.rug.ai.mas.oops.*;
 
 public class ProverTest {
 	private static Prover s_prover;

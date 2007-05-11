@@ -17,18 +17,18 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover;
+package nl.rug.ai.mas.oops;
 
 import java.io.*;
 import java.util.*;
 
-import nl.rug.ai.mas.prover.parser.parser.*;
-import nl.rug.ai.mas.prover.parser.lexer.*;
-import nl.rug.ai.mas.prover.parser.analysis.*;
-import nl.rug.ai.mas.prover.parser.node.*;
+import nl.rug.ai.mas.oops.parser.parser.*;
+import nl.rug.ai.mas.oops.parser.lexer.*;
+import nl.rug.ai.mas.oops.parser.analysis.*;
+import nl.rug.ai.mas.oops.parser.node.*;
 
-import nl.rug.ai.mas.prover.formula.*;
-import nl.rug.ai.mas.prover.tableau.*;
+import nl.rug.ai.mas.oops.formula.*;
+import nl.rug.ai.mas.oops.tableau.*;
 
 /**
  * Class to transform a parse tree into a formula tree.

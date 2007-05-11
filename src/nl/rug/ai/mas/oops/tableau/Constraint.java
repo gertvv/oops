@@ -17,7 +17,7 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.tableau;
+package nl.rug.ai.mas.oops.tableau;
 
 public interface Constraint {
 	public boolean validate(NodeSubstitution s);

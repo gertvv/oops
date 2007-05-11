@@ -17,7 +17,7 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.formula;
+package nl.rug.ai.mas.oops.formula;
 
 /**
  * Wraps a VariableReference&lt;Agent&gt; such that it can be used as an Agent.

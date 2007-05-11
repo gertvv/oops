@@ -17,7 +17,7 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover.formula;
+package nl.rug.ai.mas.oops.formula;
 
 public class Implication implements PropositionalF {
 	private Formula d_left;
