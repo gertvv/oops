@@ -58,6 +58,10 @@ public class Branch {
 		return l;
 	}
 
+	/**
+	 * Apply a necessity to all labels on the Branch.
+	 * @return The resulting nodes.
+	 */
 	public Vector<Node> apply(Node n) {
 		Vector<Node> result = new Vector<Node>();
 		for (Label l : getLabels()) {

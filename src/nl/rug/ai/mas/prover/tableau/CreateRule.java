@@ -31,6 +31,10 @@ public class CreateRule extends ModalRule {
 		this(name, tpl, rwt, null);
 	}
 
+	/**
+	 * Matching a create rule will result in a label with a free world
+	 * variable.
+	 */
 	public Match match(Node n) {
 		// perform template match
 		NodeSubstitution s = d_template.match(n, d_constraint);
@@ -40,29 +44,7 @@ public class CreateRule extends ModalRule {
 		// perform rewrite
 		Node rwt = d_rewrite.substitute(s);
 
-		// create a pattern to match rwt
-		Variable<World> w = new Variable<World>("W");
-		WorldReference wref = new WorldReference(w);
-		Variable<Agent> a = new Variable<Agent>("a");
-		AgentReference aref = new AgentReference(a);
-		Variable<Label> p = new Variable<Label>("p");
-		LabelReference pref = new LabelReference(p);
-
-		// get the reference to the world we want to create
-		LabelInstance label = new LabelInstance(pref, wref, aref);
-		Substitution<World> wsub =
-			label.match(rwt.getLabel()).getWorldSubstitution();
-		WorldReference newWorldRef = (WorldReference)wsub.get(w);
-
-		// create new substitution to replace the reference by our actual world
-		LabelSubstitution ls = new LabelSubstitution();
-		ls.put(newWorldRef.get(), new WorldInstance());
-		NodeSubstitution ns = new NodeSubstitution();
-		ns.merge(ls, new FullSubstitution());
-
-		// perform the substitution
-		rwt = rwt.substitute(ns);
-
+		// create result set
 		Vector<Node> v = new Vector<Node>();
 		v.add(rwt);
 		return new Match(this, v);

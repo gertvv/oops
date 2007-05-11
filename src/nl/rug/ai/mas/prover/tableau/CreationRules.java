@@ -17,36 +17,46 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.prover;
+package nl.rug.ai.mas.prover.tableau;
 
 import java.util.*;
-import java.io.ByteArrayInputStream;
 import nl.rug.ai.mas.prover.formula.*;
-import nl.rug.ai.mas.prover.tableau.*;
 
-/**
- * Proves formulas using a tableau.
- */
-public class Prover {
-	FormulaAdapter d_formulaAdapter;
-	Tableau d_tableau;
+public class CreationRules {
+	private CreationRules d_parent;
+	private Vector<Node> d_current;
 
-	public Prover(Vector<Rule> rules) {
-		d_formulaAdapter = new FormulaAdapter();
-		d_tableau = new Tableau(rules);
+	public CreationRules(CreationRules parent) {
+		d_parent = parent;
+		d_current = new Vector<Node>();
 	}
 
-	public boolean proveable(String formula)
-			throws TableauErrorException {
-		if (!d_formulaAdapter.parse(
-				new ByteArrayInputStream(formula.getBytes()))) {
-			throw new TableauErrorException("Could not parse formula");
+	public void add(Node n) {
+		d_current.add(n);
+	}
+
+	public boolean entails(Node concrete) {
+		if (d_parent != null && d_parent.entails(concrete)) {
+			return true;
 		}
-		Tableau.BranchState result = d_tableau.tableau(
-			new Negation(d_formulaAdapter.getFormula()));
-		if (result == Tableau.BranchState.ERROR) {
-			throw new TableauErrorException(d_tableau.getError());
+
+		for (Node n : d_current) {
+			if (n.getFormula().equals(concrete.getFormula()) &&
+					n.getLabel().match(concrete.getLabel()) != null)
+				return true;
 		}
-		return result == Tableau.BranchState.CLOSED;
+		return false;
+	}
+
+	public String toString() {
+		String s = new String();
+		if (d_parent == null)
+			s = "###\n";
+		else
+			s = d_parent.toString() + "---\n";
+		for (Node n : d_current) {
+			s += "\t" + n.toString() + "\n";
+		}
+		return s;
 	}
 }

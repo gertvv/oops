@@ -20,4 +20,7 @@
 package nl.rug.ai.mas.prover;
 
 public class TableauErrorException extends Exception {
+	public TableauErrorException(String msg) {
+		super(msg);
+	}
 }

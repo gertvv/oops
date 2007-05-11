@@ -59,7 +59,7 @@ class FormulaAdapter extends DepthFirstAdapter {
 			reset(); // reset internal variables
 
 			Lexer l = new Lexer (new PushbackReader (new BufferedReader(
-							new InputStreamReader (System.in))));
+							new InputStreamReader(is))));
 			Parser p = new Parser (l);
 			Start start = p.parse ();
 

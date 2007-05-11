@@ -2,8 +2,8 @@ Implementatie:
 - bugs fixen in unittest.txt GERT
 - JUnit test van testformules ELSKE
 - bende Unit testen bijmaken GERT
-- TransformTest omzetten naar iets netters GERT
-- de parser aanpassen zodat hij alleen formules pakt GERT
+v TransformTest omzetten naar iets netters GERT
+v de parser aanpassen zodat hij alleen formules pakt GERT
 - API documentatie aanpassen GERT
 
 Verslag:
