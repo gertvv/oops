@@ -68,6 +68,11 @@ eventually applying all possible rules (when a node matches more that one
 rule, all possibilities are explored). The implications for computational
 complexity have not been explored in-depth.
 
+See appendix \ref{app:propalg} for an overview of a suitable tableau algorithm
+for propositional formulas (this simple algorithm was implemented as a
+prototype for the modal algorithm, which replaces it). The modal algorithm is
+listed in appendix \ref{app:modalg}.
+
 The queue used by the tableau is a priority queue, in which rules that are
 less `bad' are given higher priority. We hope that this heuristic will prevent
 the unnecessary introduction of branches and worlds in many cases, thus

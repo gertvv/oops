@@ -36,15 +36,11 @@ public class CreationRules {
 	}
 
 	public boolean entails(Node concrete) {
-		System.out.println("Entails test: " + concrete);
 		if (d_parent != null && d_parent.entails(concrete)) {
-			System.out.println("parent entails");
 			return true;
 		}
 
 		for (Node n : d_current) {
-			System.out.println(n.getFormula() + "  " + n.getFormula().equals(concrete.getFormula()));
-			System.out.println(n.getLabel() + " " + n.getLabel().match(concrete.getLabel()));
 			if (n.getFormula().equals(concrete.getFormula()) &&
 					n.getLabel().match(concrete.getLabel()) != null)
 				return true;

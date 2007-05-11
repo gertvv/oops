@@ -28,6 +28,24 @@ import nl.rug.ai.mas.prover.tableau.*;
  * Proves formulas using a tableau.
  */
 public class Prover {
+	public static void main(String [] args) {
+		if (args.length != 1) {
+			System.out.println("Please supply a formula on the command line.");
+			return;
+		}
+
+		// build rules
+		Vector<Rule> rules = PropositionalRuleFactory.build();
+		rules.addAll(ModalRuleFactory.build());
+
+		Prover p = new Prover(rules);
+		try {
+			System.out.println(p.proveable(args[0]));
+		} catch (TableauErrorException e) {
+			System.out.println(e);
+		}
+	}
+
 	FormulaAdapter d_formulaAdapter;
 	Tableau d_tableau;
 
