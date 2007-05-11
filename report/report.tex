@@ -1,0 +1,361 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[english]{babel}
+\usepackage{latexsym}
+\usepackage{amssymb,amsmath}
+\usepackage{theorem}
+\usepackage{qtree}
+\theorembodyfont{\upshape}
+\newtheorem{defs}{Definition}[section]
+\newtheorem{exs}{Example}[section]
+
+
+\author{Elske van der Vaart \and Gert van Valkenhoef}
+\title{OOPS: An Automated Proof Tool for $\textbf{S5}_{(n)}$}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+In this paper, we describe the implementation and use of {\it OOPS}, an {\it O}bject {\it O}riented {\it P}rover for $\mathbf\mathit{S}\textbf{5}_{(n)}$. {\it OOPS} is a Java-based implementation of semantic tableaux, which can automatically prove or disprove  formulas of epistemic logic, using the $\textbf{S5}_{(n)}$ axioms. It is based on the proof system {\bf ELtap}, developed by de Boer~\cite{these}, which we introduce in Section \ref{theory}.
+
+\section{Semantic Tableaux for $\textbf{S5}_{(n)}$}
+\label{theory}
+{\it OOPS}' automated proofs are generated using de Boer's ~\cite{these} proof system {\bf ELtap}, which is an extension of Fitting and Mendelsohn's ~\cite{fit_men} labelled semantic tableau method. Within this formalism, semantic tableau proofs are represented as trees of labelled formulas, where labels specify accessibility relations between worlds.
+
+\begin{defs}{\it Labels} \newline
+If $\sigma$ is a label representing a world $m$, then $\sigma.n_i$ represents a world $n$ accessible from $m$ by agent $i$, where $\sigma,m,n,i \in \mathcal{N}$. The {\it length} of a label $\sigma$ is the number of dots it contains plus one.~\cite{beck_gore} \end{defs} 
+
+In this type of semantic tableau, the formula $\varphi$ to be proved is placed at the top of the tree in negated form, $\neg \varphi$, as the {\it root node}. Additional nodes are added to the tree by application of {\it tableau extension rules}. All {\it propositional extension rules} create child nodes with labels identical to those of the parent nodes.
+
+\begin{defs} {\it Propositional Tableau Extension Rules} ~\cite{these, fit_men}
+\label{proptab}
+\newline
+\begin{tabular}{cccc}
+
+&&$\neg\neg$ = & \\ 
+&&\begin{tabular} {lc}
+$\sigma$&$\neg\neg\varphi$\\
+\hline
+$\sigma$&$\varphi$
+\end{tabular} & 
+
+\begin{tabular} {c}
+{\it Double Negation}\\{\it Rule}
+\end{tabular} \\  [14pt]
+
+$\wedge_\wedge$ = & $\wedge_\vee$ = & $\wedge_\rightarrow$ = & \\
+
+\begin{tabular} {lc}
+$\sigma$&$\varphi\wedge\psi$\\
+\hline
+$\sigma$&$\varphi$\\
+$\sigma$&$\psi$
+\end{tabular} &
+
+\begin{tabular} {lc}
+$\sigma$&$\neg(\varphi\vee\psi)$\\
+\hline
+$\sigma$&$\neg\varphi$\\
+$\sigma$&$\neg\psi$
+\end{tabular} &
+
+\begin{tabular} {lc}
+$\sigma$&$\neg(\varphi\rightarrow\psi)$\\
+\hline
+$\sigma$&$\varphi$\\
+$\sigma$&$\neg\psi$
+\end{tabular} &
+
+\begin{tabular} {c}
+{\it Conjunctive}\\{\it Rules}
+\end{tabular} \\ [24pt]
+
+$\vee_\wedge$ = & $\vee_\vee$ = & $\vee_\rightarrow$ = & \\
+
+\begin{tabular} {lrlr}
+\multicolumn{4}{c}{$\sigma\;\;\;\;\neg(\varphi\wedge\psi)$}\\
+\hline
+$\sigma$&$\neg\psi$&\multicolumn{1}{|r}{$\sigma$}&$\neg\psi$
+\end{tabular} &
+
+\begin{tabular} {lrlr}
+\multicolumn{4}{c}{$\sigma\;\;\;\;\varphi\vee\psi$}\\
+\hline
+$\sigma$&$\psi$&\multicolumn{1}{|r}{$\sigma$}&$\psi$
+\end{tabular} &
+
+\begin{tabular} {lrlr}
+\multicolumn{4}{c}{$\sigma\;\;\;\;\varphi\rightarrow\psi$}\\
+\hline
+$\sigma$&$\neg\psi$&\multicolumn{1}{|r}{$\sigma$}&$\psi$
+\end{tabular} & 
+
+\begin{tabular} {c}
+{\it Disjunctive}\\{\it Rules}
+\end{tabular} \\ [18pt] \\
+\end{tabular}
+\end{defs}
+
+\samepage{
+A node without children is called a {\it leaf}, while a {\it branch} is any path from the root node to a leaf node. {\it Conjunctive rules} add two child nodes to the same branch, while {\it disjunctive rules} fork a branch in two, adding one child node to each. For a succesful tableau proof of a formula $\varphi$, all branches from the root node $\neg\varphi$ must be {\it closed}.}
+
+\begin{defs}{\it Closure of Branches} \newline
+A tableaubranch is {\it closed} if it contains two nodes with the formulas $\psi$ and $\neg\psi$, where each has the same label $\sigma$. Otherwise, a branch is {\it open}.
+\end{defs}
+
+\begin{defs}{\it Closure of Tableaux} \newline
+A semantic tableau is {\it closed} if all its branches are closed. A closed semantic tableau with root node $\neg\varphi$ is a {\it proof} of $\varphi$.
+\end{defs}
+
+Example 1.1 demonstrates how a semantic tableau can be used to prove a propositional formula. From left to right, each node is represented by its label $\sigma$, its formula $\psi$, an index $k$ and an abbreviated rule $R$. The indexes indicate the order in which nodes were added to tree, while the abbreviated rules summarize how they were generated. A $\otimes$ indicates a closed branch, while the $\dagger$ joins the two nodes that close it.
+
+\begin{exs}{\it Tableau Proof of $(p \rightarrow q) \rightarrow (\neg p \vee q)$}
+
+\begin{center}
+\begin{tabular} {p{50pt}lp{135pt}rrp{50pt}}
+& $\sigma$ & $\psi$ & $k$ & $R$ & \\
+& 1 & $\neg((p \rightarrow q ) \rightarrow (\neg p \vee q ))$ & 1. &  & \\
+& 1 & $p \rightarrow q$ & 2. & $\wedge_{1_\rightarrow}$ : 1 & \\
+& 1 & $\neg(\neg p \vee q)$ & 3. & $\wedge_{2_\rightarrow}$ : 1 &\\
+& 1 & $\neg\neg p$ & 4. & $\wedge_{1_\vee}$ :  3 & \\
+& 1 & $\neg q$ & 5. & $\wedge_{2_\vee}$ :  3 & \\
+\end{tabular} \newline
+\begin{picture}(500,100)
+\put(175,100){\line(3,-2){65}}
+\put(175,100){\line(-3,-2){65}}
+\put(80,25){\makebox(0,0){\begin{tabular} {lp{20pt}rr}
+1 & $\neg p$ & 6. & $\vee_{1_\rightarrow}$ : 2 \\
+1 & $p$ & 8. & $\neg\neg$  :  4 \\
+& $\otimes$ & & (6$\dagger$8)
+\end{tabular}}}
+\put(265,25){\makebox(0,0){\begin{tabular} {lp{20pt}rr}
+1 & $q$ & 7. & $\vee_{2_\rightarrow}$ : 2 \\ 
+& $\otimes$ & & (5$\dagger$7) \\ &
+\end{tabular} }}
+\end{picture}
+
+\end{center}
+\end{exs}
+
+\newpage For use with $\textbf{S5}_{(n)}$, the propositional expansion rules in Definition \ref{proptab} must be extended with modal expansion rules, as de Boer~\cite{these} does for his proof system {\bf ELtap}. {\it Possibility rules} introduce new labels to a branch, while {\it necessity rules} add formula's to existing labels. {\it Basic necessity rules} follow from $\textbf{K}$; {\it special necessity rules} are derived from the extra axioms of $\textbf{S5}_{(n)}$. If a node's label is of the form $\sigma.k_i$ (i.e., it represents a world $k$ accessible from $\sigma$ by agent $i$), and its formula $\varphi$ concerns the same agent $i$ (i.e., $\varphi = \Box_i\psi$ or $\varphi = \Diamond_i\psi$), only {\it starred $*$} extension rules may be applied. In all other cases, {\it regular} rules must be applied.
+
+\begin{defs} {\it Modal Tableau Extension Rules} ~\cite{these, fit_men}
+\label{modtab}
+\begin{center}
+\begin{tabular} {cccc}
+& $M_\Diamond$ = & $M_\Box$ = & \\
+ \begin{tabular} {c}
+where $k_i = null$\\
+or $i \neq j$ \end{tabular} &
+ 
+\begin{tabular} {lc}
+$\sigma.k_i$&$\Diamond_j\varphi$\\
+\hline
+$\sigma.k_i.n_j$&$\varphi$
+\end{tabular} & 
+
+\begin{tabular} {lc}
+$\sigma.k_i$&$\neg \Box_i\varphi$\\
+\hline
+$\sigma.k_i.n_j$&$\neg\varphi$
+\end{tabular} &
+
+\begin{tabular} {c}
+{\it Possibility}\\{\it Rules}
+\end{tabular} \\ [18pt]
+
+& $M_\Diamond*$ = & $M_\Box*$ = & \\
+
+ \begin{tabular} {c}
+where $k_i \neq null$
+\end{tabular} &
+ 
+\begin{tabular} {lc}
+$\sigma.k_i$&$\Diamond_i\varphi$\\
+\hline
+$\sigma.n_i$&$\varphi$
+\end{tabular} & 
+
+\begin{tabular} {lc}
+$\sigma.k_i$&$\neg \Box_i\varphi$\\
+\hline
+$\sigma.n_i$&$\neg\varphi$
+\end{tabular} &
+
+\begin{tabular} {c}
+{\it Possibility} \\ {\it Rules$*$}
+\end{tabular} \\ [18pt]
+
+& $K_\Box$ = & $K_\Diamond$ = & \\
+
+ \begin{tabular} {c}
+where $k_i = null$ \\
+or $i \neq j$
+\end{tabular} &
+ 
+\begin{tabular} {lc}
+$\sigma.k_i$&$\Box_j\varphi$\\
+\hline
+$\sigma.h_j$&$\varphi$
+\end{tabular} & 
+
+\begin{tabular} {lc}
+$\sigma.k_i$&$\neg \Diamond_j\varphi$\\
+\hline
+$\sigma.h_j$&$\neg\varphi$
+\end{tabular} &
+
+\begin{tabular} {c}
+{\it Basic Necessity}\\{\it Rules}
+\end{tabular} \\ [18pt]
+
+& $K_\Box*$ = & $K_\Diamond*$ = & \\
+
+ \begin{tabular} {c}
+where $k_i \neq null$ 
+\end{tabular} &
+ 
+\begin{tabular} {lc}
+$\sigma.k_i$&$\Box_i\varphi$\\
+\hline
+$\sigma.h_i$&$\varphi$
+\end{tabular} & 
+
+\begin{tabular} {lc}
+$\sigma.k_i$&$\neg \Diamond_i\varphi$\\
+\hline
+$\sigma.h_i$&$\neg\varphi$
+\end{tabular} &
+
+\begin{tabular} {c}
+{\it Basic Necessity} \\ {\it Rules$*$}
+\end{tabular} \\ [18pt]
+
+& $T_\Box$ = & $T_\Diamond$ = & \\
+
+ \begin{tabular} {c}
+where $k_i = null$ \\
+or $i \neq j$
+\end{tabular} &
+ 
+\begin{tabular} {lc}
+$\sigma.k_i$&$\Box_j\varphi$\\
+\hline
+$\sigma.k_i$&$\varphi$
+\end{tabular} & 
+
+\begin{tabular} {lc}
+$\sigma.k_i$&$\neg\Diamond_j\varphi$\\
+\hline
+$\sigma.k_i$&$\neg\varphi$
+\end{tabular} & 
+
+\begin{tabular} {c}
+{\it Special Necessity}\\{\it Rules}
+\end{tabular} \\ [18pt]
+
+& $R_\Box*$ = & $R_\Diamond*$ = & \\
+
+ \begin{tabular} {c}
+where $k_i \neq null$
+\end{tabular} &
+
+\begin{tabular} {lc}
+$\sigma.k_i$&$\Box_i\varphi$\\
+\hline
+$\sigma$&$\varphi$
+\end{tabular} &
+
+\begin{tabular} {lc}
+$\sigma.k_i$&$\neg\Diamond_i\varphi$\\
+\hline
+$\sigma$&$\neg\varphi$
+\end{tabular} &
+
+\begin{tabular} {c}
+{\it Special Necessity}\\{\it Rules$*$}
+\end{tabular} \\ [20pt]
+
+\end{tabular}
+\end{center}
+\end{defs}
+
+Intuitively, we can understand these rules as follows. Let's consider $\Box_i \varphi$ as an example. In a world $k$, a formula $\Box_i \varphi$ implies 'in all worlds accessible from $k$ by agent $i$, $\varphi$ holds'. Given the reflexive, transitive nature of $\textbf{S5}_{(n)}$, 'all worlds accessible from $k$' includes $k$ itself, all worlds $l$ accessible from $k$, all worlds $m$ from which $k$ is accessible, and all worlds $o$ accessible from $m$. This corresponds to rules $T$, $K_\Box$, $R*$ and $K_\Box*$, respectively.
+
+As is evident from Definition \ref{modtab}, modal tableau extension rules add two complications to the propositional tableau scheme: Labels are now important, and multiple rules may apply to the same formula. We can summarize the possible applications of the different extension rules as follows, taking into account the fact that $\Diamond \equiv \neg\Box\neg$:
+
+\paragraph \noindent In a node with a label of the form $\sigma.k_i$ and a formula $\varphi$, where $\varphi = \Box_i\psi$ or $\varphi = \Diamond_i\psi$:
+\begin{itemize}
+\item A {\large  $\Diamond_i\varphi$} can only be expanded into a node with label $\sigma.n_i$ (rule $M_\Diamond*$), with formula $\varphi$.
+\item A {\large $\Box_i \varphi$} can be expanded into a node with label $\sigma$ (rule $R*$), or a node with label $\sigma.h_i$ (rule $K_\Box*$), both with formula $\varphi$.
+\end {itemize}
+
+In a node with a label of the form $\sigma$, i.e. a label of length == 1, {\it or} a label of the form $\sigma.k_i$ and a formula $\varphi$, where $\varphi = \Box_j\psi$ or $\varphi = \Diamond_j\psi$ and $i \neq j$:
+\begin{itemize}
+\item A {\large  $\Diamond_i\varphi$} can be expanded only into a node with label $\sigma.n_i$ (rule $M_\Diamond$), with formula $\varphi$.
+\item A {\large $\Box_i \varphi$} can be expanded into a node with label $\sigma$ (rule $T$) or a node with label $\sigma.h_i$ (rule $K_\Box$), both with formula $\varphi$.
+\end {itemize}
+
+\newpage
+\begin{exs}{\it Tableau Proof of $\Diamond_1(p \wedge \Box_1 q) \rightarrow (\Diamond_1 p\wedge \Box_1 q)$}
+\begin{center}
+\begin{tabular} {p{40pt}lp{155pt}rrp{40pt}}
+& $\sigma$ & $\psi$ & $k$ & $R$ & \\
+& 1 & $\neg(\Diamond_1(p \wedge \Box_1 q) \rightarrow (\Diamond_1 p\wedge \Box_1 q))$& 1. &  & \\
+& 1 & $\neg\Diamond_1(p \wedge \Box_1 q) $ & 2. & $\wedge_{1_\rightarrow}$ : 1 & \\
+& 1 & $\Diamond_1 p\wedge \Box_1 q$ & 3. & $\wedge_{2_\rightarrow}$ : 1 &\\
+& 1 & $\Diamond_1 p$ & 4. & $\wedge_{1_\vee}$ :  3 & \\
+& 1 & $\Box_1 q$ & 5. & $\wedge_{2_\vee}$ :  3 & \\
+& 1.1 & $p$ & 6. & $M\Diamond$ : 4 & \\
+& 1.1 & $\neg(p \wedge \Box_1 q)$ & 7. & $K\Diamond$ :  2 & \\
+\end{tabular} \newline
+\begin{picture}(500,100)
+\put(185,110){\line(3,-2){65}}
+\put(185,110){\line(-3,-2){65}}
+\put(90,25){\makebox(0,0){\begin{tabular} {lp{20pt}rr}
+1.1 & $\neg p$ & 8. & $\vee_{1_\wedge}$ : 7 \\
+& $\otimes$ & & (6$\dagger$8) \\ & \\ &
+\end{tabular}}}
+\put(275,25){\makebox(0,0){\begin{tabular} {lp{20pt}rr}
+1.1 & $\neg\Box_1 q$ & 9. & $\vee_{2_\wedge}$ : 7 \\ 
+1.2 & $\neg q$ & 10. & $M_\Box*$ : 9 \\ 
+1.1 & $q$ & 11. & $K_\Box*$ : 10 \\ 
+& $\otimes$ & & (10$\dagger$11) \\ 
+\end{tabular} }}
+\end{picture}
+
+\end{center}
+\end{exs}
+
+\section{Use of {\it OOPS}}
+\label{use}
+
+\begin{tabular}{cc}
+Logical Operator & OOPS Input Symbol \\
+$\neg$ & $\sim$ \\ 
+$\wedge$ & \& \\
+$\vee$ & $|$ \\
+$\rightarrow$ & $>$ \\
+$\leftrightarrow$ & = \\
+$\Box_i$ & \# \_ i  \\
+$\Diamond_i$ & \% \_ i  \\
+\end{tabular}
+
+\section{Implementation of {\it OOPS}}
+\label{imp}
+\input{implementation.tex}
+
+\section{Validation of {\it OOPS}}
+\label{val}
+
+\section{Further Work}
+\label{more}
+
+
+
+\newpage
+\bibliography{mas}
+\bibliographystyle{naturemag}
+\end{document}
