@@ -1,0 +1,126 @@
+\documentclass[a4paper, 10pt]{article}
+\usepackage{algorithm2e}
+
+\newcommand{\fn}[1]{{\sc #1}}
+
+\begin{document}
+\begin{algorithm}[H]
+\SetLine
+\KwIn{Node, State}
+\KwOut{Open, Closed or Error}
+State = \fn{newBranchState}(State) \;
+
+\If{not \fn{branch}(State) contains Node}{
+	\If{Node closes \fn{branch}(State)}{
+		\Return{Closed} \;
+	}
+	\fn{add}(\fn{branch}(State), Node) \;
+	\fn{add}(\fn{queue}(State), \fn{match}(Node)) \;
+}
+\While{\fn{queue}(State) non-empty}{
+	Match := \fn{removeFirst}(\fn{queue}(State)) \;
+	\uIf{Match is SPLIT}{
+		\For{Element $\in$ Match}{
+			Result := \fn{tableau}(Element, State) \;
+			\If{Result != Closed}{
+				\Return{Result} \;
+			}
+		}
+		\Return{Closed} \;
+	}
+	\uElseIf{Match is LINEAR}{ 
+		\For{Element $\in$ Match}{
+			Result := \fn{handleLinear}(Element, State) \;
+			\If{Result != Open}{
+				\Return{Result} \;
+			}
+		}
+	}
+	\uElseIf{Match is CREATE}{
+		\For{Element $\in$ Match}{
+			Result := \fn{handleCreate}(Element, State) \;
+			\If{Result != Open}{
+				\Return{Result} \;
+			}
+		}
+	}
+	\ElseIf{Match is ACCESS}{
+		\For{Element $\in$ Match}{
+			Result := \fn{handleAccess}(Element, State) \;
+			\If{Result != Open}{
+				\Return{Result} \;
+			}
+		}
+	}
+}
+\Return{Open} \;
+\caption{tableau}
+\end{algorithm}
+
+% linear case
+\begin{algorithm}
+\SetLine
+\KwIn{Element, State}
+\KwOut{Open, Closed or Error}
+\If{not \fn{branch}(State) contains Element}{
+	\If{Element closes \fn{branch}(State)}{
+		\Return{Closed} \;
+	}
+	\fn{add}(\fn{branch}(State), Element) \;
+	\fn{add}(\fn{queue}(State), \fn{match}(Element)) \;
+}
+\Return{Open} \;
+\caption{handleLinear}
+\end{algorithm}
+
+% create case
+\begin{algorithm}
+\SetLine
+\KwIn{Element, State}
+\KwOut{Open, Closed or Error}
+
+\If{\fn{creationRules}(State) entails Element}{
+	\Return{Open} \;
+}
+
+\fn{add}(\fn{creationRules}(State), Element) \;
+\If{Element closes \fn{branch}(State)}{
+	\Return{Closed} \;
+}
+\fn{add}(\fn{branch}(State), Element) \;
+\fn{add}(\fn{queue}(State), \fn{match}(Element)) \;
+\For{ElementB $\in$ \fn{apply}(\fn{necessities}(State),
+		\fn{label}(Element))}{
+	\If{not \fn{branch}(State) contains ElementB}{
+		\If{ElementB closes \fn{branch}(State)}{
+			\Return{Closed} \;
+		}
+		\fn{add}(\fn{branch}(State), ElementB) \;
+		\fn{add}(\fn{queue}(State), \fn{match}(ElementB)) \;
+	}
+}
+\Return{Open} \;
+\caption{handleCreate}
+\end{algorithm}
+
+% access case
+\begin{algorithm}
+\SetLine
+\KwIn{Element, State}
+\KwOut{Open, Closed or Error}
+
+\fn{add}(\fn{necessities}(State), Element) \;
+\For{ElementB $\in$ \fn{apply}(Element, \fn{labels}(\fn{branch}(State)))}{
+	\If{not \fn{branch}(State) contains ElementB}{
+		\If{ElementB closes \fn{branch}(State)}{
+			\Return{Closed} \;
+		}
+		\fn{add}(\fn{branch}(State), ElementB) \;
+		\fn{add}(\fn{queue}(State), \fn{match}(ElementB)) \;
+	}
+}
+\Return{Open} \;
+\caption{handleAccess}
+\end{algorithm}
+
+\end{document}
