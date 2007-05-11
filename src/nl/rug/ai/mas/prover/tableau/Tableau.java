@@ -78,19 +78,21 @@ public class Tableau {
 				case CREATE:
 					for (Node n : match.getNodes()) {
 						System.out.println("CREATE: " + n);
-						System.out.println("BRANCH: ");
 						Node concrete = concretize(n);
 						if (creationRules.entails(concrete)) {
 							System.out.println("NOT NEW");
 							continue;
 						}
 						creationRules.add(n);
+						System.out.println("CREATION RULES: ");
+						System.out.println(creationRules);
 						matchPut(concrete, branch, queue);
 						for (Node m : necessities.apply(concrete.getLabel())) {
 							result = handleNode(m, branch, queue);
 							if (result != BranchState.OPEN)
 								return result;
 						}
+						System.out.println("BRANCH: ");
 						System.out.println(branch);
 					}
 					break;

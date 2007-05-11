@@ -61,4 +61,19 @@ public class FormulaTest {
 
 		assertNotNull(tpl.match(fml));
 	}
+
+	/**
+	 * []%_3#_3#_2#_3a should equal %_3#_3#_2#_3a
+	 */
+	@Test public void complexModalTest() {
+		Agent a3 = new AgentId("3");
+		Agent a2 = new AgentId("2");
+		Proposition pA = new Proposition("a");
+		Formula f0 = new MultiDiamond(a3, new MultiBox(a3, new MultiBox(a2,
+			new MultiBox(a3, pA))));
+		FullSubstitution s = new FullSubstitution();
+		Formula f1 = f0.substitute(s);
+
+		assertEquals(f0, f1);
+	}
 }
