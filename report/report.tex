@@ -3,6 +3,8 @@
 \usepackage{latexsym}
 \usepackage{amssymb,amsmath}
 \usepackage{theorem}
+\usepackage{algorithm2e}
+\newcommand{\fn}[1]{{\sc #1}}
 \theorembodyfont{\upshape}
 \newtheorem{defs}{Definition}[section]
 \newtheorem{exs}{Example}[section]
@@ -17,11 +19,12 @@
 
 \section{Introduction}
 
-In this paper, we describe the implementation and use of {\it OOPS}, an {\it O}bject {\it O}riented {\it P}rover for $\mathbf\mathit{S}\textbf{5}_{(n)}$. {\it OOPS} is a Java-based implementation of semantic tableaux, which can automatically prove or disprove  formulas of epistemic logic, using the $\textbf{S5}_{(n)}$ axioms. It is based on the proof system {\bf ELtap}, developed by de Boer~\cite{these}, which we introduce in Section \ref{theory}.
+This paper describes {\tt OOPS}, an {\it O}bject {\it O}riented {\it P}rover for $\mathbf\mathit{S}\textbf{5}_{(n)}$. {\tt OOPS} is a Java-based implementation of semantic tableaux, which can automatically prove or disprove  formulas of epistemic logic, using the $\textbf{S5}_{(n)}$ axioms. It was developed as a final project for the course Multi-Agent Systems at the Rijksuniversiteit Groningen.
+\par {\tt OOPS} is implemented as a Java package (code library) in order to facilitate reuse in a Logics Workbench-like ~\cite{wb} tool as well as an online applet. The choice for Java sets {\tt OOPS} apart from similar tools written in Prolog or C in terms of portability and deployment options.
 
 \section{Semantic Tableaux for $\textbf{S5}_{(n)}$}
 \label{theory}
-{\it OOPS}' automated proofs are generated using de Boer's ~\cite{these} proof system {\bf ELtap}, which is an extension of Fitting and Mendelsohn's ~\cite{fit_men} labelled semantic tableau method. Within this formalism, semantic tableau proofs are represented as trees of labelled formulas, where labels specify accessibility relations between worlds.
+{\tt OOPS} generates proofs using de Boer's ~\cite{these} proof system {\bf ELtap}, which is an extension of Fitting and Mendelsohn's ~\cite{fit_men} labelled semantic tableau method. Within this formalism, semantic tableau proofs are represented as trees of labelled formulas, where labels specify accessibility relations between worlds.
 
 \begin{defs}{\it Labels} \newline
 If $\sigma$ is a label representing a world $m$, then $\sigma.n_i$ represents a world $n$ accessible from $m$ by agent $i$, where $\sigma,m,n,i \in \mathcal{N}$. The {\it length} of a label $\sigma$ is the number of dots it contains plus one.~\cite{beck_gore} \end{defs} 
@@ -97,8 +100,7 @@ $\sigma$&$\neg\psi$&\multicolumn{1}{|r}{$\sigma$}&$\psi$
 \end{tabular}
 \end{defs}
 
-\samepage{
-A node without children is called a {\it leaf}, while a {\it branch} is any path from the root node to a leaf node. {\it Conjunctive rules} add two child nodes to the same branch, while {\it disjunctive rules} fork a branch in two, adding one child node to each. For a succesful tableau proof of a formula $\varphi$, all branches from the root node $\neg\varphi$ must be {\it closed}.}
+A node without children is called a {\it leaf}, while a {\it branch} is any path from the root node to a leaf node. {\it Conjunctive rules} add two child nodes to the same branch, while {\it disjunctive rules} fork a branch in two, adding one child node to each. For a succesful tableau proof of a formula $\varphi$, all branches from the root node $\neg\varphi$ must be {\it closed}.
 
 \begin{defs}{\it Closure of Branches} \newline
 A tableaubranch is {\it closed} if it contains two nodes with the formulas $\psi$ and $\neg\psi$, where each has the same label $\sigma$. Otherwise, a branch is {\it open}.
@@ -138,7 +140,7 @@ Example 1.1 demonstrates how a semantic tableau can be used to prove a propositi
 \end{center}
 \end{exs}
 
-\newpage For use with $\textbf{S5}_{(n)}$, the propositional expansion rules in Definition \ref{proptab} must be extended with modal expansion rules, as de Boer~\cite{these} does for his proof system {\bf ELtap}. {\it Possibility rules} introduce new labels to a branch, while {\it necessity rules} add formula's to existing labels. {\it Basic necessity rules} follow from $\textbf{K}$; {\it special necessity rules} are derived from the extra axioms of $\textbf{S5}_{(n)}$. If a node's label is of the form $\sigma.k_i$ (i.e., it represents a world $k$ accessible from $\sigma$ by agent $i$), and its formula $\varphi$ concerns the same agent $i$ (i.e., $\varphi = \Box_i\psi$ or $\varphi = \Diamond_i\psi$), only {\it starred $*$} extension rules may be applied. In all other cases, {\it regular} rules must be applied.
+For use with $\textbf{S5}_{(n)}$, the propositional expansion rules in Definition \ref{proptab} must be extended with modal expansion rules, as de Boer~\cite{these} does for his proof system {\bf ELtap}. {\it Possibility rules} introduce new labels to a branch, while {\it necessity rules} add formula's to existing labels. {\it Basic necessity rules} follow from $\textbf{K}$; {\it special necessity rules} are derived from the extra axioms of $\textbf{S5}_{(n)}$. If a node's label is of the form $\sigma.k_i$ (i.e., it represents a world $k$ accessible from $\sigma$ by agent $i$), and its formula $\varphi$ concerns the same agent $i$ (i.e., $\varphi = \Box_i\psi$ or $\varphi = \Diamond_i\psi$), only {\it starred $*$} extension rules may be applied. In all other cases, {\it regular} rules must be applied.
 
 \begin{defs} {\it Modal Tableau Extension Rules} ~\cite{these, fit_men}
 \label{modtab}
@@ -297,7 +299,6 @@ In a node with a label of the form $\sigma$, i.e. a label of length == 1, {\it o
 \item A {\large $\Box_i \varphi$} can be expanded into a node with label $\sigma$ (rule $T$) or a node with label $\sigma.h_i$ (rule $K_\Box$), both with formula $\varphi$.
 \end {itemize}
 
-\newpage
 \begin{exs}{\it Tableau Proof of $\Diamond_1(p \wedge \Box_1 q) \rightarrow (\Diamond_1 p\wedge \Box_1 q)$}
 \begin{center}
 \begin{tabular} {p{40pt}lp{155pt}rrp{40pt}}
@@ -328,33 +329,45 @@ In a node with a label of the form $\sigma$, i.e. a label of length == 1, {\it o
 \end{center}
 \end{exs}
 
-\section{Use of {\it OOPS}}
+\section{Use of {\tt OOPS}}
 \label{use}
 
 \begin{tabular}{cc}
 Logical Operator & OOPS Input Symbol \\
-$\neg$ & $\sim$ \\ 
-$\wedge$ & \& \\
-$\vee$ & $|$ \\
-$\rightarrow$ & $>$ \\
-$\leftrightarrow$ & = \\
-$\Box_i$ & \# \_ i  \\
-$\Diamond_i$ & \% \_ i  \\
+$\neg$ & \tt{$\sim$} \\ 
+$\wedge$ & \tt{\&} \\
+$\vee$ & \tt{|} \\
+$\rightarrow$ & \tt{>} \\
+$\leftrightarrow$ & \tt{=} \\
+$\Box_i$ & \tt{\#\_i}  \\
+$\Diamond_i$ & \tt{\%\_i}  \\
 \end{tabular}
 
-\section{Implementation of {\it OOPS}}
+\section{Implementation of {\tt OOPS}}
 \label{imp}
 \input{implementation.tex}
 
-\section{Validation of {\it OOPS}}
+\section{Validation of {\tt OOPS}}
+
+Although full validation of {\tt OOPS} was outside the scope of this project, it was succefully tested on the set of example formulas listed by de Boer ~\cite{these} (see Appendix A.1.4 of that work). This example set  consists of 17 formulas that are true in $\textbf{S5}_{(n)}$, as well as 8 that are not. {\tt OOPS} performs correctly on all 25. This includes modal formulas concerning up to three different agents, with up to six nested modal operators. For full details of the example set, we refer to de Boer's ~\cite{these} thesis, or our own implementing code. On the 2.66 GHz Intel Pentium Dual-Core Processor we used to test {\tt OOPS}, evaluating all 25 examples takes slightly less than half a second.
+
 \label{val}
 
-\section{Further Work}
+\section{Conclusion and Further Work}
 \label{more}
 
-
+{\tt OOPS} seems to be a succesful proof tool for epistemic logic in  $\textbf{S5}_{(n)}$, but it would benefit from a number of improvements. First, it needs more extensive validation. We have proved neither soundness nor completion for our version of the {\bf ELtap}~\cite{these} proof system, and the set of example formulas tested is quite small.
+\par Second, {\tt OOPS} can be extended in several ways which would increase its usefulness as a tool. It could be adapted to generate counterexamples, to display the proof trees belonging to semantic tableaux in a readable way, and to handle logics other than $\textbf{S5}_{(n)}$.
+\par Third, a somewhat more user friendly distribution is possible. Although we have accurately documented the installation and configuration of {\tt OOPS}, it is not a straightforward process. Given that {\tt OOPS} is implemented in Java, a web-based version in the form of an applet is a possibility which could easily be exploited.
 
 \newpage
 \bibliography{mas}
 \bibliographystyle{naturemag}
+\appendix
+\section{Propositional Algorithm}
+\label{app:propalg}
+\input{algorithm.tex}
+\section{Modal Algorithm}
+\label{app:modalg}
+\input{algorithm_modal.tex}
 \end{document}
