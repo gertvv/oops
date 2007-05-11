@@ -1,3 +1,66 @@
+Introduction
+==============================================================================
+
+This is OOPS, the Object Oriented Prover for S5n. OOPS was created by Elske
+van der Vaart (http://www.ai.rug.nl/~elskevdv/) and Gert van Valkenhoef
+(http://www.ai.rug.nl/~valkenhoef/) in the context of a Multi-Agent Systems
+project (http://www.ai.rug.nl/mas/).
+
+OOPS makes use of a tableau proof method in order to prove or disprove
+formulas in the S5n modal logic. More information can be found in the
+accompanying paper (http://www.ai.rug.nl/~valkenhoef/oops/).
+
+To encourage future work on OOPS, the source code is available under the GNU
+General Public License (GNU GPL). It is our hope that OOPS will be tested,
+proven correct, extended or otherwise enhanced in the context of future
+student projects.
+
+
+License
+==============================================================================
+
+    OOPS - Object Oriented Prover for S5n
+    Copyright (C) 2007  Elske van der Vaart and Gert van Valkenhoef
+
+	This program is free software; you can redistribute it and/or modify it
+	under the terms of the GNU General Public License version 2 as published
+	by the Free Software Foundation.
+	
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+	See the 'LICENSE' file in the source distribution for more information.
+
+
+Running OOPS
+==============================================================================
+
+To run OOPS from the provided JAR file, you need to have the following
+installed (and have your classpath set up correctly):
+
+ * Sun Java 1.5 or higher
+
+Run the prover by (assuming oops.jar is in the current working directory):
+	 $ java -cp oops.jar nl.rug.ai.mas.oops.Prover '<formula>'
+Where <formula> is a valid formula according to the OOPS syntax (see the
+accompanying paper).
+
+Example:
+	 $ java -cp oops.jar nl.rug.ai.mas.oops.Prover 'a | ~a'
+	true
+
+
+Compiling from source
+==============================================================================
+
+Requirements
+------------------------------------------------------------------------------
 In order to build the sources in this directory you need:
 
 Sun Java 1.5 or higher (or any compatible implementation)
@@ -9,3 +72,29 @@ http://ant.apache.org/
 SableCC, version 3.2 (supporting generics) or higher
 SableCC ant task, version 1.0.1 or higher
 http://sablecc.org/
+
+Junit4, version 4.3.1 has been tested (although any 4.x should be sufficient)
+http://junit.org/
+
+Follow the installation instructions _carefully_ and make sure all the
+required JAR files are in your path.
+
+
+Building the JAR
+------------------------------------------------------------------------------
+
+Use the following command:
+	 $ ant dist
+
+This will create the file 'oops.jar' under the directory 'dist'.
+
+Running plain 'ant' will build the class files, but not the JAR.
+
+
+Running the test suite
+------------------------------------------------------------------------------
+
+Use the following command:
+	$ ant test
+
+This will create a series of test reports in the directory 'test'.

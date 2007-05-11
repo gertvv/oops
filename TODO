@@ -7,11 +7,11 @@ v de parser aanpassen zodat hij alleen formules pakt GERT
 - API documentatie aanpassen GERT
 
 Verslag:
-- de semantische tableau uitleg verbeteren ELSKE
+v de semantische tableau uitleg verbeteren ELSKE
 - "gebruikers beschrijving" komen van het programma ELSKE
-- beschrijving van het algoritme
-- lijst van geteste formules & uitslag ELSKE
-- opsomming verdere wensen
+v beschrijving van het algoritme
+v lijst van geteste formules & uitslag ELSKE
+v opsomming verdere wensen
 	*	hooks tableau generator voor:
 						tableau weergeven
 						tegenvoorbeelden genereren
@@ -26,4 +26,4 @@ Presentatie:
 
 Anders:
 - webpagina met link naar subversion & gezipte versie van verslag & API documentatie
-- beschrijving benodigde packages
+v beschrijving benodigde packages

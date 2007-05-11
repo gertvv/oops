@@ -59,7 +59,8 @@ Debugging, testing, bespreking
 2007-05-03	0	1
 TransformTest -> FormulaAdapter
 
-TODO 2007-04-27
- * unit tests (G)
- * algoritme uitwerken / werkend krijgen (E)
- * log bijwerken (E)
+2007-05-09	0	3
+Bugfixes bugfixes bugfixes
+
+2007-05-11	7	7
+Bugfixes, tests, rename naar OOPS, verslag, README
