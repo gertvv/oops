@@ -74,3 +74,13 @@ the unnecessary introduction of branches and worlds in many cases, thus
 closing the tableau as early as possible. The optimal assignment of badness
 values to rules is not known (although a good approximation has been
 implemented).
+
+\begin{tabular}{ll}
+Type & Badness \\
+\hline
+LINEAR, $1$ resultant & 1 \\
+LINEAR, $> 1$ resultant  & 2 \\
+ACCESS & 3 \\
+CREATE & 4 \\
+SPLIT & 5 \\
+\end{tabular}
