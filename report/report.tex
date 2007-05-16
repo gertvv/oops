@@ -8,6 +8,7 @@
 \theorembodyfont{\upshape}
 \newtheorem{defs}{Definition}[section]
 \newtheorem{exs}{Example}[section]
+\newtheorem{mytable}{Table}[section]
 
 
 \author{Elske van der Vaart \and Gert van Valkenhoef}
@@ -19,14 +20,70 @@
 
 \section{Introduction}
 
-This paper describes {\tt OOPS}, an {\it O}bject {\it O}riented {\it P}rover for $\mathbf\mathit{S}\textbf{5}_{(n)}$. {\tt OOPS} is a Java-based implementation of semantic tableaux, which can automatically prove or disprove  formulas of epistemic logic, using the $\textbf{S5}_{(n)}$ axioms. It was developed as a final project for the course Multi-Agent Systems at the Rijksuniversiteit Groningen.
-\par {\tt OOPS} is implemented as a Java package (code library) in order to facilitate reuse in a Logics Workbench-like ~\cite{wb} tool as well as an online applet. The choice for Java sets {\tt OOPS} apart from similar tools written in Prolog or C in terms of portability and deployment options.
+This paper describes {\tt OOPS}, an {\it O}bject {\it O}riented {\it P}rover for $\mathbf\mathit{S}\textbf{5}_{(n)}$. {\tt OOPS} is a Java-based implementation of semantic tableaux, which can automatically prove or disprove  formulas of epistemic logic, using the $\textbf{S5}_{(n)}$ axioms. It can be run from the commandline, and will correctly return {\tt true} or {\tt false} in response to an $\textbf{S5}_{(n)}$ input formula.
+\par {\tt OOPS} was developed as a final project for the course Multi-Agent Systems at the Rijksuniversiteit Groningen. It was inspired by the Logics Workbench \cite{wb}, but it is different in that it handles $\textbf{S5}_{(n)}$ formulas, and features a far less restrictive licence.
+Furthermore, {\tt OOPS}' implementation in Java sets it apart from similar tools written in Prolog or C in terms of portability and deployment options.
+\par This paper is divided into several sections. First, Section \ref{use} describes how to use {\tt OOPS}. Then, Section \ref{theory} introduces the theory behind its semantic tableaux method, while Section \ref {imp} explains how this was implemented as a Java program. Finally, Section \ref{val} discusses how {\tt OOPS} was validated, which is followed by Section \ref{more} which considers possible improvements.
 
-\section{Semantic Tableaux for $\textbf{S5}_{(n)}$}
+\section{Use of {\tt OOPS}}
+\label{use}
+At this stage in its development, {\tt OOPS} can only be run from the commandline, by users who have the Sun Java Runtime Environment (JRE)\footnote{Available from http://java.sun.com.} installed, version 1.5 or higher. (See the README for details.)  {\tt OOPS} is distributed as {\tt oops.jar} \footnote{At time of writing, available from http://www.ai.rug.nl/~valkenhoef/oops.} , and can be run by typing the following command: \newline
+\par {\tt \$ java -cp oops.jar nl.rug.ai.mas.oops.Prover '<formula>'} \newline
+\par {\tt OOPS} should then return {\tt true} or {\tt false} as appropriate, or an error message in response to an incorrectly formatted formula.
+\par Each logical operator has an {\tt OOPS} equivalent, to facilitate easy input by computer keyboard. These are shown in Table \ref{input}, as are operator precedences. Two example runs of {\tt OOPS} are presented in Example \ref{runs}.
+
+\begin{mytable}{{\it {\tt OOPS} Input Details}}
+\label{input}
+\newline
+\newline
+\begin{tabular}{cc}
+\begin{tabular}{cc}
+Logical Operator & OOPS Symbol \\
+$\neg$ & \tt{$\sim$} \\ 
+$\wedge$ & \tt{\&} \\
+$\vee$ & \tt{|} \\
+$\rightarrow$ & \tt{>} \\
+$\leftrightarrow$ & \tt{=} \\
+$\Box_i$ & \tt{\#\_i}  \\
+$\Diamond_i$ & \tt{\%\_i}  \\
+\end{tabular}
+
+&
+
+\begin{tabular}{cc}
+Precedence & Logical Operator(s) \\
+1 & $\neg$, $\Box_i$, $\Diamond_i$ \\ 
+2 & $\wedge$ \\
+3 & $\vee$ \\
+4 & $\rightarrow$, $\leftrightarrow$ \\
+\\
+\\
+\\
+\end{tabular}
+\end{tabular}
+\end{mytable}
+
+\begin{exs}{\it Example Runs of {\tt OOPS}}
+\label{runs}
+
+\begin{tabbing}
+A ru\=n demonstrating a test of $\neg\Diamond_1(\neg a \wedge a)$: \\
+\> {\tt \$ java} \= {\tt -cp oops.jar nl.rug.ai.mas.oops.Prover '$\sim$\%\_1($\sim$a \& a)'} \\
+\> \> {\tt true} \\
+\\
+A ru\=n demonstrating a test of $\Box_1\Box_2(\neg a \wedge b)$: \\
+\> {\tt \$ java} \= {\tt -cp oops.jar nl.rug.ai.mas.oops.Prover '\#\_1\#\_2($\sim$a \& b)'} \\
+\> \> {\tt false}
+ \end{tabbing}
+\end{exs}
+
+\section{Semantic Tableaux for $\tt OOPS$}
 \label{theory}
-{\tt OOPS} generates proofs using de Boer's ~\cite{these} proof system {\bf ELtap}, which is an extension of Fitting and Mendelsohn's ~\cite{fit_men} labelled semantic tableau method. Within this formalism, semantic tableau proofs are represented as trees of labelled formulas, where labels specify accessibility relations between worlds.
+{\tt OOPS} generates proofs using de Boer's ~\cite{these} proof system {\bf ELtap}, which is an extension of Fitting and Mendelsohn's ~\cite{fit_men} labelled semantic tableau method.
+\par This section provides a general introduction to {\bf ELtap}. Within this formalism, semantic tableau proofs are represented as trees of labelled formulas, where labels specify accessibility relations between worlds.
 
 \begin{defs}{\it Labels} \newline
+\label{lab}
 If $\sigma$ is a label representing a world $m$, then $\sigma.n_i$ represents a world $n$ accessible from $m$ by agent $i$, where $\sigma,m,n,i \in \mathcal{N}$. The {\it length} of a label $\sigma$ is the number of dots it contains plus one.~\cite{beck_gore} \end{defs} 
 
 In this type of semantic tableau, the formula $\varphi$ to be proved is placed at the top of the tree in negated form, $\neg \varphi$, as the {\it root node}. Additional nodes are added to the tree by application of {\it tableau extension rules}. All {\it propositional extension rules} create child nodes with labels identical to those of the parent nodes.
@@ -110,11 +167,13 @@ A tableaubranch is {\it closed} if it contains two nodes with the formulas $\psi
 A semantic tableau is {\it closed} if all its branches are closed. A closed semantic tableau with root node $\neg\varphi$ is a {\it proof} of $\varphi$.
 \end{defs}
 
-Example 1.1 demonstrates how a semantic tableau can be used to prove a propositional formula. From left to right, each node is represented by its label $\sigma$, its formula $\psi$, an index $k$ and an abbreviated rule $R$. The indexes indicate the order in which nodes were added to tree, while the abbreviated rules summarize how they were generated. A $\otimes$ indicates a closed branch, while the $\dagger$ joins the two nodes that close it.
+Example \ref{proof1} demonstrates how a semantic tableau can be used to prove a propositional formula. From left to right, each node is represented by its label $\sigma$, its formula $\psi$, an index $k$ and an abbreviated rule $R$. The indexes indicate the order in which nodes were added to tree, while the abbreviated rules summarize how they were generated. A $\otimes$ indicates a closed branch, while the $\dagger$ joins the two nodes that close it.
 
+\newpage
 \begin{exs}{\it Tableau Proof of $(p \rightarrow q) \rightarrow (\neg p \vee q)$}
 
 \begin{center}
+\label{proof1}
 \begin{tabular} {p{50pt}lp{135pt}rrp{50pt}}
 & $\sigma$ & $\psi$ & $k$ & $R$ & \\
 & 1 & $\neg((p \rightarrow q ) \rightarrow (\neg p \vee q ))$ & 1. &  & \\
@@ -188,6 +247,10 @@ $\sigma.n_i$&$\neg\varphi$
 \begin{tabular} {c}
 {\it Possibility} \\ {\it Rules$*$}
 \end{tabular} \\ [18pt]
+
+\end{tabular}
+
+\begin{tabular}{cccc}
 
 & $K_\Box$ = & $K_\Diamond$ = & \\
 
@@ -279,6 +342,9 @@ $\sigma$&$\neg\varphi$
 {\it Special Necessity}\\{\it Rules$*$}
 \end{tabular} \\ [20pt]
 
+\multicolumn{4}{c}{\it Here, $n_i$ indicates a world new to the branch,} \\
+\multicolumn{4}{c}{\it while $h_i$ indicates a world already on the branch.}
+
 \end{tabular}
 \end{center}
 \end{defs}
@@ -300,6 +366,7 @@ In a node with a label of the form $\sigma$, i.e. a label of length == 1, {\it o
 \end {itemize}
 
 \begin{exs}{\it Tableau Proof of $\Diamond_1(p \wedge \Box_1 q) \rightarrow (\Diamond_1 p\wedge \Box_1 q)$}
+\label{proof2}
 \begin{center}
 \begin{tabular} {p{40pt}lp{155pt}rrp{40pt}}
 & $\sigma$ & $\psi$ & $k$ & $R$ & \\
@@ -329,26 +396,64 @@ In a node with a label of the form $\sigma$, i.e. a label of length == 1, {\it o
 \end{center}
 \end{exs}
 
-\section{Use of {\tt OOPS}}
-\label{use}
-
-\begin{tabular}{cc}
-Logical Operator & OOPS Input Symbol \\
-$\neg$ & \tt{$\sim$} \\ 
-$\wedge$ & \tt{\&} \\
-$\vee$ & \tt{|} \\
-$\rightarrow$ & \tt{>} \\
-$\leftrightarrow$ & \tt{=} \\
-$\Box_i$ & \tt{\#\_i}  \\
-$\Diamond_i$ & \tt{\%\_i}  \\
-\end{tabular}
-
 \section{Implementation of {\tt OOPS}}
 \label{imp}
-\input{implementation.tex}
+
+As is evident from Section \ref{theory}, the most important components of semantic tableau proofs are {\it rules} and {\it nodes}, where rules operate on nodes and nodes consist of pairs of {\it labels} and {\it formulas}. This general structure is preserved by  {\tt OOPS}, which was written in Java.
+\newline
+
+In {\tt OOPS}, labels are defined recursively, so that each label consists of a {\it world}, an {\it agent} and a {\it parent label}. In a regular {\bf ELtap} tableau proof, the first label $\sigma$ is simply 0. Similarly, {\tt OOPS}' first label has a world {\tt 0}, but its agent is a {\tt NullAgent} and its parent is a {\tt NullLabel}, terminating the recursion of labels. {\tt NullAgents} and {\tt NullLabels} match no other agents or labels, respectively.
+
+Formulas are represented by implementations of the {\tt Formula} interface. Every logical operator has a corresponding {\tt Formula} object, such as {\tt Negation}, {\tt Conjunction}, {\tt Disjunction}, and so on. The user provides an input formula in {\tt String} form, which is parsed into its component {\tt Formulas} by a SableCC-based\footnote{See http://sablecc.org for details.} parser. Like {\tt Labels}, {\tt Formulas} are defined recursively: A {\tt Negation} consists of a "$\sim$" followed by any type of {\tt Formula}, which eventually terminates in one or more {\tt Propositions}.
+
+\newpage
+
+A {\tt Node} is a combination of a {\tt Label} and a {\tt Formula}. {\tt OOPS} places its nodes on {\tt Branches}. When this happens, {\tt OOPS} checks which rules apply to the new node. Rules are represented by objects implementing the {\tt Rule} interface. Every rule from Definitions \ref{proptab} and \ref{modtab} has its own {\tt Rule} object.
+
+In {\tt OOPS}, propositional rules are divided into two types: LINEAR and SPLIT. LINEAR rules add new nodes to the same branch; SPLIT rules create two new branches. LINEAR rules thus correspond to the {\it Double Negation Rule} and {\it Conjunctive Rules} of Definition \ref{proptab}, while SPLIT rules refer to the {\it Disjunctive Rules} defined there.
+
+Likewise, there are two types of modal rules, CREATE and ACCESS. CREATE rules generate nodes with labels new to the branch, while ACCESS rules generate nodes with labels already on the branch. CREATE rules are thus the {\it Possibility Rules} of Definition \ref{modtab}; ACCESS rules are the {\it Basic Necessity Rules} and {\it Special Necessity Rules} of Definition \ref{modtab}.
+\newline
+
+Every time a new node is added to a branch, all rules are checked for possible application. If a rule matches the new node, the resulting match is placed on the 'Match Queue'. For example, if a new node has the formula '$p \wedge q$', then a LINEAR rule matches, namely the one corresponding to rule $\wedge_{\wedge}$ from Definition \ref{proptab}.
+
+Once this match reaches the top of the Match Queue, it will be executed, and it will place two new nodes (with formula's 'p' and 'q', respectively) on the branch. Those nodes might again generate new matches, which will again be placed on the queue, and so on.
+
+All matches are handled appropriately. If a match results from a LINEAR or ACCESS rule, new nodes are placed on the current branch. If a match results from a SPLIT rule, a new branch is created for each resultant node. And finally, if a match results from a CREATE rule, a node with a new label is added to the current branch.
+
+The ACCESS rules corresponding to the {\it Basic Necessity Rules} of Definition \ref{modtab} are a special case, as they can create matched that apply to nodes that do not yet exist on the branch. For this reason, a special list of '{\it necessities}' is maintained, which is checked whenever a match resulting from a CREATE rule is applied. If one of these 'necessities' is applicable to the newly created node, its corresponding match is added to the Match Queue.
+\newline
+
+The Match Queue that stores the matches is a priority queue, where matches that result from rules that are less `bad' are given higher priority. This heuristic should prevent the unnecessary introduction of branches and worlds in many cases, thus closing the tableau as early as possible. The optimal assignment of badness values to rules is not known, although a good approximation has been implemented, as is shown in Table \ref{prior}.
+
+
+\newpage
+
+\begin{mytable}{Queue Match Priorities}
+\label{prior}
+\newline
+\newline
+\begin{tabular}{cc}
+{\it Type} & {\it Badness} \\
+LINEAR, $1$ resultant & 1 \\
+LINEAR, $> 1$ resultant  & 2 \\
+ACCESS & 3 \\
+CREATE & 4 \\
+SPLIT & 5 \\
+\end{tabular}
+\end{mytable}
+
+One of the implications of the above design is that multiple rules can be applied to single nodes. Infinite recursion is avoided by storing matches from the create rules and ignoring any duplicates. Non-determinism and backtracking are avoided by eventually applying all possible rules (when a node matches more that one rule, all possibilities are explored). The implications for computational
+complexity have not been explored in-depth.
+\newline
+
+For a more detailed overview of the algorithm that drives {\tt OOPS}, see the Appendixes. Appendix \ref{app:propalg} suggests a suitable tableau algorithm for propositional formulas, which was implemented as a prototype for the modal algorithm. This modal algorithm is listed in Appendix \ref{app:modalg}.
+\newline
+
+As a final note, the {\tt OOPS} package makes extensive use of the new `generics' feature in Java 1.5 in
+order to ensure readability and type safety. Most of the code is covered by Javadoc-style comments that enable automatic generation of API documentation, which is also available online. Also, a JUnit 4\footnote{See http://www.junit.org for more information.} testing framework is in place, providing partial testing coverage for the library. Whenever bugs were encountered, a unit test was added to the test suite to prevent them from reappearing.
 
 \section{Validation of {\tt OOPS}}
-
 Although full validation of {\tt OOPS} was outside the scope of this project, it was succefully tested on the set of example formulas listed by de Boer ~\cite{these} (see Appendix A.1.4 of that work). This example set  consists of 17 formulas that are true in $\textbf{S5}_{(n)}$, as well as 8 that are not. {\tt OOPS} performs correctly on all 25. This includes modal formulas concerning up to three different agents, with up to six nested modal operators. For full details of the example set, we refer to de Boer's ~\cite{these} thesis, or our own implementing code. On the 2.66 GHz Intel Pentium Dual-Core Processor we used to test {\tt OOPS}, evaluating all 25 examples takes slightly less than half a second.
 
 \label{val}
