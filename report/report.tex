@@ -27,7 +27,7 @@ Furthermore, {\tt OOPS}' implementation in Java sets it apart from similar tools
 
 \section{Use of {\tt OOPS}}
 \label{use}
-At this stage in its development, {\tt OOPS} can only be run from the commandline, by users who have the Sun Java Runtime Environment (JRE)\footnote{Available from http://java.sun.com.} installed, version 1.5 or higher. (See the README for details.)  {\tt OOPS} is distributed as {\tt oops.jar} \footnote{At time of writing, available from http://www.ai.rug.nl/~valkenhoef/oops.} , and can be run by typing the following command: \newline
+At this stage in its development, {\tt OOPS} can only be run from the commandline, by users who have the Sun Java Runtime Environment (JRE)\footnote{Available from http://java.sun.com.} installed, version 1.5 or higher. (See the README for details.)  {\tt OOPS} is distributed as {\tt oops.jar} \footnote{At time of writing, available from http://www.ai.rug.nl/\~{}valkenhoef/oops.} , and can be run by typing the following command: \newline
 \par {\tt \$ java -cp oops.jar nl.rug.ai.mas.oops.Prover '<formula>'} \newline
 \par {\tt OOPS} should then return {\tt true} or {\tt false} as appropriate, or an error message in response to an incorrectly formatted formula.
 \par Each logical operator has an {\tt OOPS} equivalent, to facilitate easy input by computer keyboard. These are shown in Table \ref{input}, as are operator precedences. Two example runs of {\tt OOPS} are presented in Example \ref{runs}.
@@ -447,7 +447,7 @@ One of the implications of the above design is that multiple rules can be applie
 complexity have not been explored in-depth.
 \newline
 
-For a more detailed overview of the algorithm that drives {\tt OOPS}, see the Appendixes. Appendix \ref{app:propalg} suggests a suitable tableau algorithm for propositional formulas, which was implemented as a prototype for the modal algorithm. This modal algorithm is listed in Appendix \ref{app:modalg}.
+For a more detailed overview of the algorithm that drives {\tt OOPS}, see the Appendices. Appendix \ref{app:propalg} suggests a suitable tableau algorithm for propositional formulas, which was implemented as a prototype for the modal algorithm. This modal algorithm is listed in Appendix \ref{app:modalg}.
 \newline
 
 As a final note, the {\tt OOPS} package makes extensive use of the new `generics' feature in Java 1.5 in
@@ -461,7 +461,7 @@ Although full validation of {\tt OOPS} was outside the scope of this project, it
 \section{Conclusion and Further Work}
 \label{more}
 
-{\tt OOPS} seems to be a succesful proof tool for epistemic logic in  $\textbf{S5}_{(n)}$, but it would benefit from a number of improvements. First, it needs more extensive validation. We have proved neither soundness nor completion for our version of the {\bf ELtap}~\cite{these} proof system, and the set of example formulas tested is quite small.
+{\tt OOPS} seems to be a succesful proof tool for epistemic logic in  $\textbf{S5}_{(n)}$, but it would benefit from a number of improvements. First, it needs more extensive validation. We have proved neither soundness nor completeness for our version of the {\bf ELtap}~\cite{these} proof system, and the set of example formulas tested is quite small.
 \par Second, {\tt OOPS} can be extended in several ways which would increase its usefulness as a tool. It could be adapted to generate counterexamples, to display the proof trees belonging to semantic tableaux in a readable way, and to handle logics other than $\textbf{S5}_{(n)}$.
 \par Third, a somewhat more user friendly distribution is possible. Although we have accurately documented the installation and configuration of {\tt OOPS}, it is not a straightforward process. Given that {\tt OOPS} is implemented in Java, a web-based version in the form of an applet is a possibility which could easily be exploited.
 
