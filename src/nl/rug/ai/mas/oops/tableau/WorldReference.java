@@ -28,13 +28,15 @@ implements World {
 		super(w);
 	}
 
-	public Substitution<World> match(World other) {
-		Substitution<World> s = new Substitution<World>();
+	public NodeSubstitution match(World other) {
+		NodeSubstitution ns = new NodeSubstitution();
+		Substitution<World> s = ns.getWorldSubstitution();
 		s.put(get(), other);
-		return s;
+		return ns;
 	}
 
-	public World substitute(Substitution<World> s) {
+	public World substitute(NodeSubstitution ns) {
+		Substitution<World> s = ns.getWorldSubstitution();
 		World w = s.get(get());
 		return (w != null ? w : this);
 	}

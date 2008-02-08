@@ -65,10 +65,8 @@ public class Branch {
 	public Vector<Node> apply(Node n) {
 		Vector<Node> result = new Vector<Node>();
 		for (Label l : getLabels()) {
-			LabelSubstitution lsub = n.getLabel().match(l);
-			if (lsub != null) {
-				NodeSubstitution nsub = new NodeSubstitution();
-				nsub.merge(lsub, new FullSubstitution());
+			NodeSubstitution nsub = n.getLabel().match(l);
+			if (nsub != null) {
 				result.add(n.substitute(nsub));
 			}
 		}

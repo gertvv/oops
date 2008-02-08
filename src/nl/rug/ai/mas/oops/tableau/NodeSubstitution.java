@@ -42,19 +42,46 @@ public class NodeSubstitution {
 		d_constraint = c;
 	}
 
+	public boolean merge(NodeSubstitution s) {
+		if (s.d_constraint != null)
+			return false;
+		if (!d_lsub.merge(s.getLabelSubstitution()))
+			return false;
+		if (!d_wsub.merge(s.getWorldSubstitution()))
+			return false;
+		if (!d_asub.merge(s.getAgentSubstitution()))
+			return false;
+		if (!d_fsub.merge(s.getFormulaSubstitution()))
+			return false;
+
+		if (d_constraint != null && !d_constraint.validate(this))
+			return false;
+
+		return true;
+	}
+
 	public boolean merge(LabelSubstitution ls, FullSubstitution fs) {
 		if (!d_lsub.merge(ls.getLabelSubstitution()))
 			return false;
 		if (!d_wsub.merge(ls.getWorldSubstitution()))
 			return false;
-		if (!d_fsub.merge(fs.getFormulaSubstitution()))
+		if (!d_asub.merge(ls.getAgentSubstitution()))
 			return false;
 
-		if (!d_asub.merge(ls.getAgentSubstitution()))
+		if (!merge(fs))
+			return false;
+
+		//if (d_constraint != null && !d_constraint.validate(this))
+		//	return false;
+
+		return true;
+	}
+
+	public boolean merge(FullSubstitution fs) {
+		if (!d_fsub.merge(fs.getFormulaSubstitution()))
 			return false;
 		if (!d_asub.merge(fs.getAgentSubstitution()))
 			return false;
-
 		if (d_constraint != null && !d_constraint.validate(this))
 			return false;
 

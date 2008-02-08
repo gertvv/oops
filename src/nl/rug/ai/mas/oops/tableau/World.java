@@ -23,6 +23,6 @@ import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 
 public interface World {
-	public Substitution<World> match(World other);
-	public World substitute(Substitution<World> s);
+	public NodeSubstitution match(World other);
+	public World substitute(NodeSubstitution s);
 }

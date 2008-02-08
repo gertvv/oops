@@ -44,10 +44,8 @@ public class Necessities {
 			result = new Vector<Node>();
 
 		for (Node n : d_current) {
-			LabelSubstitution lsub = n.getLabel().match(l);
-			if (lsub != null) {
-				NodeSubstitution nsub = new NodeSubstitution();
-				nsub.merge(lsub, new FullSubstitution());
+			NodeSubstitution nsub = n.getLabel().match(l);
+			if (nsub != null) {
 				result.add(n.substitute(nsub));
 			}
 		}

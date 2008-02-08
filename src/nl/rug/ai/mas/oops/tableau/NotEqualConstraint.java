@@ -36,4 +36,8 @@ public class NotEqualConstraint implements Constraint {
 			return false;
 		return true;
 	}
+
+	public String toString() {
+		return "CONSTRAINT(" + d_a1 + " != " + d_a2 + ")";
+	}
 }

@@ -38,19 +38,18 @@ public class Tableau {
 	public BranchState tableau(Formula f) {
 		d_error = null;
 		Node n = new Node(
-				new LabelInstance(new NullLabel(), new WorldInstance(),
+				new LabelInstance(new NullLabel(), new WorldInstance(null),
 					new AgentId("NoAgent")), f);
-		return tableau(n, null, null, null, new PriorityQueue<Match>());
+		return tableau(n, null, null, new PriorityQueue<Match>());
 	}
 
 	private BranchState tableau(Node node, Branch branch,
-			Necessities necessities, CreationRules creationRules,
+			Necessities necessities,
 			PriorityQueue<Match> queue) {
 		// create data structures for this tableau branch
 		queue = new PriorityQueue<Match>(queue);
 		branch = new Branch(branch);
 		necessities = new Necessities(necessities);
-		creationRules = new CreationRules(creationRules);
 
 		BranchState result = handleNode(node, branch, queue);
 		if (result != BranchState.OPEN)
@@ -62,8 +61,7 @@ public class Tableau {
 			switch (match.getType()) {
 				case SPLIT:
 					for (Node n : match.getNodes()) {
-						result = tableau(n, branch, necessities, creationRules,
-							queue);
+						result = tableau(n, branch, necessities, queue);
 						if (result != BranchState.CLOSED)
 							return result;
 					}
@@ -77,13 +75,11 @@ public class Tableau {
 					break;
 				case CREATE:
 					for (Node n : match.getNodes()) {
-						Node concrete = concretize(n);
-						if (creationRules.entails(concrete)) {
+						if (branch.contains(n)) {
 							continue;
 						}
-						creationRules.add(n);
-						matchPut(concrete, branch, queue);
-						for (Node m : necessities.apply(concrete.getLabel())) {
+						matchPut(n, branch, queue);
+						for (Node m : necessities.apply(n.getLabel())) {
 							result = handleNode(m, branch, queue);
 							if (result != BranchState.OPEN)
 								return result;
@@ -93,7 +89,9 @@ public class Tableau {
 				case ACCESS:
 					for (Node n : match.getNodes()) {
 						necessities.add(n);
+						int i = 0;
 						for (Node m : branch.apply(n)) {
+							++i;
 							result = handleNode(m, branch, queue);
 							if (result != BranchState.OPEN)
 								return result;
@@ -141,37 +139,6 @@ public class Tableau {
 				result.add(m);
 		}
 		return result;
-	}
-	
-	/**
-	 * This is a hack that could have been done in a more generic way (provided
-	 * a way to check for free variables in the label).
-	 */
-	private Node concretize(Node rwt) {
-		// create a pattern to match rwt
-		Variable<World> w = new Variable<World>("W");
-		WorldReference wref = new WorldReference(w);
-		Variable<Agent> a = new Variable<Agent>("a");
-		AgentReference aref = new AgentReference(a);
-		Variable<Label> p = new Variable<Label>("p");
-		LabelReference pref = new LabelReference(p);
-
-		// get the reference to the world we want to create
-		LabelInstance label = new LabelInstance(pref, wref, aref);
-		Substitution<World> wsub =
-			label.match(rwt.getLabel()).getWorldSubstitution();
-		WorldReference newWorldRef = (WorldReference)wsub.get(w);
-
-		// create new substitution to replace the reference by our actual world
-		LabelSubstitution ls = new LabelSubstitution();
-		ls.put(newWorldRef.get(), new WorldInstance());
-		NodeSubstitution ns = new NodeSubstitution();
-		ns.merge(ls, new FullSubstitution());
-
-		// perform the substitution
-		rwt = rwt.substitute(ns);
-
-		return rwt;
 	}
 
 	public String getError() {

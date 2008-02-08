@@ -46,8 +46,8 @@ public class LabelTest {
 		Label tpl = new LabelInstance(lref, kref, iref);
 
 		// build label
-		World w0 = new WorldInstance();
-		World w1 = new WorldInstance();
+		World w0 = new WorldInstance(null);
+		World w1 = new WorldInstance(null);
 		Agent a0 = new AgentId("NoAgent");
 		Agent a1 = new AgentId("1");
 		Label lbl = new LabelInstance(

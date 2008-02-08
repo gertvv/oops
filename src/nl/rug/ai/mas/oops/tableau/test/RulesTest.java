@@ -73,8 +73,8 @@ public class RulesTest {
 		Proposition p = new Proposition("p");
 		AgentId a = new AgentId("1");
 		Formula f = new Negation(new MultiDiamond(a, p));
-		World w0 = new WorldInstance();
-		World w1 = new WorldInstance();
+		World w0 = new WorldInstance(null);
+		World w1 = new WorldInstance(null);
 		Label l = new LabelInstance(
 			new LabelInstance(new NullLabel(), w0, new AgentId("NoAgent")),
 			w1, a);

@@ -31,14 +31,14 @@ implements Label {
 		super(l);
 	}
 
-	public LabelSubstitution match(Label other) {
-		LabelSubstitution s = new LabelSubstitution();
-		s.put(get(), other);
+	public NodeSubstitution match(Label other) {
+		NodeSubstitution s = new NodeSubstitution();
+		s.getLabelSubstitution().put(get(), other);
 		return s;
 	}
 
-	public Label substitute(LabelSubstitution s) {
-		Label l = s.get(get());
+	public Label substitute(NodeSubstitution s) {
+		Label l = s.getLabelSubstitution().get(get());
 		return (l != null ? l : this);
 	}
 }

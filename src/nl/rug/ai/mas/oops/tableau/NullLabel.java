@@ -35,9 +35,9 @@ public class NullLabel implements Label {
 	 * @param o The Label to match.
 	 * @return The empty subsitution if it matches o, null otherwise.
 	 */
-	public LabelSubstitution match(Label o) {
+	public NodeSubstitution match(Label o) {
 		if (equals(o)) {
-			return new LabelSubstitution();
+			return new NodeSubstitution();
 		}
 		return null;
 	}
@@ -46,7 +46,7 @@ public class NullLabel implements Label {
 	 * Substitute all occuring variables.
 	 * @return this.
 	 */ 
-	public Label substitute(LabelSubstitution s) {
+	public Label substitute(NodeSubstitution s) {
 		return this;
 	}
 

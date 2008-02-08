@@ -58,17 +58,18 @@ public class ModalRuleFactory {
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
 		// new world
-		Variable<World> n = new Variable<World>("n");
-		WorldReference nref = new WorldReference(n);
+		//Variable<World> n = new Variable<World>("n");
+		//WorldReference nref = new WorldReference(n);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
 
 		// formula f. agents i, j. worlds k, n. label l.
-		Label templateLabel = new LabelInstance(lref, kref, jref);
-		Label rewriteLabel = new LabelInstance(templateLabel, nref, iref);
 		Formula templateFormula = new MultiDiamond(iref, fref);
 		Formula rewriteFormula = fref;
+		WorldInstance n = new WorldInstance(rewriteFormula);
+		Label templateLabel = new LabelInstance(lref, kref, jref);
+		Label rewriteLabel = new LabelInstance(templateLabel, n, iref);
 		Constraint c = new NotEqualConstraint(i, j);
 		return new CreateRule("PosO1", new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
@@ -89,17 +90,18 @@ public class ModalRuleFactory {
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
 		// new world
-		Variable<World> n = new Variable<World>("n");
-		WorldReference nref = new WorldReference(n);
+		//Variable<World> n = new Variable<World>("n");
+		//WorldReference nref = new WorldReference(n);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
 
 		// formula f. agents i, j. worlds k, n. label l.
-		Label templateLabel = new LabelInstance(lref, kref, jref);
-		Label rewriteLabel = new LabelInstance(templateLabel, nref, iref);
 		Formula templateFormula = new Negation(new MultiBox(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
+		WorldInstance n = new WorldInstance(rewriteFormula);
+		Label templateLabel = new LabelInstance(lref, kref, jref);
+		Label rewriteLabel = new LabelInstance(templateLabel, n, iref);
 		Constraint c = new NotEqualConstraint(i, j);
 		return new CreateRule("PosO2", new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
@@ -117,17 +119,18 @@ public class ModalRuleFactory {
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
 		// new world
-		Variable<World> n = new Variable<World>("n");
-		WorldReference nref = new WorldReference(n);
+		//Variable<World> n = new Variable<World>("n");
+		//WorldReference nref = new WorldReference(n);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
 
 		// formula f. agents i, j. worlds k, n. label l.
-		Label templateLabel = new LabelInstance(lref, kref, iref);
-		Label rewriteLabel = new LabelInstance(lref, nref, iref);
 		Formula templateFormula = new MultiDiamond(iref, fref);
 		Formula rewriteFormula = fref;
+		WorldInstance n = new WorldInstance(rewriteFormula);
+		Label templateLabel = new LabelInstance(lref, kref, iref);
+		Label rewriteLabel = new LabelInstance(lref, n, iref);
 		return new CreateRule("PosS1", new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
@@ -144,17 +147,18 @@ public class ModalRuleFactory {
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
 		// new world
-		Variable<World> n = new Variable<World>("n");
-		WorldReference nref = new WorldReference(n);
+		//Variable<World> n = new Variable<World>("n");
+		//WorldReference nref = new WorldReference(n);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
 
 		// formula f. agents i, j. worlds k, n. label l.
-		Label templateLabel = new LabelInstance(lref, kref, iref);
-		Label rewriteLabel = new LabelInstance(lref, nref, iref);
 		Formula templateFormula = new Negation(new MultiBox(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
+		WorldInstance n = new WorldInstance(rewriteFormula);
+		Label templateLabel = new LabelInstance(lref, kref, iref);
+		Label rewriteLabel = new LabelInstance(lref, n, iref);
 		return new CreateRule("PosS2", new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
@@ -181,10 +185,10 @@ public class ModalRuleFactory {
 		LabelReference lref = new LabelReference(l);
 
 		// formula f. agents i, j. worlds k, n. label l.
-		Label templateLabel = new LabelInstance(lref, kref, jref);
-		Label rewriteLabel = new LabelInstance(templateLabel, nref, iref);
 		Formula templateFormula = new MultiBox(iref, fref);
 		Formula rewriteFormula = fref;
+		Label templateLabel = new LabelInstance(lref, kref, jref);
+		Label rewriteLabel = new LabelInstance(templateLabel, nref, iref);
 		Constraint c = new NotEqualConstraint(i, j);
 		return new AccessRule("BNecO1",
 				new Node(templateLabel, templateFormula),

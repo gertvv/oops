@@ -40,20 +40,21 @@ public class Node {
 	}
 
 	public NodeSubstitution match(Node other, Constraint c) {
-		NodeSubstitution s = new NodeSubstitution(c);
-		LabelSubstitution ls = d_label.match(other.d_label);
+		NodeSubstitution s = new NodeSubstitution();
+		NodeSubstitution ls = d_label.match(other.d_label);
 		FullSubstitution fs = d_formula.match(other.d_formula);
-		if (ls != null && fs != null && s.merge(ls,fs))
+
+		if (ls != null && fs != null && s.merge(ls) && s.merge(fs) &&
+			(c == null || c.validate(s)))
 			return s;
+
 		return null;
 	}
 
 	public Node substitute(NodeSubstitution s) {
 		FullSubstitution fs = new FullSubstitution(s.getAgentSubstitution(),
 				s.getFormulaSubstitution());
-		LabelSubstitution ls = new LabelSubstitution(s.getLabelSubstitution(),
-				s.getWorldSubstitution(), s.getAgentSubstitution());
-		return new Node(d_label.substitute(ls), d_formula.substitute(fs));
+		return new Node(d_label.substitute(s), d_formula.substitute(fs));
 	}
 
 	public boolean equals(Object o) {

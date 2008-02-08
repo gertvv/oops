@@ -42,7 +42,7 @@ public class CreationRulesTest {
 		Proposition pA = new Proposition("a");
 		Proposition pB = new Proposition("b");
 		Label nullLabel = new NullLabel();
-		World topWorld = new WorldInstance();
+		World topWorld = new WorldInstance(null);
 		Agent noAgent = new AgentId("NoAgent");
 		Agent a1 = new AgentId("1");
 		Agent a2 = new AgentId("2");

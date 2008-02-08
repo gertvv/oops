@@ -36,42 +36,42 @@ public class LabelInstance implements Label {
 		d_agent = agent;
 	}
 
-	public LabelSubstitution match(Label o) {
+	public NodeSubstitution match(Label o) {
 		try {
 			LabelInstance other = (LabelInstance)o;
 
-			Substitution<World> sw = d_world.match(other.d_world);
-			if (sw == null)
+			NodeSubstitution ns = d_world.match(other.d_world);
+			if (ns == null)
 				return null;
 
 			Substitution<Agent> sa = d_agent.match(other.d_agent);
 			if (sa == null)
 				return null;
 
-			LabelSubstitution s = new LabelSubstitution(sw, sa);
+			ns.getAgentSubstitution().merge(sa);
 
 			if (d_parent == null) {
 				if (other.d_parent == null) {
-					return s;
+					return ns;
 				}
 				return null;
 			}
 
-			LabelSubstitution ps = d_parent.match(other.d_parent);
+			NodeSubstitution ps = d_parent.match(other.d_parent);
 			if (ps == null)
 				return null;
 
-			if (s.merge(ps)) {
-				return s;
+			if (ns.merge(ps)) {
+				return ns;
 			}
 		} catch (ClassCastException e) {
 		}
 		return null;
 	}
 
-	public Label substitute(LabelSubstitution s) {
+	public Label substitute(NodeSubstitution s) {
 		Agent a = d_agent.substitute(s.getAgentSubstitution());
-		World w = d_world.substitute(s.getWorldSubstitution());
+		World w = d_world.substitute(s);
 		Label p = d_parent.substitute(s);
 		return new LabelInstance(p, w, a);
 	}

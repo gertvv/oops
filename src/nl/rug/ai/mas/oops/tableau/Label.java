@@ -30,11 +30,11 @@ public interface Label {
 	 * Match this Label to another Label, returing a substitution for the
 	 * variables occuring in this Label.
 	 */
-	public LabelSubstitution match(Label other);
+	public NodeSubstitution match(Label other);
 	/**
 	 * Apply a substitution for variables to this Label, replacing occurences
 	 * of variables with their substitution. This function should not modify
 	 * existing objects, but create new ones instead.
 	 */
-	public Label substitute(LabelSubstitution s);
+	public Label substitute(NodeSubstitution s);
 }
