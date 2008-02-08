@@ -25,4 +25,5 @@ import nl.rug.ai.mas.oops.formula.*;
 public interface World {
 	public NodeSubstitution match(World other);
 	public World substitute(NodeSubstitution s);
+	public boolean isConcrete();
 }

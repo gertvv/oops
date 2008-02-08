@@ -53,6 +53,10 @@ public class BiImplication implements PropositionalF {
 		return false;
 	}
 
+	public int hashCode() {
+		return 1;
+	}
+
 	public FullSubstitution match(Formula f) {
 		try {
 			BiImplication x = (BiImplication)f;
@@ -76,5 +80,9 @@ public class BiImplication implements PropositionalF {
 
 	public boolean isSimple() {
 		return false;
+	}
+
+	public boolean isConcrete() {
+		return d_left.isConcrete() && d_right.isConcrete();
 	}
 }

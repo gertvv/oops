@@ -60,4 +60,8 @@ public class Proposition implements PropositionalF {
 	public boolean isSimple() {
 		return true;
 	}
+
+	public boolean isConcrete() {
+		return true;
+	}
 }

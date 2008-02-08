@@ -41,4 +41,8 @@ implements Label {
 		Label l = s.getLabelSubstitution().get(get());
 		return (l != null ? l : this);
 	}
+
+	public boolean isConcrete() {
+		return false;
+	}
 }

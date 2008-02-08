@@ -50,4 +50,8 @@ implements Agent {
 			return a;
 		return this;
 	}
+
+	public boolean isConcrete() {
+		return false;
+	}
 }

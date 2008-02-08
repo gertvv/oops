@@ -56,7 +56,7 @@
 
 	<!-- PROVER build targets here -->
 	<target name="oops" depends="oops-grammar">
-		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/oops/**" debug="true">
+		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/oops/**" debug="true" target="1.5" source="1.5">
 			<classpath path="${project.class.path}" />
 		</javac>
 	</target>

@@ -41,6 +41,10 @@ public class UniBox implements UniModalF {
 		return false;
 	}
 
+	public int hashCode() {
+		return 1;
+	}
+
 	public FullSubstitution match(Formula f) {
 		try {
 			UniBox m = (UniBox)f;
@@ -60,5 +64,9 @@ public class UniBox implements UniModalF {
 
 	public boolean isSimple() {
 		return false;
+	}
+
+	public boolean isConcrete() {
+		return d_right.isConcrete();
 	}
 }

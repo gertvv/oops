@@ -44,6 +44,16 @@ public class Match implements Comparable<Match> {
 		}
 	}
 
+	public Match(Rule r, Node n) {
+		this(r, nodeVector(n));
+	}
+
+	private static Vector<Node> nodeVector(Node n) {
+		Vector<Node> v = new Vector<Node>();
+		v.add(n);
+		return v;
+	}
+
 	public Rule.Type getType() {
 		return d_rule.getType();
 	}
@@ -62,5 +72,23 @@ public class Match implements Comparable<Match> {
 	
 	public String toString() {
 		return d_rule.toString() + d_nodes.toString();
+	}
+
+	public boolean isConcrete() {
+		for (Node n : d_nodes) {
+			if (!n.isConcrete())
+				return false;
+		}
+		return true;
+	}
+
+	public Vector<Match> apply(Label l) {
+		Vector<Match> result = new Vector<Match>();
+		for (Node n : d_nodes) {
+			NodeSubstitution nsub = n.getLabel().match(l);
+			if (nsub != null)
+				result.add(new Match(d_rule, n.substitute(nsub)));
+		}
+		return result;
 	}
 }

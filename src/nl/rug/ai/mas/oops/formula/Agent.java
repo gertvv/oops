@@ -22,4 +22,5 @@ package nl.rug.ai.mas.oops.formula;
 public interface Agent {
 	public Substitution<Agent> match(Agent other);
 	public Agent substitute(Substitution<Agent> s);
+	public boolean isConcrete();
 }

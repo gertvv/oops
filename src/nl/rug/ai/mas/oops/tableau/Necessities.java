@@ -24,30 +24,26 @@ import nl.rug.ai.mas.oops.formula.*;
 
 public class Necessities {
 	private Necessities d_parent;
-//	private Vector<Node> d_current;
-	private Vector<Node> d_current;
+	private Vector<Match> d_current;
 
 	public Necessities(Necessities parent) {
 		d_parent = parent;
-		d_current = new Vector<Node>();
+		d_current = new Vector<Match>();
 	}
 
-	public void add(Node n) {
+	public void add(Match n) {
 		d_current.add(n);
 	}
 
-	public Vector<Node> apply(Label l) {
-		Vector<Node> result = null;
+	public Vector<Match> apply(Label l) {
+		Vector<Match> result = null;
 		if (d_parent != null)
 			result = d_parent.apply(l);
 		else
-			result = new Vector<Node>();
+			result = new Vector<Match>();
 
-		for (Node n : d_current) {
-			NodeSubstitution nsub = n.getLabel().match(l);
-			if (nsub != null) {
-				result.add(n.substitute(nsub));
-			}
+		for (Match m : d_current) {
+			result.addAll(m.apply(l));
 		}
 		return result;
 	}
@@ -58,10 +54,9 @@ public class Necessities {
 			s = "###\n";
 		else
 			s = d_parent.toString() + "---\n";
-		for (Node n : d_current) {
+		for (Match n : d_current) {
 			s += "\t" + n.toString() + "\n";
 		}
 		return s;
 	}
 }
-

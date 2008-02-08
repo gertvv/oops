@@ -71,4 +71,8 @@ public class Node {
 	public String toString() {
 		return "{" + d_label.toString() + "," + d_formula.toString() + "}";
 	}
+
+	public boolean isConcrete() {
+		return d_label.isConcrete() && d_formula.isConcrete();
+	}
 }

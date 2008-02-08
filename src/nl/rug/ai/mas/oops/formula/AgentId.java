@@ -61,4 +61,8 @@ public class AgentId implements Agent {
 	public Agent substitute(Substitution<Agent> s) {
 		return this;
 	}
+
+	public boolean isConcrete() {
+		return true;
+	}
 }

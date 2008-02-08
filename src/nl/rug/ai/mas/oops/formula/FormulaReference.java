@@ -48,4 +48,8 @@ implements Formula {
 	public boolean isSimple() {
 		return false;
 	}
+
+	public boolean isConcrete() {
+		return false;
+	}
 }

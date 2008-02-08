@@ -67,4 +67,8 @@ public class Prover {
 		}
 		return result == Tableau.BranchState.CLOSED;
 	}
+
+	public Tableau getTableau() {
+		return d_tableau;
+	}
 }

@@ -17,28 +17,10 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.oops.formula;
+package nl.rug.ai.mas.oops.tableau;
 
-public interface Formula {
-	/**
-	 * Attempt to match this formula to another formula, returning a
-	 * substitution for the variables in this formula.
-	 */
-	public FullSubstitution match(Formula f);
-	/**
-	 * Substitute for all variables the values in the substitution s.
-	 */
-	public Formula substitute(FullSubstitution s);
-	/**
-	 * Return the simplest opposite for the formula
-	 */
-	public Formula opposite();
-	/**
-	 * Return wether the formula is simple (an atom or a negation of an atom).
-	 */
-	public boolean isSimple();
-	/**
-	 * @return true if the formula contains no free variables, false otherwise
-	 */
-	public boolean isConcrete();
+public class SystemOutObserver implements TableauObserver {
+	public void update (Tableau t, TableauEvent e) {
+		System.out.println(e);
+	}
 }

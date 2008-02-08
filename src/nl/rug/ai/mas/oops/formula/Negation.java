@@ -47,6 +47,10 @@ public class Negation implements PropositionalF {
 		return false;
 	}
 
+	public int hashCode() {
+		return 1;
+	}
+
 	public FullSubstitution match(Formula f) {
 		try {
 			Negation n = (Negation)f;
@@ -70,5 +74,9 @@ public class Negation implements PropositionalF {
 					) == null && d_right.isSimple())
 			return true;
 		return false;
+	}
+
+	public boolean isConcrete() {
+		return d_right.isConcrete();
 	}
 }

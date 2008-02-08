@@ -16,29 +16,24 @@
   * with this program; if not, write to the Free Software Foundation, Inc.,
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
+package nl.rug.ai.mas.oops.tableau;
 
-package nl.rug.ai.mas.oops.formula;
+public class BranchAddedEvent implements TableauEvent {
+	private Branch d_added;
+	public BranchAddedEvent(Branch added) {
+		d_added = added;
+	}
 
-public interface Formula {
-	/**
-	 * Attempt to match this formula to another formula, returning a
-	 * substitution for the variables in this formula.
-	 */
-	public FullSubstitution match(Formula f);
-	/**
-	 * Substitute for all variables the values in the substitution s.
-	 */
-	public Formula substitute(FullSubstitution s);
-	/**
-	 * Return the simplest opposite for the formula
-	 */
-	public Formula opposite();
-	/**
-	 * Return wether the formula is simple (an atom or a negation of an atom).
-	 */
-	public boolean isSimple();
-	/**
-	 * @return true if the formula contains no free variables, false otherwise
-	 */
-	public boolean isConcrete();
+	public Branch getAdded() {
+		return d_added;
+	}
+
+	public Branch getParent() {
+		return d_added.getParent();
+	}
+
+	public String toString() {
+		return getClass().getSimpleName() + 
+			": " + d_added + " to " + getParent();
+	}
 }

@@ -72,4 +72,8 @@ public class NullLabel implements Label {
 	public String toString() {
 		return "NullLabel";
 	}
+
+	public boolean isConcrete() {
+		return true;
+	}
 }

@@ -44,13 +44,18 @@ public class Disjunction implements PropositionalF {
 		if (o != null) {
 			try {
 				Disjunction other = (Disjunction) o;
-				if (other.d_left.equals(d_left) && other.d_right.equals(d_right)) {
+				if (other.d_left.equals(d_left) &&
+						other.d_right.equals(d_right)) {
 					return true;
 				}
 			} catch (ClassCastException e) {
 			}
 		}
 		return false;
+	}
+
+	public int hashCode() {
+		return 1;
 	}
 
 	public FullSubstitution match(Formula f) {
@@ -76,5 +81,9 @@ public class Disjunction implements PropositionalF {
 
 	public boolean isSimple() {
 		return false;
+	}
+
+	public boolean isConcrete() {
+		return d_left.isConcrete() && d_right.isConcrete();
 	}
 }

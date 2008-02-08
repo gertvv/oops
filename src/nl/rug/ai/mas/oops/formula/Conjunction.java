@@ -52,6 +52,10 @@ public class Conjunction implements PropositionalF {
 		return false;
 	}
 
+	public int hashCode() {
+		return 1;
+	}
+
 	public String toString() {
 		return "(" + d_left + " & " + d_right + ")";
 	}
@@ -79,5 +83,9 @@ public class Conjunction implements PropositionalF {
 
 	public boolean isSimple() {
 		return false;
+	}
+
+	public boolean isConcrete() {
+		return d_left.isConcrete() && d_right.isConcrete();
 	}
 }

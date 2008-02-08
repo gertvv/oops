@@ -88,16 +88,18 @@ public class WorldInstance implements World {
 
 	public int hashCode() {
 		int hash = 1;
-		/* FIXME: implement hashCode() for formulas
 		if (d_formula != null) {
 			hash = hash * 31 + d_formula.hashCode();
 		}
-		*/
 		return hash;
 	}
 
 	public String toString() {
 		return "World(" + (d_formula == null ? "null" : 
 			d_formula.toString()) + ")";
+	}
+
+	public boolean isConcrete() {
+		return (d_formula == null ? true : d_formula.isConcrete());
 	}
 }

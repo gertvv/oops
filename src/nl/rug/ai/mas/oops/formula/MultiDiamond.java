@@ -43,6 +43,10 @@ public class MultiDiamond implements MultiModalF {
 		return false;
 	}
 
+	public int hashCode() {
+		return 1;
+	}
+
 	public FullSubstitution match(Formula f) {
 		try {
 			MultiDiamond m = (MultiDiamond)f;
@@ -71,5 +75,9 @@ public class MultiDiamond implements MultiModalF {
 
 	public boolean isSimple() {
 		return false;
+	}
+
+	public boolean isConcrete() {
+		return d_agent.isConcrete() && d_right.isConcrete();
 	}
 }

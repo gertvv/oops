@@ -37,4 +37,8 @@ public interface Label {
 	 * existing objects, but create new ones instead.
 	 */
 	public Label substitute(NodeSubstitution s);
+	/**
+	 * @return true if the label contains no free variables
+	 */
+	public boolean isConcrete();
 }

@@ -58,21 +58,23 @@ public class Branch {
 		return l;
 	}
 
+	public Branch getParent() {
+		return d_parent;
+	}
+
 	/**
 	 * Apply a necessity to all labels on the Branch.
 	 * @return The resulting nodes.
 	 */
-	public Vector<Node> apply(Node n) {
-		Vector<Node> result = new Vector<Node>();
+	public Vector<Match> apply(Match m) {
+		Vector<Match> result = new Vector<Match>();
 		for (Label l : getLabels()) {
-			NodeSubstitution nsub = n.getLabel().match(l);
-			if (nsub != null) {
-				result.add(n.substitute(nsub));
-			}
+			result.addAll(m.apply(l));
 		}
 		return result;
 	}
 
+	/* disabled for SystemOutObserver
 	public String toString() {
 		String s = new String();
 		if (d_parent == null)
@@ -87,4 +89,5 @@ public class Branch {
 		}
 		return s;
 	}
+	*/
 }

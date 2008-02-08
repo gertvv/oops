@@ -40,4 +40,8 @@ implements World {
 		World w = s.get(get());
 		return (w != null ? w : this);
 	}
+
+	public boolean isConcrete() {
+		return false;
+	}
 }

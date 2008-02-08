@@ -16,47 +16,25 @@
   * with this program; if not, write to the Free Software Foundation, Inc.,
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
-
 package nl.rug.ai.mas.oops.tableau;
 
-import java.util.*;
-import nl.rug.ai.mas.oops.formula.*;
-
-public class CreationRules {
-	private CreationRules d_parent;
-	private Vector<Node> d_current;
-
-	public CreationRules(CreationRules parent) {
-		d_parent = parent;
-		d_current = new Vector<Node>();
+public class NodeAddedEvent implements TableauEvent {
+	private Branch d_branch;
+	private Node d_node;
+	public NodeAddedEvent(Branch branch, Node n) {
+		d_branch = branch;
+		d_node = n;
 	}
 
-	public void add(Node n) {
-		d_current.add(n);
+	public Branch getBranch() {
+		return d_branch;
 	}
 
-	public boolean entails(Node concrete) {
-		if (d_parent != null && d_parent.entails(concrete)) {
-			return true;
-		}
-
-		for (Node n : d_current) {
-			if (n.getFormula().equals(concrete.getFormula()) &&
-					n.getLabel().match(concrete.getLabel()) != null)
-				return true;
-		}
-		return false;
+	public Node getNode() {
+		return d_node;
 	}
 
 	public String toString() {
-		String s = new String();
-		if (d_parent == null)
-			s = "###\n";
-		else
-			s = d_parent.toString() + "---\n";
-		for (Node n : d_current) {
-			s += "\t" + n.toString() + "\n";
-		}
-		return s;
+		return getClass().getSimpleName() + ": " + d_node + " to " + d_branch;
 	}
 }

@@ -113,4 +113,9 @@ public class LabelInstance implements Label {
 		s += "(" + d_world + "," + d_agent + ")";
 		return s;
 	}
+
+	public boolean isConcrete() {
+		return d_parent.isConcrete() && d_world.isConcrete() &&
+			d_agent.isConcrete();
+	}
 }

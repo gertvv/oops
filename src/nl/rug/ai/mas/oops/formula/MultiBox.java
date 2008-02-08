@@ -43,6 +43,10 @@ public class MultiBox implements MultiModalF {
 		return false;
 	}
 
+	public int hashCode() {
+		return 1;
+	}
+
 	public FullSubstitution match(Formula f) {
 		try {
 			MultiBox m = (MultiBox)f;
@@ -71,5 +75,9 @@ public class MultiBox implements MultiModalF {
 
 	public boolean isSimple() {
 		return false;
+	}
+
+	public boolean isConcrete() {
+		return d_agent.isConcrete() && d_right.isConcrete();
 	}
 }

@@ -29,10 +29,12 @@ public class Tableau {
 
 	private Vector<Rule> d_rules;
 	private String d_error;
+	private Vector<TableauObserver> d_observers;
 
 	public Tableau(Vector<Rule> rules) {
 		d_rules = rules;
 		d_error = null;
+		d_observers = new Vector<TableauObserver>();
 	}
 
 	public BranchState tableau(Formula f) {
@@ -40,7 +42,10 @@ public class Tableau {
 		Node n = new Node(
 				new LabelInstance(new NullLabel(), new WorldInstance(null),
 					new AgentId("NoAgent")), f);
-		return tableau(n, null, null, new PriorityQueue<Match>());
+		notify(new TableauStartedEvent());
+		BranchState result = tableau(n, null, null, new PriorityQueue<Match>());
+		notify(new TableauFinishedEvent(result));
+		return result;
 	}
 
 	private BranchState tableau(Node node, Branch branch,
@@ -50,8 +55,9 @@ public class Tableau {
 		queue = new PriorityQueue<Match>(queue);
 		branch = new Branch(branch);
 		necessities = new Necessities(necessities);
+		notify(new BranchAddedEvent(branch));
 
-		BranchState result = handleNode(node, branch, queue);
+		BranchState result = handleNode(node, branch, queue, necessities);
 		if (result != BranchState.OPEN)
 			return result;
 
@@ -68,34 +74,26 @@ public class Tableau {
 					return BranchState.CLOSED;
 				case LINEAR:
 					for (Node n : match.getNodes()) {
-						result = handleNode(n, branch, queue);
+						result = handleNode(n, branch, queue, necessities);
 						if (result != BranchState.OPEN)
 							return result;
 					}
 					break;
 				case CREATE:
 					for (Node n : match.getNodes()) {
-						if (branch.contains(n)) {
-							continue;
-						}
-						matchPut(n, branch, queue);
-						for (Node m : necessities.apply(n.getLabel())) {
-							result = handleNode(m, branch, queue);
+						if (!branch.contains(n)) {
+							result = handleNode(n, branch, queue, necessities);
 							if (result != BranchState.OPEN)
 								return result;
+							queue.addAll(necessities.apply(n.getLabel()));
 						}
 					}
 					break;
 				case ACCESS:
 					for (Node n : match.getNodes()) {
-						necessities.add(n);
-						int i = 0;
-						for (Node m : branch.apply(n)) {
-							++i;
-							result = handleNode(m, branch, queue);
-							if (result != BranchState.OPEN)
-								return result;
-						}
+						result = handleNode(n, branch, queue, necessities);
+						if (result != BranchState.OPEN)
+							return result;
 					}
 					break;
 				default:
@@ -103,24 +101,43 @@ public class Tableau {
 					return BranchState.ERROR;
 			}
 		}
+
+		notify(new BranchOpenEvent(branch));
 		return BranchState.OPEN;
 	}
 
-	private BranchState handleNode(Node n, Branch b, PriorityQueue<Match> q) {
+	private BranchState handleNode(Node n, Branch b, PriorityQueue<Match> q,
+			Necessities nec) {
 		if (!b.contains(n)) {
 			if (b.contains(new Node(n.getLabel(), n.getFormula().opposite()))) {
+				put(n, b);
+				notify(new BranchClosedEvent(b));
 				return BranchState.CLOSED;
 			}
-			return matchPut(n, b, q);
+			return matchPut(n, b, q, nec);
 		}
 		return BranchState.OPEN;
 	}
 
-	private BranchState matchPut(Node n, Branch b, PriorityQueue<Match> q) {
+	private void put(Node n, Branch b) {
 		b.add(n);
-		Vector<Match> m = match(n);
-		if (!m.isEmpty()) {
-			q.addAll(m);
+		notify(new NodeAddedEvent(b, n));
+	}
+
+	private BranchState matchPut(Node n, Branch b, PriorityQueue<Match> q,
+			Necessities nec) {
+		put(n, b);
+		Vector<Match> v = match(n);
+		if (!v.isEmpty()) {
+			// q.addAll(m);
+			for (Match m : v) { // treat necessities specially
+				if (m.getType() == Rule.Type.ACCESS) {
+					nec.add(m);
+					q.addAll(b.apply(m));
+				} else {
+					q.add(m);
+				}
+			}
 		} else {
 			if (!n.getFormula().isSimple()) {
 				d_error = n.toString() +
@@ -143,5 +160,19 @@ public class Tableau {
 
 	public String getError() {
 		return d_error;
+	}
+
+	public void attachObserver(TableauObserver o) {
+		d_observers.add(o);
+	}
+
+	public void detachObserver(TableauObserver o) {
+		d_observers.remove(o);
+	}
+
+	private void notify(TableauEvent e) {
+		for (TableauObserver o : d_observers) {
+			o.update(this, e);
+		}
 	}
 }
