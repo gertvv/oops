@@ -18,5 +18,8 @@
   */
 package nl.rug.ai.mas.oops.tableau;
 
+/**
+ * Event that may be emitted by Tableau.
+ */
 public interface TableauEvent {
 }

@@ -23,7 +23,7 @@ import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 
 /**
- * A reference to a Label variable.
+ * A reference to a Label variable. May be used in place of a Label instance.
  */
 public class LabelReference extends VariableReference<Label>
 implements Label {
@@ -31,17 +31,29 @@ implements Label {
 		super(l);
 	}
 
+	/**
+	 * A LabelReference matches any other Label. A substitution is created in
+	 * which other is substituted for this.
+	 */
 	public NodeSubstitution match(Label other) {
 		NodeSubstitution s = new NodeSubstitution();
 		s.getLabelSubstitution().put(get(), other);
 		return s;
 	}
 
+	/**
+	 * Return the substitute for this variable, if such a substitute is present
+	 * in s. Otherwise the variable itself is returned.
+	 */
 	public Label substitute(NodeSubstitution s) {
 		Label l = s.getLabelSubstitution().get(get());
 		return (l != null ? l : this);
 	}
 
+	/**
+	 * A reference to a variable is not concrete.
+	 * @return false
+	 */
 	public boolean isConcrete() {
 		return false;
 	}

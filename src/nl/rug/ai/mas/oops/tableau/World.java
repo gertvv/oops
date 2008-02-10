@@ -23,7 +23,21 @@ import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 
 public interface World {
+	/**
+	 * Match this World to another World, returning a substitution for the
+	 * variables occuring in this World.
+	 */
 	public NodeSubstitution match(World other);
+	/**
+	 * Apply a substitution for variables to this World, replacing occurences
+	 * of variables with their substitution. This function should not modify
+	 * existing objects, but create new ones instead.
+	 */
 	public World substitute(NodeSubstitution s);
+	/**
+	 * Determine wether this contains any free variables.
+	 * @return true if the world contains no free variables
+	 *
+	 */
 	public boolean isConcrete();
 }

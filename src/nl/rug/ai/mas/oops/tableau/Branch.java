@@ -22,15 +22,27 @@ package nl.rug.ai.mas.oops.tableau;
 import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 
+/**
+ * A tableau branch, a collection of nodes. Implemented recursively, that is, a
+ * Branch may itself have a 'parent' Branch and so on. This recursion is
+ * abstracted from for most operations. For performance reasons, nodes are
+ * grouped by label and the order in which nodes are added is not preserved.
+ */
 public class Branch {
 	private Branch d_parent;
 	private HashMap<Label, Vector<Node>> d_current;
 
+	/**
+	 * Create a new branch with parent. Use null to create a top-level Branch.
+	 */
 	public Branch(Branch parent) {
 		d_parent = parent;
 		d_current = new HashMap<Label, Vector<Node>>();
 	}
 
+	/**
+	 * @return true if this Branch or it's parent contain n. false otherwise.
+	 */
 	public boolean contains(Node n) {
 		Vector<Node> v = d_current.get(n.getLabel());
 		if (v != null && v.contains(n))
@@ -40,6 +52,9 @@ public class Branch {
 		return false;
 	}
 
+	/**
+	 * Add Node n to the branch.
+	 */
 	public void add(Node n) {
 		Vector<Node> v = d_current.get(n.getLabel());
 		if (v == null) {
@@ -51,6 +66,10 @@ public class Branch {
 		}
 	}
 
+	/**
+	 * Get a set of all the labels on this Branch and it's parent. Relies upon
+	 * the appropriate implementation of the hashCode() method in Label.
+	 */
 	public Set<Label> getLabels() {
 		HashSet<Label> l = new HashSet(d_current.keySet());
 		if (d_parent != null)
@@ -58,13 +77,16 @@ public class Branch {
 		return l;
 	}
 
+	/**
+	 * Return the parent branch.
+	 */
 	public Branch getParent() {
 		return d_parent;
 	}
 
 	/**
 	 * Apply a necessity to all labels on the Branch.
-	 * @return The resulting nodes.
+	 * @return A collection of concrete matches derived from m.
 	 */
 	public Vector<Match> apply(Match m) {
 		Vector<Match> result = new Vector<Match>();
@@ -73,21 +95,4 @@ public class Branch {
 		}
 		return result;
 	}
-
-	/* disabled for SystemOutObserver
-	public String toString() {
-		String s = new String();
-		if (d_parent == null)
-			s = "***\n";
-		else
-			s = d_parent.toString() + "---\n";
-		for (Map.Entry<Label, Vector<Node>> w : d_current.entrySet()) {
-			s += w.getKey() + "\n";
-			for (Node n : w.getValue()) {
-				s += "\t" + n.toString() + "\n";
-			}
-		}
-		return s;
-	}
-	*/
 }

@@ -19,6 +19,14 @@
 
 package nl.rug.ai.mas.oops.tableau;
 
+/**
+ * A constraint on NodeSubstitutions. Can be used to enforce certain rules on a
+ * substitution (e.g. that two variables may not receive the same
+ * substitution).
+ */
 public interface Constraint {
+	/**
+	 * @return false if the constraint is violated, true otherwise.
+	 */
 	public boolean validate(NodeSubstitution s);
 }

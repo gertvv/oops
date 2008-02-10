@@ -25,15 +25,25 @@ package nl.rug.ai.mas.oops.formula;
 public class VariableReference<T> {
 	private Variable<T> d_var;
 
+	/**
+	 * Create a reference to var. Also registers this with var.
+	 */
 	public VariableReference(Variable<T> var) {
 		d_var = var;
 		d_var.add(this);
 	}
 
+	/**
+	 * @return The reference variable.
+	 */
 	public Variable<T> get() {
 		return d_var;
 	}
 
+	/**
+	 * Set the reference to a different variable. Unregisters this with the
+	 * original variable, registers with the new variable.
+	 */
 	public void set(Variable<T> var) {
 		d_var.remove(this);
 		d_var = var;
@@ -44,6 +54,11 @@ public class VariableReference<T> {
 		return d_var.toString();
 	}
 
+	/**
+	 * Two VariableReferences are equal iff they reference the same variable
+	 * (the variable objects must be identical (.equals() equality is not
+	 * enough).
+	 */
 	public boolean equals(Object o) {
 		try {
 			VariableReference<T> other = (VariableReference<T>)o;
@@ -53,6 +68,9 @@ public class VariableReference<T> {
 		return false;
 	}
 
+	/**
+	 * @return 31 + hashcode of the reference variable
+	 */
 	public int hashCode() {
 		return 31 + d_var.hashCode();
 	}

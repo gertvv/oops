@@ -24,8 +24,27 @@
 	<property name="docs" location="docs"/>
 	<property name="test" location="test"/>
 
+	<!-- location of local packages -->
+	<property name="local" location="/home/gert/local" />
+
+	<!-- dependencies for JUNG (graph library) -->
+	<property name="xerxes" location="${local}/xerces-2_9_1/xercesImpl.jar" />
+	<property name="commons-collections"
+	location="${local}/commons-collections-3.2/commons-collections-3.2.jar" />
+	<property name="colt" location="${local}/colt/lib/colt.jar" />
+	<property name="jung" location="${local}/jung-1.7.6.jar" />
+
+	<!-- dependencies for JGraph -->
+	<property name="jgraph" location="${local}/jgraph/lib/jgraph.jar" />
+
 	<!-- global definition of the classpath -->
 	<path id="project.class.path">
+		<pathelement path="${commons-collections}" />
+		<pathelement path="${colt}" />
+		<pathelement path="${jung}" />
+
+		<pathelement path="${jgraph}" />
+
 		<pathelement location="build/"/>
 		<pathelement path="${java.class.path}/"/>
 	</path>
@@ -55,9 +74,12 @@
 	</target>
 
 	<!-- PROVER build targets here -->
+	<!-- disabled because running sablecc ANNOYS ME 
 	<target name="oops" depends="oops-grammar">
-		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/oops/**" debug="true" target="1.5" source="1.5">
-			<classpath path="${project.class.path}" />
+	-->
+	<target name="oops" depends="init">
+		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/oops/**" debug="true" target="1.5" source="1.5" classpathref="project.class.path">
+			<!-- <classpath path="${project.class.path}" /> -->
 		</javac>
 	</target>
 
@@ -105,5 +127,10 @@
 				</fileset>
 			</batchtest>
 		</junit>
+	</target>
+
+	<!-- jung test -->
+	<target name="jungtest" depends="oops">
+		<java classpathref="project.class.path" classname="nl.rug.ai.mas.oops.JungTest" fork="true" />
 	</target>
 </project>

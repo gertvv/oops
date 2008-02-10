@@ -27,7 +27,7 @@ import nl.rug.ai.mas.oops.formula.*;
  */
 public interface Label {
 	/**
-	 * Match this Label to another Label, returing a substitution for the
+	 * Match this Label to another Label, returning a substitution for the
 	 * variables occuring in this Label.
 	 */
 	public NodeSubstitution match(Label other);
@@ -38,6 +38,7 @@ public interface Label {
 	 */
 	public Label substitute(NodeSubstitution s);
 	/**
+	 * Determine wether this contains any free variables.
 	 * @return true if the label contains no free variables
 	 */
 	public boolean isConcrete();
