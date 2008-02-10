@@ -17,43 +17,10 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.oops.formula;
+package nl.rug.ai.mas.oops.tableau;
 
-/**
- * Holds a reference to a Variable object, used for unification of variables.
- */
-public class FormulaReference extends VariableReference<Formula>
-implements Formula {
-	public FormulaReference(Variable<Formula> var) {
-		super(var);
-	}
-
-	public FullSubstitution match(Formula f) {
-		FullSubstitution s = new FullSubstitution();
-		s.put(get(), f);
-		return s;
-	}
-
-	public Formula substitute(FullSubstitution s) {
-		Formula f = s.get(get());
-		if (f != null)
-			return f;
-		return this;
-	}
-
-	public void accept(FormulaVisitor v) {
-		v.visitFormulaReference(this);
-	}
-
-	public Formula opposite() {
-		return new Negation(this);
-	}
-
-	public boolean isSimple() {
-		return false;
-	}
-
-	public boolean isConcrete() {
-		return false;
-	}
+public interface LabelVisitor {
+	public void visitLabelInstance(LabelInstance l);
+	public void visitLabelReference(LabelReference l);
+	public void visitNullLabel(NullLabel l);
 }

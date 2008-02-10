@@ -50,6 +50,10 @@ implements Label {
 		return (l != null ? l : this);
 	}
 
+	public void accept(LabelVisitor v) {
+		v.visitLabelReference(this);
+	}
+
 	/**
 	 * A reference to a variable is not concrete.
 	 * @return false

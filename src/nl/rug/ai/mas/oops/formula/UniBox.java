@@ -58,6 +58,11 @@ public class UniBox implements UniModalF {
 		return new UniBox(d_right.substitute(s));
 	}
 
+	public void accept(FormulaVisitor v) {
+		d_right.accept(v);
+		v.visitUniBox(this);
+	}
+
 	public Formula opposite() {
 		return new Negation(this);
 	}

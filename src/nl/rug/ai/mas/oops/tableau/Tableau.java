@@ -41,7 +41,7 @@ public class Tableau {
 		d_error = null;
 		Node n = new Node(
 				new LabelInstance(new NullLabel(), new WorldInstance(null),
-					new AgentId("NoAgent")), f);
+					new NullAgent()), f);
 		notify(new TableauStartedEvent());
 		BranchState result = tableau(n, null, null, new PriorityQueue<Match>());
 		notify(new TableauFinishedEvent(result));

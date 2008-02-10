@@ -30,6 +30,10 @@ public interface Formula {
 	 */
 	public Formula substitute(FullSubstitution s);
 	/**
+	 * Accept a Visitor to this formula (Visitor pattern).
+	 */
+	public void accept(FormulaVisitor v);
+	/**
 	 * Return the simplest opposite for the formula
 	 */
 	public Formula opposite();

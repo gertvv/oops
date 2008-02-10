@@ -38,6 +38,10 @@ public interface Label {
 	 */
 	public Label substitute(NodeSubstitution s);
 	/**
+	 * Accept a Visitor to this label (Visitor pattern).
+	 */
+	public void accept(LabelVisitor v);
+	/**
 	 * Determine wether this contains any free variables.
 	 * @return true if the label contains no free variables
 	 */

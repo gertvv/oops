@@ -19,53 +19,16 @@
 
 package nl.rug.ai.mas.oops.formula;
 
-public class Proposition implements PropositionalF {
-	private String d_name;
-	
-	public Proposition(String name) {
-		d_name = name;
-	}
-
-	public String getName() {
-		return d_name;
-	}
-
-	public String toString() {
-		return d_name;
-	}
-
-	/**
-	 * Propositions are only considered equal if they are references to the same
-	 * Proposition object.
-	 */
-	public boolean equals(Object other) {
-		return this == other;
-	}
-
-	public FullSubstitution match(Formula f) {
-		if (equals(f)) {
-			return new FullSubstitution();
-		}
-		return null;
-	}
-
-	public Formula substitute(FullSubstitution s) {
-		return this;
-	}
-
-	public void accept(FormulaVisitor v) {
-		v.visitProposition(this);
-	}
-
-	public Formula opposite() {
-		return new Negation(this);
-	}
-
-	public boolean isSimple() {
-		return true;
-	}
-
-	public boolean isConcrete() {
-		return true;
-	}
+public interface FormulaVisitor {
+	public void visitBiImplication(BiImplication f);
+	public void visitConjunction(Conjunction f);
+	public void visitDisjunction(Disjunction f);
+	public void visitImplication(Implication f);
+	public void visitMultiBox(MultiBox f);
+	public void visitMultiDiamond(MultiDiamond f);
+	public void visitNegation(Negation f);
+	public void visitProposition(Proposition f);
+	public void visitUniBox(UniBox f);
+	public void visitUniDiamond(UniDiamond f);
+	public void visitFormulaReference(FormulaReference f);
 }

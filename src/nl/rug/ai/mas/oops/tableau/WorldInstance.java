@@ -33,6 +33,10 @@ public class WorldInstance implements World {
 		d_formula = f;
 	}
 
+	public Formula getFormula() {
+		return d_formula;
+	}
+
 	/**
 	 * Worlds are equal iff their d_formula are equal.
 	 */

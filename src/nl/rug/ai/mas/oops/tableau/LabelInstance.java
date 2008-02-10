@@ -36,6 +36,14 @@ public class LabelInstance implements Label {
 		d_agent = agent;
 	}
 
+	public World getWorld() {
+		return d_world;
+	}
+
+	public Agent getAgent() {
+		return d_agent;
+	}
+
 	public NodeSubstitution match(Label o) {
 		try {
 			LabelInstance other = (LabelInstance)o;
@@ -74,6 +82,11 @@ public class LabelInstance implements Label {
 		World w = d_world.substitute(s);
 		Label p = d_parent.substitute(s);
 		return new LabelInstance(p, w, a);
+	}
+
+	public void accept(LabelVisitor v) {
+		d_parent.accept(v);
+		v.visitLabelInstance(this);
 	}
 
 	/**

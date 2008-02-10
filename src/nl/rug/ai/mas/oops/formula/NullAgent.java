@@ -19,59 +19,35 @@
 
 package nl.rug.ai.mas.oops.formula;
 
-public class UniDiamond implements UniModalF {
-	Formula d_right;
-
-	public UniDiamond(Formula f) {
-		d_right = f;
+public class NullAgent implements Agent {
+	public NullAgent() {
 	}
 
-	public String toString() {
-		return "%" + d_right;
-	}
-
-	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		try {
-			UniDiamond other = (UniDiamond)o;
-			return d_right.equals(other.d_right);
-		} catch (ClassCastException e) {
-		}
-		return false;
-	}
-
-	public int hashCode() {
-		return 1;
-	}
-
-	public FullSubstitution match(Formula f) {
-		try {
-			UniDiamond m = (UniDiamond)f;
-			return d_right.match(m.d_right);
-		} catch (ClassCastException e) {
+	public Substitution<Agent> match(Agent other) {
+		if (equals(other)) {
+			return new Substitution<Agent>();
 		}
 		return null;
 	}
 
-	public Formula substitute(FullSubstitution s) {
-		return new UniDiamond(d_right.substitute(s));
+	public Agent substitute(Substitution<Agent> s) {
+		return this;
 	}
 
-	public void accept(FormulaVisitor v) {
-		d_right.accept(v);
-		v.visitUniDiamond(this);
-	}
-
-	public Formula opposite() {
-		return new Negation(this);
-	}
-
-	public boolean isSimple() {
+	public boolean equals(Object o) {
+		try {
+			NullAgent other = (NullAgent)o;
+			return true;
+		} catch (ClassCastException e) {
+		}
 		return false;
 	}
 
+	public String toString() {
+		return "NullAgent";
+	}
+
 	public boolean isConcrete() {
-		return d_right.isConcrete();
+		return true;
 	}
 }

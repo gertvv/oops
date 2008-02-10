@@ -74,6 +74,12 @@ public class Implication implements PropositionalF {
 		return new Implication(d_left.substitute(s), d_right.substitute(s));
 	}
 
+	public void accept(FormulaVisitor v) {
+		d_left.accept(v);
+		d_right.accept(v);
+		v.visitImplication(this);
+	}
+
 	public Formula opposite() {
 		return new Negation(this);
 	}

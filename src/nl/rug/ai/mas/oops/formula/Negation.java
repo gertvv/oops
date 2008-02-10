@@ -64,6 +64,11 @@ public class Negation implements PropositionalF {
 		return new Negation(d_right.substitute(s));
 	}
 
+	public void accept(FormulaVisitor v) {
+		d_right.accept(v);
+		v.visitNegation(this);
+	}
+
 	public Formula opposite() {
 		return d_right;
 	}

@@ -28,6 +28,10 @@ public class MultiDiamond implements MultiModalF {
 		d_right = f;
 	}
 
+	public Agent getAgent() {
+		return d_agent;
+	}
+
 	public String toString() {
 		return "%_" + d_agent.toString() + d_right;
 	}
@@ -67,6 +71,11 @@ public class MultiDiamond implements MultiModalF {
 		return new MultiDiamond(
 				d_agent.substitute(s.getAgentSubstitution()),
 				d_right.substitute(s));
+	}
+
+	public void accept(FormulaVisitor v) {
+		d_right.accept(v);
+		v.visitMultiDiamond(this);
 	}
 
 	public Formula opposite() {

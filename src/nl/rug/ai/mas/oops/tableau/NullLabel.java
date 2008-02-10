@@ -50,6 +50,10 @@ public class NullLabel implements Label {
 		return this;
 	}
 
+	public void accept(LabelVisitor v) {
+		v.visitNullLabel(this);
+	}
+
 	/**
 	 * A NullLabel equals() all other NullLabel instances.
 	 */

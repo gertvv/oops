@@ -22,9 +22,11 @@ package nl.rug.ai.mas.oops;
 import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
+import nl.rug.ai.mas.oops.render.FormulaObserver;
 
 public class ObserveProver {
-	public static void main(String [] args) {
+	public static void main(String [] args)
+	throws java.io.IOException, java.awt.FontFormatException {
 		if (args.length != 1) {
 			System.out.println("Please supply a formula on the command line.");
 			return;
@@ -36,6 +38,7 @@ public class ObserveProver {
 
 		Prover p = new Prover(rules);
 		p.getTableau().attachObserver(new SystemOutObserver());
+		p.getTableau().attachObserver(new FormulaObserver());
 		try {
 			System.out.println(p.proveable(args[0]));
 		} catch (TableauErrorException e) {

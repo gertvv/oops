@@ -77,6 +77,12 @@ public class Conjunction implements PropositionalF {
 		return new Conjunction(d_left.substitute(s), d_right.substitute(s));
 	}
 
+	public void accept(FormulaVisitor v) {
+		d_left.accept(v);
+		d_right.accept(v);
+		v.visitConjunction(this);
+	}
+
 	public Formula opposite() {
 		return new Negation(this);
 	}
