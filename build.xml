@@ -36,14 +36,13 @@
 
 	<!-- dependencies for JGraph -->
 	<property name="jgraph" location="${local}/jgraph/lib/jgraph.jar" />
+	
+	<!-- dependencies for zest -->
+	<property name="zest-layouts" location="${local}/org.eclipse.mylyn.zest.layouts_0.5.0.0.jar" />
 
 	<!-- global definition of the classpath -->
 	<path id="project.class.path">
-		<pathelement path="${commons-collections}" />
-		<pathelement path="${colt}" />
-		<pathelement path="${jung}" />
-
-		<pathelement path="${jgraph}" />
+		<pathelement path="${zest-layouts}" />
 
 		<pathelement location="build/"/>
 		<pathelement path="${java.class.path}/"/>
