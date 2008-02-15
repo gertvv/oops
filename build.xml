@@ -27,16 +27,6 @@
 	<!-- location of local packages -->
 	<property name="local" location="/home/gert/local" />
 
-	<!-- dependencies for JUNG (graph library) -->
-	<property name="xerxes" location="${local}/xerces-2_9_1/xercesImpl.jar" />
-	<property name="commons-collections"
-	location="${local}/commons-collections-3.2/commons-collections-3.2.jar" />
-	<property name="colt" location="${local}/colt/lib/colt.jar" />
-	<property name="jung" location="${local}/jung-1.7.6.jar" />
-
-	<!-- dependencies for JGraph -->
-	<property name="jgraph" location="${local}/jgraph/lib/jgraph.jar" />
-	
 	<!-- dependencies for zest -->
 	<property name="zest-layouts" location="${local}/org.eclipse.mylyn.zest.layouts_0.5.0.0.jar" />
 
@@ -102,7 +92,7 @@
 	<!-- create jar file -->
 	<target name="dist" depends="oops">
 		<mkdir dir="${dist}"/>
-		<jar jarfile="${dist}/oops.jar" basedir="${build}"/>
+		<jar jarfile="${dist}/oops.jar" basedir="${build}" manifest="${src}/MANIFEST.MF" />
 	</target>
 
 	<!-- build documentation -->

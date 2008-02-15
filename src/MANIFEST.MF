@@ -1,0 +1,2 @@
+Manifest-Version: 0.0.64
+Main-Class: nl.rug.ai.mas.oops.Prover
