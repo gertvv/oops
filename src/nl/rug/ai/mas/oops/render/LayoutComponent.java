@@ -43,8 +43,13 @@ public class LayoutComponent extends JComponent implements LayoutEntity {
 		// use even simpler layout? only to proxy preferred/minimum size etc.
 		setLayout(new java.awt.BorderLayout());
 		add(c);
+		d_component = c;
 		d_relations = new ArrayList<LayoutRelation>();
 		d_x = 0; d_y = 0; d_width = 0; d_height = 0;
+	}
+
+	public JComponent getJComponent() {
+		return d_component;
 	}
 
 	public int compareTo(Object o) {
@@ -58,6 +63,10 @@ public class LayoutComponent extends JComponent implements LayoutEntity {
 
 	public List<LayoutRelation> getRelations() {
 		return d_relations;
+	}
+
+	public int getRelationsCount() {
+		return d_relations.size();
 	}
 
 	public Object getLayoutInformation() {

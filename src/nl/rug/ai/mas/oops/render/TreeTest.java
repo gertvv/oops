@@ -32,8 +32,6 @@ public class TreeTest {
 		d_tree = new Tree();
 		JLabel root = new JLabel("root");
 		LayoutComponent rootc = d_tree.addComponent(root, null);
-		System.out.println(root.getPreferredSize());
-		System.out.println(rootc.getPreferredSize());
 		JLabel e1 = new JLabel("element1");
 		LayoutComponent e1c = d_tree.addComponent(e1, rootc);
 		JLabel e2 = new JLabel("element2");
@@ -43,13 +41,11 @@ public class TreeTest {
 		JLabel e12 = new JLabel("element1.2");
 		LayoutComponent e12c = d_tree.addComponent(e12, e1c);
 
-		JFrame frame = new JFrame();
+		JFrame frame = new JFrame("Tree Test");
 		JScrollPane panel = new JScrollPane(d_tree);
 		frame.add(panel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		root.revalidate();
-		root.repaint();
 		frame.setVisible(true);
 	}
 

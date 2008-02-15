@@ -19,12 +19,15 @@
 
 package nl.rug.ai.mas.oops.render;
 
+/*
 import nl.rug.ai.mas.oops.tableau.Tableau;
 import nl.rug.ai.mas.oops.tableau.TableauEvent;
 import nl.rug.ai.mas.oops.tableau.TableauObserver;
 import nl.rug.ai.mas.oops.tableau.NodeAddedEvent;
 import nl.rug.ai.mas.oops.tableau.Node;
 import nl.rug.ai.mas.oops.tableau.Label;
+*/
+import nl.rug.ai.mas.oops.tableau.*;
 
 import nl.rug.ai.mas.oops.formula.Formula;
 
@@ -36,30 +39,41 @@ import java.awt.FontFormatException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+
+import java.util.HashMap;
 
 public class FormulaObserver implements TableauObserver {
-	private JPanel d_panel;
+	private JFrame d_frame; // root window
+	private Tree d_tree; // tree display
 	private Font d_font;
+	private HashMap<Branch, LayoutComponent> d_branchMap;
 	private static String s_font = "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf";
 
 	public FormulaObserver() throws IOException, FontFormatException {
-		JFrame frame = new JFrame();
-		d_panel = new JPanel();
-		d_panel.setLayout(new BoxLayout(d_panel, BoxLayout.PAGE_AXIS));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(250, 250);
-		frame.getContentPane().add(d_panel);
-		frame.setVisible(true);
+		d_frame = new JFrame("Tableau Observer");
+		d_tree = new Tree();
+		JScrollPane panel = new JScrollPane(d_tree);
+		d_frame.add(panel);
+		d_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		d_frame.pack();
+		d_frame.setSize(800, 600);
+		d_frame.setVisible(true);
 
 		File ff = new File(s_font);
 		d_font = Font.createFont(Font.TRUETYPE_FONT, ff);
 		d_font = d_font.deriveFont((float)12);
+
+		d_branchMap = new HashMap<Branch, LayoutComponent>();
 	}
 
 	public void update(Tableau t, TableauEvent e) {
-		try {
+		if (e instanceof NodeAddedEvent) {
 			NodeAddedEvent event = (NodeAddedEvent)e;
+			Branch b = event.getBranch();
 			Formula f = event.getNode().getFormula();
 			Label l = event.getNode().getLabel();
 
@@ -68,14 +82,46 @@ public class FormulaObserver implements TableauObserver {
 			f.accept(fh);
 			LabelHtml lh = new LabelHtml();
 			l.accept(lh);
+			/*
 			String html = "<html>" + lh.getHtml() + 
 				"&nbsp;" + fh.getHtml() + "</html>";
+				*/
 
-			JLabel label = new JLabel(html);
-			label.setFont(d_font);
-			d_panel.add(label);
-			d_panel.revalidate();
-		} catch (ClassCastException ex) {
+			JLabel fl = new JLabel("<html>" + fh.getHtml() + "</html>");
+			fl.setMinimumSize(fl.getPreferredSize());
+			fl.setFont(d_font);
+			JLabel ll = new JLabel("<html>" + lh.getHtml() + "</html>");
+			ll.setMinimumSize(ll.getPreferredSize());
+			ll.setFont(d_font);
+
+			LayoutComponent branch = d_branchMap.get(b);
+			GridBagConstraints c = new GridBagConstraints();
+			c.weightx = 1.0;
+			c.anchor = GridBagConstraints.LINE_START;
+			c.gridwidth = GridBagConstraints.RELATIVE;
+			branch.getJComponent().add(ll, c);
+			c.gridwidth = GridBagConstraints.REMAINDER;
+			branch.getJComponent().add(fl, c);
+		} else if (e instanceof BranchAddedEvent) {
+			BranchAddedEvent event = (BranchAddedEvent)e;
+			Branch p = event.getParent();
+			Branch b = event.getAdded();
+
+			LayoutComponent parent = null;
+			if (p != null) {
+				parent = d_branchMap.get(p);
+			}
+
+			JPanel panel = new JPanel();
+			GridBagLayout layout = new GridBagLayout();
+			panel.setLayout(layout);
+			LayoutComponent branch = d_tree.addComponent(panel, parent);
+			d_branchMap.put(b, branch);
+		} else if (e instanceof TableauFinishedEvent) {
+			System.out.println(d_tree.getPreferredSize());
+			d_tree.revalidate();
+			System.out.println(d_tree.getPreferredSize());
+			d_tree.repaint();
 		}
 	}
 }

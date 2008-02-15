@@ -25,6 +25,7 @@ import java.awt.Component;
 import java.awt.Container;
 
 import org.eclipse.mylyn.zest.layouts.algorithms.TreeLayoutAlgorithm;
+import org.eclipse.mylyn.zest.layouts.LayoutStyles;
 
 import java.util.ArrayList;
 
@@ -41,10 +42,11 @@ public class TreeLayout implements LayoutManager {
 
 		TreeLayoutAlgorithm alg = new TreeLayoutAlgorithm();
 		try {
+			Dimension d = parent.getSize();
 			alg.applyLayout(
 				entities.toArray(new LayoutComponent[0]),
 				relations.toArray(new LayoutRelation[0]),
-				0, 0, 250, 250, false, false);
+				0, 0, d.width, d.height, false, false);
 			for (LayoutComponent c : entities) {
 				c.setBounds((int)c.getXInLayout(), (int)c.getYInLayout(),
 				(int)c.getWidthInLayout(), (int)c.getHeightInLayout());

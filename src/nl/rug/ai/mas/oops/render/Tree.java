@@ -23,7 +23,15 @@ import javax.swing.JComponent;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Dimension;
 
+import java.util.HashSet;
+import java.util.ArrayList;
+
+/**
+ * Implement a graphical tree layout.
+ * This class is far from efficient and could use some cleanup.
+ */
 public class Tree extends JComponent {
 	public Tree() {
 		super();
@@ -36,6 +44,67 @@ public class Tree extends JComponent {
 		if (parent != null)
 			parent.addRelation(component);
 		return component;
+	}
+
+	public Dimension getMinimumSize() {
+		return getPreferredSize();
+	}
+
+	public Dimension getPreferredSize() {
+		int width = 200;
+		int height = 100;
+
+		// get relations
+		HashSet<LayoutRelation> rels = new HashSet<LayoutRelation>();
+		for (java.awt.Component c : getComponents()) {
+			LayoutComponent component = (LayoutComponent)c;
+			for (LayoutRelation r : component.getRelations()) {
+				rels.add(r);
+			}
+		}
+
+		// get root(s)
+		ArrayList<LayoutComponent> comps = new ArrayList<LayoutComponent>();
+		for (java.awt.Component c : getComponents()) {
+			LayoutComponent component = (LayoutComponent)c;
+			boolean root = true;
+			for (LayoutRelation r: rels) {
+				if (r.getDestinationInLayout() == component) {
+					root = false;
+					break;
+				}
+			}
+			if (root) {
+				comps.add(component);
+			}
+		}
+
+		// iterate over levels
+		ArrayList<LayoutComponent> curr_comps = null; 
+		int curr_width = 0;
+		int curr_height = 0;
+		while (!comps.isEmpty()) {
+			curr_comps = new ArrayList<LayoutComponent>();
+			curr_width = 200;
+			curr_height = 0;
+			for (LayoutComponent c : comps) {
+				Dimension d = c.getPreferredSize();
+				curr_width += d.width + 50;
+				if (d.height > curr_height) {
+					curr_height = d.height;
+				}
+				for (LayoutRelation r : c.getRelations()) {
+					curr_comps.add((LayoutComponent)r.getDestinationInLayout());
+				}
+			}
+			if (curr_width > width) {
+				width = curr_width;
+			}
+			height += curr_height + 50;
+			comps = curr_comps;
+		}
+		Dimension d = new Dimension(width * 2, height * 2);
+		return d;
 	}
 
 	protected void paintChildren(Graphics g) {
