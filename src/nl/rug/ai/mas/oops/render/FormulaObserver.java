@@ -48,14 +48,14 @@ import java.util.HashMap;
 
 public class FormulaObserver implements TableauObserver {
 	private JFrame d_frame; // root window
-	private Tree d_tree; // tree display
+	private TidyTree d_tree; // tree display
 	private Font d_font;
-	private HashMap<Branch, LayoutComponent> d_branchMap;
+	private HashMap<Branch, ComponentCell> d_branchMap;
 	private static String s_font = "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf";
 
 	public FormulaObserver() throws IOException, FontFormatException {
 		d_frame = new JFrame("Tableau Observer");
-		d_tree = new Tree();
+		d_tree = new TidyTree();
 		JScrollPane panel = new JScrollPane(d_tree);
 		d_frame.add(panel);
 		d_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,7 +67,7 @@ public class FormulaObserver implements TableauObserver {
 		d_font = Font.createFont(Font.TRUETYPE_FONT, ff);
 		d_font = d_font.deriveFont((float)12);
 
-		d_branchMap = new HashMap<Branch, LayoutComponent>();
+		d_branchMap = new HashMap<Branch, ComponentCell>();
 	}
 
 	public void update(Tableau t, TableauEvent e) {
@@ -94,20 +94,20 @@ public class FormulaObserver implements TableauObserver {
 			ll.setMinimumSize(ll.getPreferredSize());
 			ll.setFont(d_font);
 
-			LayoutComponent branch = d_branchMap.get(b);
+			ComponentCell branch = d_branchMap.get(b);
 			GridBagConstraints c = new GridBagConstraints();
 			c.weightx = 1.0;
 			c.anchor = GridBagConstraints.LINE_START;
 			c.gridwidth = GridBagConstraints.RELATIVE;
-			branch.getJComponent().add(ll, c);
+			branch.getComponent().add(ll, c);
 			c.gridwidth = GridBagConstraints.REMAINDER;
-			branch.getJComponent().add(fl, c);
+			branch.getComponent().add(fl, c);
 		} else if (e instanceof BranchAddedEvent) {
 			BranchAddedEvent event = (BranchAddedEvent)e;
 			Branch p = event.getParent();
 			Branch b = event.getAdded();
 
-			LayoutComponent parent = null;
+			ComponentCell parent = null;
 			if (p != null) {
 				parent = d_branchMap.get(p);
 			}
@@ -115,7 +115,7 @@ public class FormulaObserver implements TableauObserver {
 			JPanel panel = new JPanel();
 			GridBagLayout layout = new GridBagLayout();
 			panel.setLayout(layout);
-			LayoutComponent branch = d_tree.addComponent(panel, parent);
+			ComponentCell branch = d_tree.addComponent(panel, parent);
 			d_branchMap.put(b, branch);
 		} else if (e instanceof TableauFinishedEvent) {
 			System.out.println(d_tree.getPreferredSize());
