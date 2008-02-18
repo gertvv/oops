@@ -23,7 +23,10 @@ import javax.swing.JComponent;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Point;
 import java.awt.Dimension;
+
+import nl.rug.ai.mas.oops.render.tree.Edge;
 
 public class TidyTree extends JComponent {
 	private TidyTreeLayout d_layout;
@@ -53,8 +56,38 @@ public class TidyTree extends JComponent {
 		return d_layout.preferredLayoutSize(this);
 	}
 
-	//protected void paintChildren(Graphics g) {
-	//	super.paintChildren(g);
-	//	// draw edges
-	//}
+	protected void paintChildren(Graphics g) {
+		super.paintChildren(g);
+
+		if (g instanceof Graphics2D) {
+			((Graphics2D) g).setRenderingHint(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+			((Graphics2D) g).setRenderingHint(
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			((Graphics2D) g).setRenderingHint(
+				RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY);
+			((Graphics2D) g).setRenderingHint(
+				RenderingHints.KEY_FRACTIONALMETRICS,
+				RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		}
+
+		// draw edges
+		for (Edge<ComponentCell> edge : d_layout.edgeIterable()) {
+			JComponent cs = edge.getSource().getComponent();
+			JComponent cd = edge.getDestination().getComponent();
+
+			Point p1 = cs.getLocation();
+			Dimension d1 = cs.getSize();
+			Point p2 = cd.getLocation();
+			Dimension d2 = cd.getSize();
+
+			p1.x += d1.width / 2;
+			p1.y += d1.height;
+			p2.x += d2.width / 2;
+			g.drawLine(p1.x, p1.y, p2.x, p2.y);
+		}
+	}
 }

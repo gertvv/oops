@@ -57,6 +57,14 @@ public class TreeStructure<CellType extends Cell> extends Observable {
 		return d_cells.iterator();
 	}
 
+	public Iterable<Edge<CellType>> edgeIterable() {
+		ArrayList<Edge<CellType>> edges = new ArrayList<Edge<CellType>>();
+		for (ArrayList<Edge<CellType>> e : d_edges.values()) {
+			edges.addAll(e);
+		}
+		return edges;
+	}
+
 	public Iterator<Edge<CellType>> edgeIterator(CellType parent) {
 		return d_edges.get(parent).iterator();
 	}

@@ -63,7 +63,6 @@ public class TreeStructuredDiagram<CellType extends Cell> implements Observer {
 		int minY = d_placement.get(d_tree.getRoot()).y;
 		for (CellType c : new IterableImpl<CellType>(d_tree.cellIterator())) {
 			Point p = d_placement.get(c);
-			System.out.println(p);
 			if (p.x + c.getWidth() > maxX) {
 				maxX = p.x + c.getWidth();
 			}

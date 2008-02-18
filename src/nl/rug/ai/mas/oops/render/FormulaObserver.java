@@ -118,9 +118,7 @@ public class FormulaObserver implements TableauObserver {
 			ComponentCell branch = d_tree.addComponent(panel, parent);
 			d_branchMap.put(b, branch);
 		} else if (e instanceof TableauFinishedEvent) {
-			System.out.println(d_tree.getPreferredSize());
 			d_tree.revalidate();
-			System.out.println(d_tree.getPreferredSize());
 			d_tree.repaint();
 		}
 	}
