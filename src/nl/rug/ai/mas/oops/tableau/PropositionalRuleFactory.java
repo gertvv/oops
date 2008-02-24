@@ -23,6 +23,12 @@ import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 
 public class PropositionalRuleFactory {
+	public static String CONJ = "&and;";
+	public static String DISJ = "&or;";
+	public static String NEG = "&not;";
+	public static String IMPL = "&rarr;";
+	public static String BIIM = "&harr;";
+
 	private PropositionalRuleFactory() {
 	}
 
@@ -41,6 +47,7 @@ public class PropositionalRuleFactory {
 	}
 
 	public static Rule buildNeg() {
+		String html = NEG;
 		// variables occuring
 		Variable<Formula> r = new Variable<Formula>("R");
 		FormulaReference rref = new FormulaReference(r);
@@ -52,10 +59,11 @@ public class PropositionalRuleFactory {
 		Vector<Formula> rwt = new Vector<Formula>(1);
 		rwt.add(rref);
 
-		return new LinearRule("NEG", f, rwt);
+		return new LinearRule("NEG", html, f, rwt);
 	}
 
 	public static Rule buildCon1() {
+		String html = CONJ + "<sub>" + CONJ + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
@@ -71,10 +79,11 @@ public class PropositionalRuleFactory {
 		rwt.add(lref);
 		rwt.add(rref);
 
-		return new LinearRule("CON1", f, rwt);
+		return new LinearRule("CON1", html, f, rwt);
 	}
 
 	public static Rule buildCon2() {
+		String html = CONJ + "<sub>" + DISJ + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
@@ -90,10 +99,11 @@ public class PropositionalRuleFactory {
 		rwt.add(new Negation(lref));
 		rwt.add(new Negation(rref));
 
-		return new LinearRule("CON2", f, rwt);
+		return new LinearRule("CON2", html, f, rwt);
 	}
 
 	public static Rule buildCon3() {
+		String html = CONJ + "<sub>" + IMPL + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
@@ -109,10 +119,11 @@ public class PropositionalRuleFactory {
 		rwt.add(lref);
 		rwt.add(new Negation(rref));
 
-		return new LinearRule("CON3", f, rwt);
+		return new LinearRule("CON3", html, f, rwt);
 	}
 
 	public static Rule buildCon4() {
+		String html = CONJ + "<sub>" + BIIM + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
@@ -130,10 +141,11 @@ public class PropositionalRuleFactory {
 		rwt.add(new Negation(new Conjunction(
 						lref, rref)));
 
-		return new LinearRule("CON4", f, rwt);
+		return new LinearRule("CON4", html, f, rwt);
 	}
 
 	public static Rule buildDis1() {
+		String html = DISJ + "<sub>" + DISJ + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
@@ -149,10 +161,11 @@ public class PropositionalRuleFactory {
 		rwt.add(lref);
 		rwt.add(rref);
 
-		return new SplitRule("DIS1", f, rwt);
+		return new SplitRule("DIS1", html, f, rwt);
 	}
 
 	public static Rule buildDis2() {
+		String html = DISJ + "<sub>" + CONJ + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
@@ -168,10 +181,11 @@ public class PropositionalRuleFactory {
 		rwt.add(new Negation(lref));
 		rwt.add(new Negation(rref));
 
-		return new SplitRule("DIS2", f, rwt);
+		return new SplitRule("DIS2", html, f, rwt);
 	}
 
 	public static Rule buildDis3() {
+		String html = DISJ + "<sub>" + IMPL + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
@@ -187,10 +201,11 @@ public class PropositionalRuleFactory {
 		rwt.add(new Negation(lref));
 		rwt.add(rref);
 
-		return new SplitRule("DIS3", f, rwt);
+		return new SplitRule("DIS3", html, f, rwt);
 	}
 
 	public static Rule buildDis4() {
+		String html = DISJ + "<sub>" + BIIM + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
 		FormulaReference lref = new FormulaReference(l);
@@ -206,6 +221,6 @@ public class PropositionalRuleFactory {
 		rwt.add(new Conjunction(new Negation(lref), new Negation(rref)));
 		rwt.add(new Conjunction(lref, rref));
 
-		return new SplitRule("DIS4", f, rwt);
+		return new SplitRule("DIS4", html, f, rwt);
 	}
 }

@@ -23,11 +23,12 @@ import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 
 public class AccessRule extends ModalRule {
-	public AccessRule(String name, Node tpl, Node rwt, Constraint c) {
-		super(name, Type.ACCESS, tpl, rwt, c);
+	public AccessRule(String name, String html, Node tpl, Node rwt,
+			Constraint c) {
+		super(name, html, Type.ACCESS, tpl, rwt, c);
 	}
 
-	public AccessRule(String name, Node tpl, Node rwt) {
-		this(name, tpl, rwt, null);
+	public AccessRule(String name, String html, Node tpl, Node rwt) {
+		this(name, html, tpl, rwt, null);
 	}
 }

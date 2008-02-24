@@ -27,9 +27,9 @@ public class ModalRule extends Rule {
 	protected Node d_rewrite;
 	protected Constraint d_constraint;
 
-	protected ModalRule(String name, Type type,
+	protected ModalRule(String name, String html, Type type,
 			Node tpl, Node rwt, Constraint c) {
-		super(name, type);
+		super(name, html, type);
 		d_template = tpl;
 		d_rewrite = rwt;
 		d_constraint = c;
@@ -41,7 +41,7 @@ public class ModalRule extends Rule {
 			return null;
 		Vector<Node> v = new Vector<Node>();
 		v.add(d_rewrite.substitute(s));
-		return new Match(this, v);
+		return new Match(this, n, v);
 	}
 
 	public Node getTemplate() {

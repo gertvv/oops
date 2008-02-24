@@ -26,9 +26,9 @@ public class PropositionalRule extends Rule {
 	private Formula d_template;
 	private Vector<Formula> d_rewrite;
 
-	protected PropositionalRule(String name, Type type,
+	protected PropositionalRule(String name, String html, Type type,
 			Formula tpl, Vector<Formula> rwt) {
-		super(name, type);
+		super(name, html, type);
 		d_template = tpl;
 		d_rewrite = rwt;
 	}
@@ -42,6 +42,6 @@ public class PropositionalRule extends Rule {
 			result.add(new Node(n.getLabel(),
 					d_rewrite.get(i).substitute(sub)));
 		}
-		return new Match(this, result);
+		return new Match(this, n, result);
 	}
 }

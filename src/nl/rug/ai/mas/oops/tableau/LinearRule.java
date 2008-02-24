@@ -23,7 +23,8 @@ import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 
 public class LinearRule extends PropositionalRule {
-	public LinearRule(String name, Formula tpl, Vector<Formula> rwt) {
-		super(name, Type.LINEAR, tpl, rwt);
+	public LinearRule(String name, String html, Formula tpl,
+			Vector<Formula> rwt) {
+		super(name, html, Type.LINEAR, tpl, rwt);
 	}
 }

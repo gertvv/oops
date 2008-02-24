@@ -16,62 +16,26 @@
   * with this program; if not, write to the Free Software Foundation, Inc.,
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
-
 package nl.rug.ai.mas.oops.tableau;
 
-import java.util.*;
-import nl.rug.ai.mas.oops.formula.*;
-
 /**
- * Tableau rule. Matches labels and formulas.
+ * Represents a justification for a match. That is, the rule that created the
+ * match and the node that the rule matched on.
  */
-abstract public class Rule {
-	private String d_name;
-	private String d_html;
-	private Type d_type;
+public class Justification {
+	private Rule d_rule;
+	private Node d_node;
 
-	protected Rule(String name, String html, Type type) {
-		d_name = name;
-		d_html = html;
-		d_type = type;
+	public Justification(Rule rule, Node node) {
+		d_rule = rule;
+		d_node = node;
 	}
 
-	public Type getType() {
-		return d_type;
+	public Rule getRule() {
+		return d_rule;
 	}
 
-	abstract public Match match(Node f);
-
-	public String toString() {
-		return d_name;
-	}
-
-	public String getHtml() {
-		return d_html;
-	}
-
-	/**
-	 * Rule type enumeration.
-	 */
-	public enum Type {
-		/**
-		 * Propositional rule not creating new branches.
-		 */
-		LINEAR,
-		
-		/**
-		 * Propositional rule creating new branches.
-		 */
-		SPLIT,
-		
-		/**
-		 * Modal rule matching existing worlds.
-		 */
-		ACCESS,
-		
-		/**
-		 * Modal rule introducing new worlds.
-		 */
-		CREATE
+	public Node getNode() {
+		return d_node;
 	}
 }

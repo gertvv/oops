@@ -43,12 +43,12 @@ public class Tableau {
 				new LabelInstance(new NullLabel(), new WorldInstance(null),
 					new NullAgent()), f);
 		notify(new TableauStartedEvent());
-		BranchState result = tableau(n, null, null, new PriorityQueue<Match>());
+		BranchState result = tableau(n, null, null, null, new PriorityQueue<Match>());
 		notify(new TableauFinishedEvent(result));
 		return result;
 	}
 
-	private BranchState tableau(Node node, Branch branch,
+	private BranchState tableau(Node node, Branch branch, Match origin,
 			Necessities necessities,
 			PriorityQueue<Match> queue) {
 		// create data structures for this tableau branch
@@ -57,7 +57,7 @@ public class Tableau {
 		necessities = new Necessities(necessities);
 		notify(new BranchAddedEvent(branch));
 
-		BranchState result = handleNode(node, branch, queue, necessities);
+		BranchState result = handleNode(node, branch, origin, queue, necessities);
 		if (result != BranchState.OPEN)
 			return result;
 
@@ -67,14 +67,14 @@ public class Tableau {
 			switch (match.getType()) {
 				case SPLIT:
 					for (Node n : match.getNodes()) {
-						result = tableau(n, branch, necessities, queue);
+						result = tableau(n, branch, match, necessities, queue);
 						if (result != BranchState.CLOSED)
 							return result;
 					}
 					return BranchState.CLOSED;
 				case LINEAR:
 					for (Node n : match.getNodes()) {
-						result = handleNode(n, branch, queue, necessities);
+						result = handleNode(n, branch, match, queue, necessities);
 						if (result != BranchState.OPEN)
 							return result;
 					}
@@ -82,7 +82,7 @@ public class Tableau {
 				case CREATE:
 					for (Node n : match.getNodes()) {
 						if (!branch.contains(n)) {
-							result = handleNode(n, branch, queue, necessities);
+							result = handleNode(n, branch, match, queue, necessities);
 							if (result != BranchState.OPEN)
 								return result;
 							queue.addAll(necessities.apply(n.getLabel()));
@@ -91,7 +91,7 @@ public class Tableau {
 					break;
 				case ACCESS:
 					for (Node n : match.getNodes()) {
-						result = handleNode(n, branch, queue, necessities);
+						result = handleNode(n, branch, match, queue, necessities);
 						if (result != BranchState.OPEN)
 							return result;
 					}
@@ -106,36 +106,38 @@ public class Tableau {
 		return BranchState.OPEN;
 	}
 
-	private BranchState handleNode(Node n, Branch b, PriorityQueue<Match> q,
+	private BranchState handleNode(Node n, Branch b, Match m,
+			PriorityQueue<Match> q,
 			Necessities nec) {
 		if (!b.contains(n)) {
 			if (b.contains(new Node(n.getLabel(), n.getFormula().opposite()))) {
-				put(n, b);
+				put(n, b, m);
 				notify(new BranchClosedEvent(b));
 				return BranchState.CLOSED;
 			}
-			return matchPut(n, b, q, nec);
+			return matchPut(n, b, m, q, nec);
 		}
 		return BranchState.OPEN;
 	}
 
-	private void put(Node n, Branch b) {
+	private void put(Node n, Branch b, Match m) {
 		b.add(n);
-		notify(new NodeAddedEvent(b, n));
+		notify(new NodeAddedEvent(b, n, m));
 	}
 
-	private BranchState matchPut(Node n, Branch b, PriorityQueue<Match> q,
+	private BranchState matchPut(Node n, Branch b, Match m,
+			PriorityQueue<Match> q,
 			Necessities nec) {
-		put(n, b);
+		put(n, b, m);
 		Vector<Match> v = match(n);
 		if (!v.isEmpty()) {
 			// q.addAll(m);
-			for (Match m : v) { // treat necessities specially
-				if (m.getType() == Rule.Type.ACCESS) {
-					nec.add(m);
-					q.addAll(b.apply(m));
+			for (Match match : v) { // treat necessities specially
+				if (match.getType() == Rule.Type.ACCESS) {
+					nec.add(match);
+					q.addAll(b.apply(match));
 				} else {
-					q.add(m);
+					q.add(match);
 				}
 			}
 		} else {

@@ -23,7 +23,8 @@ import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 
 public class SplitRule extends PropositionalRule {
-	public SplitRule(String name, Formula tpl, Vector<Formula> rwt) {
-		super(name, Type.SPLIT, tpl, rwt);
+	public SplitRule(String name, String html, Formula tpl,
+			Vector<Formula> rwt) {
+		super(name, html, Type.SPLIT, tpl, rwt);
 	}
 }

@@ -20,10 +20,12 @@ package nl.rug.ai.mas.oops.tableau;
 
 public class NodeAddedEvent implements TableauEvent {
 	private Branch d_branch;
+	private Match d_match;
 	private Node d_node;
-	public NodeAddedEvent(Branch branch, Node n) {
+	public NodeAddedEvent(Branch branch, Node n, Match m) {
 		d_branch = branch;
 		d_node = n;
+		d_match = m;
 	}
 
 	public Branch getBranch() {
@@ -32,6 +34,13 @@ public class NodeAddedEvent implements TableauEvent {
 
 	public Node getNode() {
 		return d_node;
+	}
+
+	public Justification getJustification() {
+		if (d_match == null) {
+			return null;
+		}
+		return d_match.getJustification();
 	}
 
 	public String toString() {

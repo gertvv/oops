@@ -23,12 +23,13 @@ import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 
 public class CreateRule extends ModalRule {
-	public CreateRule(String name, Node tpl, Node rwt, Constraint c) {
-		super(name, Type.CREATE, tpl, rwt, c);
+	public CreateRule(String name, String html, Node tpl, Node rwt,
+			Constraint c) {
+		super(name, html, Type.CREATE, tpl, rwt, c);
 	}
 
-	public CreateRule(String name, Node tpl, Node rwt) {
-		this(name, tpl, rwt, null);
+	public CreateRule(String name, String html, Node tpl, Node rwt) {
+		this(name, html, tpl, rwt, null);
 	}
 
 	/**
@@ -47,6 +48,6 @@ public class CreateRule extends ModalRule {
 		// create result set
 		Vector<Node> v = new Vector<Node>();
 		v.add(rwt);
-		return new Match(this, v);
+		return new Match(this, n, v);
 	}
 }

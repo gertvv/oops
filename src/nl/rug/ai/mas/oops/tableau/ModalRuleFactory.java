@@ -23,6 +23,9 @@ import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 
 public class ModalRuleFactory {
+	public static String LOZENGE = "&#9674;";
+	public static String SQUARE = "&#9723;";
+
 	private ModalRuleFactory() {
 	}
 
@@ -44,6 +47,7 @@ public class ModalRuleFactory {
 	}
 
 	public static Rule buildPosO1() {
+		String html = "M<sub>" + LOZENGE + "</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -71,11 +75,13 @@ public class ModalRuleFactory {
 		Label templateLabel = new LabelInstance(lref, kref, jref);
 		Label rewriteLabel = new LabelInstance(templateLabel, n, iref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new CreateRule("PosO1", new Node(templateLabel, templateFormula),
+		return new CreateRule("PosO1", html,
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildPosO2() {
+		String html = "M<sub>" + SQUARE + "</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -103,11 +109,13 @@ public class ModalRuleFactory {
 		Label templateLabel = new LabelInstance(lref, kref, jref);
 		Label rewriteLabel = new LabelInstance(templateLabel, n, iref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new CreateRule("PosO2", new Node(templateLabel, templateFormula),
+		return new CreateRule("PosO2", html,
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildPosS1() {
+		String html = "M<sub>" + LOZENGE + "*</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -131,11 +139,13 @@ public class ModalRuleFactory {
 		WorldInstance n = new WorldInstance(rewriteFormula);
 		Label templateLabel = new LabelInstance(lref, kref, iref);
 		Label rewriteLabel = new LabelInstance(lref, n, iref);
-		return new CreateRule("PosS1", new Node(templateLabel, templateFormula),
+		return new CreateRule("PosS1", html, 
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
 
 	public static Rule buildPosS2() {
+		String html = "M<sub>" + SQUARE + "*</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -159,11 +169,13 @@ public class ModalRuleFactory {
 		WorldInstance n = new WorldInstance(rewriteFormula);
 		Label templateLabel = new LabelInstance(lref, kref, iref);
 		Label rewriteLabel = new LabelInstance(lref, n, iref);
-		return new CreateRule("PosS2", new Node(templateLabel, templateFormula),
+		return new CreateRule("PosS2", html,
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
 
 	public static Rule buildBNecO1() {
+		String html = "K<sub>" + SQUARE + "</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -190,12 +202,13 @@ public class ModalRuleFactory {
 		Label templateLabel = new LabelInstance(lref, kref, jref);
 		Label rewriteLabel = new LabelInstance(templateLabel, nref, iref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("BNecO1",
+		return new AccessRule("BNecO1", html,
 				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildBNecO2() {
+		String html = "K<sub>" + LOZENGE + "</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -222,12 +235,13 @@ public class ModalRuleFactory {
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("BNecO2",
+		return new AccessRule("BNecO2", html,
 				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildBNecS1() {
+		String html = "K<sub>" + SQUARE + "*</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -250,12 +264,13 @@ public class ModalRuleFactory {
 		Label rewriteLabel = new LabelInstance(lref, nref, iref);
 		Formula templateFormula = new MultiBox(iref, fref);
 		Formula rewriteFormula = fref;
-		return new AccessRule("BNecS1",
+		return new AccessRule("BNecS1", html,
 				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
 
 	public static Rule buildBNecS2() {
+		String html = "K<sub>" + LOZENGE + "*</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -278,12 +293,13 @@ public class ModalRuleFactory {
 		Label rewriteLabel = new LabelInstance(lref, nref, iref);
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
-		return new AccessRule("BNecS2",
+		return new AccessRule("BNecS2", html,
 				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
 
 	public static Rule buildSNecO1() {
+		String html = "T<sub>" + SQUARE + "</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -307,11 +323,13 @@ public class ModalRuleFactory {
 		Formula templateFormula = new MultiBox(iref, fref);
 		Formula rewriteFormula = fref;
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("SNecO1", new Node(templateLabel, templateFormula),
+		return new AccessRule("SNecO1", html,
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildSNecO2() {
+		String html = "T<sub>" + LOZENGE + "</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -335,11 +353,13 @@ public class ModalRuleFactory {
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("SNecO2", new Node(templateLabel, templateFormula),
+		return new AccessRule("SNecO2", html,
+				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildSNecS1() {
+		String html = "R<sub>" + SQUARE + "*</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -359,12 +379,13 @@ public class ModalRuleFactory {
 		Label rewriteLabel = lref; 
 		Formula templateFormula = new MultiBox(iref, fref);
 		Formula rewriteFormula = fref;
-		return new AccessRule("SNecS1",
+		return new AccessRule("SNecS1", html,
 				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}
 
 	public static Rule buildSNecS2() {
+		String html = "R<sub>" + LOZENGE + "*</sub>";
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
@@ -384,7 +405,7 @@ public class ModalRuleFactory {
 		Label rewriteLabel = lref;
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
-		return new AccessRule("SNecS2", 
+		return new AccessRule("SNecS2", html,
 				new Node(templateLabel, templateFormula),
 				new Node(rewriteLabel, rewriteFormula));
 	}

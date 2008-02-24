@@ -25,11 +25,13 @@ import nl.rug.ai.mas.oops.formula.*;
 public class Match implements Comparable<Match> {
 	private Rule d_rule;
 	private Vector<Node> d_nodes;
+	private Justification d_just;
 	private int d_badness;
 
-	public Match(Rule rule, Vector<Node> nodes) {
+	public Match(Rule rule, Node origin, Vector<Node> nodes) {
 		d_rule = rule;
 		d_nodes = nodes;
+		d_just = new Justification(rule, origin);
 		d_badness = 1;
 		if (rule.getType() == Rule.Type.LINEAR) {
 			if (nodes.size() > 1) {
@@ -44,8 +46,8 @@ public class Match implements Comparable<Match> {
 		}
 	}
 
-	public Match(Rule r, Node n) {
-		this(r, nodeVector(n));
+	public Match(Rule r, Node origin, Node n) {
+		this(r, origin, nodeVector(n));
 	}
 
 	private static Vector<Node> nodeVector(Node n) {
@@ -64,6 +66,10 @@ public class Match implements Comparable<Match> {
 
 	public Rule getRule() {
 		return d_rule;
+	}
+
+	public Justification getJustification() {
+		return d_just;
 	}
 
 	public int compareTo(Match other) {
@@ -87,7 +93,8 @@ public class Match implements Comparable<Match> {
 		for (Node n : d_nodes) {
 			NodeSubstitution nsub = n.getLabel().match(l);
 			if (nsub != null)
-				result.add(new Match(d_rule, n.substitute(nsub)));
+				result.add(
+					new Match(d_rule, d_just.getNode(), n.substitute(nsub)));
 		}
 		return result;
 	}

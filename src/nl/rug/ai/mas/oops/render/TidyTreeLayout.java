@@ -70,7 +70,14 @@ public class TidyTreeLayout implements LayoutManager {
 	}
 
 	public Iterable<Edge<ComponentCell>> edgeIterable() {
-		return d_tree.edgeIterable();
+		if (d_tree != null) {
+			return d_tree.edgeIterable();
+		}
+		return new Iterable<Edge<ComponentCell>>() {
+			public Iterator<Edge<ComponentCell>> iterator() {
+				return null;
+			}
+		};
 	}
 
 	public void addLayoutComponent(String name, Component comp) {
