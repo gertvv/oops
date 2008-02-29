@@ -58,8 +58,10 @@ public class Tableau {
 		notify(new BranchAddedEvent(branch));
 
 		BranchState result = handleNode(node, branch, origin, queue, necessities);
-		if (result != BranchState.OPEN)
+		if (result != BranchState.OPEN) {
+			notify(new BranchDoneEvent(branch));
 			return result;
+		}
 
 		// handle all elements on the queue
 		while (!queue.isEmpty()) {
@@ -68,23 +70,30 @@ public class Tableau {
 				case SPLIT:
 					for (Node n : match.getNodes()) {
 						result = tableau(n, branch, match, necessities, queue);
-						if (result != BranchState.CLOSED)
+						if (result != BranchState.CLOSED) {
+							notify(new BranchDoneEvent(branch));
 							return result;
+						}
 					}
+					notify(new BranchDoneEvent(branch));
 					return BranchState.CLOSED;
 				case LINEAR:
 					for (Node n : match.getNodes()) {
 						result = handleNode(n, branch, match, queue, necessities);
-						if (result != BranchState.OPEN)
+						if (result != BranchState.OPEN) {
+							notify(new BranchDoneEvent(branch));
 							return result;
+						}
 					}
 					break;
 				case CREATE:
 					for (Node n : match.getNodes()) {
 						if (!branch.contains(n)) {
 							result = handleNode(n, branch, match, queue, necessities);
-							if (result != BranchState.OPEN)
+							if (result != BranchState.OPEN) {
+								notify(new BranchDoneEvent(branch));
 								return result;
+							}
 							queue.addAll(necessities.apply(n.getLabel()));
 						}
 					}
@@ -92,8 +101,10 @@ public class Tableau {
 				case ACCESS:
 					for (Node n : match.getNodes()) {
 						result = handleNode(n, branch, match, queue, necessities);
-						if (result != BranchState.OPEN)
+						if (result != BranchState.OPEN) {
+							notify(new BranchDoneEvent(branch));
 							return result;
+						}
 					}
 					break;
 				default:
@@ -103,6 +114,7 @@ public class Tableau {
 		}
 
 		notify(new BranchOpenEvent(branch));
+		notify(new BranchDoneEvent(branch));
 		return BranchState.OPEN;
 	}
 
@@ -110,12 +122,15 @@ public class Tableau {
 			PriorityQueue<Match> q,
 			Necessities nec) {
 		if (!b.contains(n)) {
-			if (b.contains(new Node(n.getLabel(), n.getFormula().opposite()))) {
+			Node neg = new Node(n.getLabel(), n.getFormula().opposite());
+			if (b.contains(neg)) {
 				put(n, b, m);
-				notify(new BranchClosedEvent(b));
+				notify(new BranchClosedEvent(b, n, neg));
 				return BranchState.CLOSED;
 			}
 			return matchPut(n, b, m, q, nec);
+		} else {
+			notify(new NodeAddedEvent(b, n, m));
 		}
 		return BranchState.OPEN;
 	}

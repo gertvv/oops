@@ -18,27 +18,20 @@
   */
 package nl.rug.ai.mas.oops.tableau;
 
-public class BranchClosedEvent implements TableauEvent {
+/**
+ * Event that indicates the tableau system is done processing a Branch. This
+ * class is different from BranchOpenEvent and BranchClosedEvent in that it is
+ * called for non-leaf branches as well as for leafs.
+ */
+public class BranchDoneEvent implements TableauEvent {
 	private Branch d_branch;
-	private Node d_n1;
-	private Node d_n2;
 
-	public BranchClosedEvent(Branch branch, Node n1, Node n2) {
-		d_branch = branch;
-		d_n1 = n1;
-		d_n2 = n2;
+	public BranchDoneEvent(Branch b) {
+		d_branch = b;
 	}
 
 	public Branch getBranch() {
 		return d_branch;
-	}
-
-	public Node getNode1() {
-		return d_n1;
-	}
-
-	public Node getNode2() {
-		return d_n2;
 	}
 
 	public String toString() {

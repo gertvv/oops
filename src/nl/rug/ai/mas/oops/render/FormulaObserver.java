@@ -16,7 +16,6 @@
   * with this program; if not, write to the Free Software Foundation, Inc.,
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
-
 package nl.rug.ai.mas.oops.render;
 
 /*
@@ -52,7 +51,7 @@ public class FormulaObserver implements TableauObserver {
 	private int d_count; // count lines
 	private Font d_font;
 	private HashMap<Branch, ComponentCell> d_branchMap;
-	private HashMap<Node, Integer> d_lineMap;
+	private NestedMap<Branch, Node, Integer> d_lineMap;
 	private static String s_font = "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf";
 
 	public FormulaObserver() throws IOException, FontFormatException {
@@ -71,7 +70,7 @@ public class FormulaObserver implements TableauObserver {
 		d_font = d_font.deriveFont((float)12);
 
 		d_branchMap = new HashMap<Branch, ComponentCell>();
-		d_lineMap = new HashMap<Node, Integer>();
+		d_lineMap = new NestedMap<Branch, Node, Integer>();
 	}
 
 	public void update(Tableau t, TableauEvent e) {
@@ -126,6 +125,7 @@ public class FormulaObserver implements TableauObserver {
 			BranchAddedEvent event = (BranchAddedEvent)e;
 			Branch p = event.getParent();
 			Branch b = event.getAdded();
+			d_lineMap.addMap(b);
 
 			ComponentCell parent = null;
 			if (p != null) {
@@ -140,7 +140,11 @@ public class FormulaObserver implements TableauObserver {
 		} else if (e instanceof BranchClosedEvent) {
 			BranchClosedEvent event = (BranchClosedEvent)e;
 			ComponentCell branch = d_branchMap.get(event.getBranch());
-			JLabel bar = new JLabel("<html>=</html>");
+			JLabel bar = new JLabel("<html>= " + 
+				d_lineMap.get(event.getNode2()) + "," +
+				d_lineMap.get(event.getNode1()) + "</html>");
+			bar.setMinimumSize(bar.getPreferredSize());
+			bar.setFont(d_font);
 
 			GridBagConstraints c = new GridBagConstraints();
 			c.weightx = 1.0;
@@ -151,6 +155,8 @@ public class FormulaObserver implements TableauObserver {
 			BranchOpenEvent event = (BranchOpenEvent)e;
 			ComponentCell branch = d_branchMap.get(event.getBranch());
 			JLabel arrow = new JLabel("<html>&uarr;</html>");
+			arrow.setMinimumSize(arrow.getPreferredSize());
+			arrow.setFont(d_font);
 
 			GridBagConstraints c = new GridBagConstraints();
 			c.weightx = 1.0;
@@ -160,6 +166,9 @@ public class FormulaObserver implements TableauObserver {
 		} else if (e instanceof TableauFinishedEvent) {
 			d_tree.revalidate();
 			d_tree.repaint();
+		} else if (e instanceof BranchDoneEvent) {
+			BranchDoneEvent event = (BranchDoneEvent)e;
+			d_lineMap.removeMap(event.getBranch());
 		}
 	}
 }

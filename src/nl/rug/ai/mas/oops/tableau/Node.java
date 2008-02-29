@@ -72,6 +72,10 @@ public class Node {
 		return "{" + d_label.toString() + "," + d_formula.toString() + "}";
 	}
 
+	public int hashCode() {
+		return 31 * d_label.hashCode() + d_formula.hashCode();
+	}
+
 	public boolean isConcrete() {
 		return d_label.isConcrete() && d_formula.isConcrete();
 	}

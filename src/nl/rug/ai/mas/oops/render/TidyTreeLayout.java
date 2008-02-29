@@ -29,6 +29,7 @@ import java.awt.Container;
 
 import java.util.Map;
 import java.util.Iterator;
+import java.util.ArrayList;
 
 public class TidyTreeLayout implements LayoutManager {
 	private TreeStructure<ComponentCell> d_tree = null;
@@ -73,11 +74,7 @@ public class TidyTreeLayout implements LayoutManager {
 		if (d_tree != null) {
 			return d_tree.edgeIterable();
 		}
-		return new Iterable<Edge<ComponentCell>>() {
-			public Iterator<Edge<ComponentCell>> iterator() {
-				return null;
-			}
-		};
+		return new ArrayList<Edge<ComponentCell>>();
 	}
 
 	public void addLayoutComponent(String name, Component comp) {
