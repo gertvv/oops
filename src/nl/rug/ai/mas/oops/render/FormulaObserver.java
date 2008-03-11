@@ -52,7 +52,7 @@ public class FormulaObserver implements TableauObserver {
 	private Font d_font;
 	private HashMap<Branch, ComponentCell> d_branchMap;
 	private NestedMap<Branch, Node, Integer> d_lineMap;
-	private static String s_font = "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf";
+	private static String s_font = "DejaVuSans.ttf";
 
 	public FormulaObserver() throws IOException, FontFormatException {
 		d_frame = new JFrame("Tableau Observer");

@@ -31,6 +31,9 @@ public class Tableau {
 	private String d_error;
 	private Vector<TableauObserver> d_observers;
 
+	private static final String s_errorInvalidRules = 
+		"Default case reached in tableau: invalid rules";
+
 	public Tableau(Vector<Rule> rules) {
 		d_rules = rules;
 		d_error = null;
@@ -39,144 +42,11 @@ public class Tableau {
 
 	public BranchState tableau(Formula f) {
 		d_error = null;
-		Node n = new Node(
-				new LabelInstance(new NullLabel(), new WorldInstance(null),
-					new NullAgent()), f);
+		Worker worker = new Worker(f);
 		notify(new TableauStartedEvent());
-		BranchState result = tableau(n, null, null, null, new PriorityQueue<Match>());
+		BranchState result = worker.tableau();
 		notify(new TableauFinishedEvent(result));
 		return result;
-	}
-
-	private BranchState tableau(Node node, Branch branch, Match origin,
-			Necessities necessities,
-			PriorityQueue<Match> queue) {
-		// create data structures for this tableau branch
-		queue = new PriorityQueue<Match>(queue);
-		branch = new Branch(branch);
-		necessities = new Necessities(necessities);
-		notify(new BranchAddedEvent(branch));
-
-		BranchState result = handleNode(node, branch, origin, queue, necessities);
-		if (result != BranchState.OPEN) {
-			notify(new BranchDoneEvent(branch));
-			return result;
-		}
-
-		// handle all elements on the queue
-		while (!queue.isEmpty()) {
-			Match match = queue.poll();
-			switch (match.getType()) {
-				case SPLIT:
-					for (Node n : match.getNodes()) {
-						result = tableau(n, branch, match, necessities, queue);
-						if (result != BranchState.CLOSED) {
-							notify(new BranchDoneEvent(branch));
-							return result;
-						}
-					}
-					notify(new BranchDoneEvent(branch));
-					return BranchState.CLOSED;
-				case LINEAR:
-					for (Node n : match.getNodes()) {
-						result = handleNode(n, branch, match, queue, necessities);
-						if (result != BranchState.OPEN) {
-							notify(new BranchDoneEvent(branch));
-							return result;
-						}
-					}
-					break;
-				case CREATE:
-					for (Node n : match.getNodes()) {
-						if (!branch.contains(n)) {
-							result = handleNode(n, branch, match, queue, necessities);
-							if (result != BranchState.OPEN) {
-								notify(new BranchDoneEvent(branch));
-								return result;
-							}
-							queue.addAll(necessities.apply(n.getLabel()));
-						}
-					}
-					break;
-				case ACCESS:
-					for (Node n : match.getNodes()) {
-						result = handleNode(n, branch, match, queue, necessities);
-						if (result != BranchState.OPEN) {
-							notify(new BranchDoneEvent(branch));
-							return result;
-						}
-					}
-					break;
-				default:
-					d_error = "Default case reached in tableau: invalid rules";
-					return BranchState.ERROR;
-			}
-		}
-
-		notify(new BranchOpenEvent(branch));
-		notify(new BranchDoneEvent(branch));
-		return BranchState.OPEN;
-	}
-
-	private BranchState handleNode(Node n, Branch b, Match m,
-			PriorityQueue<Match> q,
-			Necessities nec) {
-		if (!b.contains(n)) {
-			Node neg = new Node(n.getLabel(), n.getFormula().opposite());
-			if (b.contains(neg)) {
-				put(n, b, m);
-				notify(new BranchClosedEvent(b, n, neg));
-				return BranchState.CLOSED;
-			}
-			return matchPut(n, b, m, q, nec);
-		} else {
-			notify(new NodeAddedEvent(b, n, m));
-		}
-		return BranchState.OPEN;
-	}
-
-	private void put(Node n, Branch b, Match m) {
-		b.add(n);
-		notify(new NodeAddedEvent(b, n, m));
-	}
-
-	private BranchState matchPut(Node n, Branch b, Match m,
-			PriorityQueue<Match> q,
-			Necessities nec) {
-		put(n, b, m);
-		Vector<Match> v = match(n);
-		if (!v.isEmpty()) {
-			// q.addAll(m);
-			for (Match match : v) { // treat necessities specially
-				if (match.getType() == Rule.Type.ACCESS) {
-					nec.add(match);
-					q.addAll(b.apply(match));
-				} else {
-					q.add(match);
-				}
-			}
-		} else {
-			if (!n.getFormula().isSimple()) {
-				d_error = n.toString() +
-					" is not simple, and does not match any rules";
-				return BranchState.ERROR;
-			}
-		}
-		return BranchState.OPEN;
-	}
-
-	private Vector<Match> match(Node f) {
-		Vector<Match> result = new Vector<Match>();
-		for (Rule r : d_rules) {
-			Match m = r.match(f);
-			if (m != null)
-				result.add(m);
-		}
-		return result;
-	}
-
-	public String getError() {
-		return d_error;
 	}
 
 	public void attachObserver(TableauObserver o) {
@@ -190,6 +60,199 @@ public class Tableau {
 	private void notify(TableauEvent e) {
 		for (TableauObserver o : d_observers) {
 			o.update(this, e);
+		}
+	}
+
+	private class Worker { 
+		/**
+		 * Node that generates this branch.
+		 */
+		private Node d_node;
+		/**
+		 * The Branch we are currently working on.
+		 */
+		private Branch d_branch;
+		/**
+		 * The Match that resulted in the creation of this branch.
+		 */
+		private Match d_origin;
+		/**
+		 * The list of Necessities.
+		 */
+		private Necessities d_necessities;
+		/**
+		 * The Queue we are working from.
+		 */
+		private PriorityQueue<Match> d_queue;
+		/**
+		 * The result obtained.
+		 */
+		private BranchState d_result;
+
+		public Worker(Formula f) {
+			d_node  = new Node(
+				new LabelInstance(
+					new NullLabel(),
+					new WorldInstance(null),
+					new NullAgent()),
+				f);
+			d_branch = new Branch(null);
+			d_origin = null;
+			d_necessities = new Necessities(null);
+			d_queue = new PriorityQueue<Match>();
+			d_result = null;
+		}
+
+		public Worker(Worker w, Node n, Match o) {
+			d_node = n;
+			d_origin = o;
+			d_branch = new Branch(w.d_branch);
+			d_necessities = new Necessities(w.d_necessities);
+			d_queue = new PriorityQueue<Match>(w.d_queue);
+			d_result = null;
+		}
+
+		public BranchState tableau() {
+			if (d_result != null) {
+				return d_result;
+			}
+
+			Tableau.this.notify(new BranchAddedEvent(d_branch));
+			BranchState result = handleNode(d_node, d_origin);
+			if (result != BranchState.OPEN) {
+				Tableau.this.notify(new BranchDoneEvent(d_branch));
+				d_result = result;
+				return result;
+			}
+
+			// handle all elements on the queue
+			while (!d_queue.isEmpty()) {
+				Match match = d_queue.poll();
+				switch (match.getType()) {
+					case SPLIT:
+						handleSplit(match);
+						break;
+					case LINEAR:
+						handleLinear(match);
+						break;
+					case CREATE:
+						handleCreate(match);
+						break;
+					case ACCESS:
+						handleAccess(match);
+						break;
+					default:
+						d_error = s_errorInvalidRules;
+						return BranchState.ERROR;
+				}
+				if (d_result != null) {
+					Tableau.this.notify(new BranchDoneEvent(d_branch));
+					return d_result;
+				}
+			}
+
+			Tableau.this.notify(new BranchOpenEvent(d_branch));
+			Tableau.this.notify(new BranchDoneEvent(d_branch));
+			return BranchState.OPEN;
+		}
+
+		private void handleSplit(Match match) {
+			for (Node n : match.getNodes()) {
+				Worker worker = new Worker(this, n, match);
+				BranchState result = worker.tableau();
+				if (result != BranchState.CLOSED) {
+					d_result = result;
+					return;
+				}
+			}
+			d_result = BranchState.CLOSED;
+		}
+
+		private void handleLinear(Match match) {
+			for (Node n : match.getNodes()) {
+				BranchState result = handleNode(n, match);
+				if (result != BranchState.OPEN) {
+					d_result = result;
+					return;
+				}
+			}
+		}
+
+		private void handleCreate(Match match) {
+			for (Node n : match.getNodes()) {
+				if (!d_branch.contains(n)) {
+					BranchState result = handleNode(n, match);
+					if (result != BranchState.OPEN) {
+						d_result = result;
+						return;
+					}
+					d_queue.addAll(d_necessities.apply(n.getLabel()));
+				}
+			}
+		}
+
+		private void handleAccess(Match match) {
+			for (Node n : match.getNodes()) {
+				BranchState result = handleNode(n, match);
+				if (result != BranchState.OPEN) {
+					d_result = result;
+					return;
+				}
+			}
+		}
+
+		private BranchState handleNode(Node n, Match m) {
+			if (!d_branch.contains(n)) {
+				Node neg = new Node(n.getLabel(), n.getFormula().opposite());
+				if (d_branch.contains(neg)) {
+					put(n, m);
+					Tableau.this.notify(
+						new BranchClosedEvent(d_branch, n, neg));
+					return BranchState.CLOSED;
+				}
+				return matchPut(n, m);
+			} else {
+				Tableau.this.notify(new NodeAddedEvent(d_branch, n, m));
+			}
+			return BranchState.OPEN;
+		}
+
+		private void put(Node n, Match m) {
+			d_branch.add(n);
+			Tableau.this.notify(new NodeAddedEvent(d_branch, n, m));
+		}
+
+		private BranchState matchPut(Node n, Match m) {
+			put(n, m);
+			Vector<Match> v = match(n);
+			if (!v.isEmpty()) {
+				// q.addAll(m);
+				for (Match match : v) { // treat necessities specially
+					if (match.getType() == Rule.Type.ACCESS) {
+						d_necessities.add(match);
+						d_queue.addAll(d_branch.apply(match));
+					} else {
+						d_queue.add(match);
+					}
+				}
+			} else {
+				if (!n.getFormula().isSimple()) {
+					d_error = n.toString() +
+						" is not simple, and does not match any rules";
+					return BranchState.ERROR;
+				}
+			}
+			return BranchState.OPEN;
+		}
+
+		private Vector<Match> match(Node f) {
+			Vector<Match> result = new Vector<Match>();
+			for (Rule r : d_rules) {
+				Match m = r.match(f);
+				if (m != null)
+					result.add(m);
+			}
+			return result;
 		}
 	}
 }
