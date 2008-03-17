@@ -33,6 +33,8 @@ public class Tableau {
 
 	private static final String s_errorInvalidRules = 
 		"Default case reached in tableau: invalid rules";
+	private static final String s_errorNoMatch = 
+		" is not simple, and does not match any rules";
 
 	public Tableau(Vector<Rule> rules) {
 		d_rules = rules;
@@ -42,9 +44,8 @@ public class Tableau {
 
 	public BranchState tableau(Formula f) {
 		d_error = null;
-		Worker worker = new Worker(f);
 		notify(new TableauStartedEvent());
-		BranchState result = worker.tableau();
+		BranchState result = (new Worker(f)).tableau();
 		notify(new TableauFinishedEvent(result));
 		return result;
 	}
@@ -118,11 +119,10 @@ public class Tableau {
 			}
 
 			Tableau.this.notify(new BranchAddedEvent(d_branch));
-			BranchState result = handleNode(d_node, d_origin);
-			if (result != BranchState.OPEN) {
+			handleNode(d_node, d_origin);
+			if (d_result != null) {
 				Tableau.this.notify(new BranchDoneEvent(d_branch));
-				d_result = result;
-				return result;
+				return d_result;
 			}
 
 			// handle all elements on the queue
@@ -139,7 +139,7 @@ public class Tableau {
 						handleCreate(match);
 						break;
 					case ACCESS:
-						handleAccess(match);
+						handleLinear(match);
 						break;
 					default:
 						d_error = s_errorInvalidRules;
@@ -170,10 +170,10 @@ public class Tableau {
 
 		private void handleLinear(Match match) {
 			for (Node n : match.getNodes()) {
-				BranchState result = handleNode(n, match);
-				if (result != BranchState.OPEN) {
-					d_result = result;
-					return;
+				if (!d_branch.contains(n)) {
+					handleNode(n, match);
+					if (d_result != null)
+						return;
 				}
 			}
 		}
@@ -181,40 +181,24 @@ public class Tableau {
 		private void handleCreate(Match match) {
 			for (Node n : match.getNodes()) {
 				if (!d_branch.contains(n)) {
-					BranchState result = handleNode(n, match);
-					if (result != BranchState.OPEN) {
-						d_result = result;
+					handleNode(n, match);
+					if (d_result != null)
 						return;
-					}
 					d_queue.addAll(d_necessities.apply(n.getLabel()));
 				}
 			}
 		}
 
-		private void handleAccess(Match match) {
-			for (Node n : match.getNodes()) {
-				BranchState result = handleNode(n, match);
-				if (result != BranchState.OPEN) {
-					d_result = result;
-					return;
-				}
-			}
-		}
-
-		private BranchState handleNode(Node n, Match m) {
-			if (!d_branch.contains(n)) {
-				Node neg = new Node(n.getLabel(), n.getFormula().opposite());
-				if (d_branch.contains(neg)) {
-					put(n, m);
-					Tableau.this.notify(
-						new BranchClosedEvent(d_branch, n, neg));
-					return BranchState.CLOSED;
-				}
-				return matchPut(n, m);
+		private void handleNode(Node n, Match m) {
+			Node neg = new Node(n.getLabel(), n.getFormula().opposite());
+			if (d_branch.contains(neg)) {
+				put(n, m);
+				Tableau.this.notify(
+					new BranchClosedEvent(d_branch, n, neg));
+				d_result = BranchState.CLOSED;
 			} else {
-				Tableau.this.notify(new NodeAddedEvent(d_branch, n, m));
+				matchPut(n, m);
 			}
-			return BranchState.OPEN;
 		}
 
 		private void put(Node n, Match m) {
@@ -222,11 +206,10 @@ public class Tableau {
 			Tableau.this.notify(new NodeAddedEvent(d_branch, n, m));
 		}
 
-		private BranchState matchPut(Node n, Match m) {
+		private void matchPut(Node n, Match m) {
 			put(n, m);
 			Vector<Match> v = match(n);
 			if (!v.isEmpty()) {
-				// q.addAll(m);
 				for (Match match : v) { // treat necessities specially
 					if (match.getType() == Rule.Type.ACCESS) {
 						d_necessities.add(match);
@@ -237,12 +220,10 @@ public class Tableau {
 				}
 			} else {
 				if (!n.getFormula().isSimple()) {
-					d_error = n.toString() +
-						" is not simple, and does not match any rules";
-					return BranchState.ERROR;
+					d_error = n.toString() + s_errorNoMatch;
+					d_result = BranchState.ERROR;
 				}
 			}
-			return BranchState.OPEN;
 		}
 
 		private Vector<Match> match(Node f) {
