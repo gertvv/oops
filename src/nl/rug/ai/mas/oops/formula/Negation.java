@@ -44,7 +44,7 @@ public class Negation implements PropositionalF {
 		if (o != null) {
 			try {
 				Negation other = (Negation) o;
-				if (other.d_right.equals(d_right)) {
+				if (other.d_code.equals(d_code)) {
 					return true;
 				}
 			} catch (ClassCastException e) {

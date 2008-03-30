@@ -41,7 +41,7 @@ public class UniDiamond implements UniModalF {
 			return false;
 		try {
 			UniDiamond other = (UniDiamond)o;
-			return d_right.equals(other.d_right);
+			return d_code.equals(other.d_code);
 		} catch (ClassCastException e) {
 		}
 		return false;

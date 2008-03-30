@@ -51,8 +51,7 @@ public class Disjunction implements PropositionalF {
 		if (o != null) {
 			try {
 				Disjunction other = (Disjunction) o;
-				if (other.d_left.equals(d_left) &&
-						other.d_right.equals(d_right)) {
+				if (other.d_code.equals(d_code)) {
 					return true;
 				}
 			} catch (ClassCastException e) {

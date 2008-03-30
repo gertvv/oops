@@ -41,7 +41,7 @@ public class UniBox implements UniModalF {
 			return false;
 		try {
 			UniBox other = (UniBox)o;
-			return d_right.equals(other.d_right);
+			return d_code.equals(other.d_code);
 		} catch (ClassCastException e) {
 		}
 		return false;

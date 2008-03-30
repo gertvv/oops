@@ -47,7 +47,7 @@ public class MultiDiamond implements MultiModalF {
 			return false;
 		try {
 			MultiDiamond other = (MultiDiamond)o;
-			return d_right.equals(other.d_right) && d_agent.equals(other.d_agent);
+			return d_code.equals(other.d_code);
 		} catch (ClassCastException e) {
 		}
 		return false;

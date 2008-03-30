@@ -46,7 +46,7 @@ public class Implication implements PropositionalF {
 		if (o != null) {
 			try {
 				Implication other = (Implication) o;
-				if (other.d_left.equals(d_left) && other.d_right.equals(d_right)) {
+				if (other.d_code.equals(d_code)) {
 					return true;
 				}
 			} catch (ClassCastException e) {

@@ -50,7 +50,7 @@ public class BiImplication implements PropositionalF {
 		if (o != null) {
 			try {
 				BiImplication other = (BiImplication) o;
-				if (other.d_left.equals(d_left) && other.d_right.equals(d_right)) {
+				if (other.d_code.equals(d_code)) {
 					return true;
 				}
 			} catch (ClassCastException e) {
