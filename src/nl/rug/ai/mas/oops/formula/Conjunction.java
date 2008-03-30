@@ -19,16 +19,22 @@
 
 package nl.rug.ai.mas.oops.formula;
 
+import java.math.BigInteger;
+
 /**
  * A conjunction.
  */
 public class Conjunction implements PropositionalF {
+	public static final BigInteger s_code = new BigInteger("3");
+
 	private Formula d_left;
 	private Formula d_right;
+	private BigInteger d_code;
 
 	public Conjunction(Formula l, Formula r) {
 		d_left = l;
 		d_right = r;
+		d_code = CodeUtil.codeBinary(s_code, l.code(), r.code());
 	}
 
 	public Formula getLeft() {
@@ -50,10 +56,6 @@ public class Conjunction implements PropositionalF {
 			}
 		}
 		return false;
-	}
-
-	public int hashCode() {
-		return 1;
 	}
 
 	public String toString() {
@@ -93,5 +95,13 @@ public class Conjunction implements PropositionalF {
 
 	public boolean isConcrete() {
 		return d_left.isConcrete() && d_right.isConcrete();
+	}
+
+	public BigInteger code() {
+		return d_code;
+	}
+
+	public int hashCode() {
+		return d_code.hashCode();
 	}
 }

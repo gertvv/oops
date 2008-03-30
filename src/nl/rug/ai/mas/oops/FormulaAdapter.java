@@ -21,6 +21,7 @@ package nl.rug.ai.mas.oops;
 
 import java.io.*;
 import java.util.*;
+import java.math.BigInteger;
 
 import nl.rug.ai.mas.oops.parser.parser.*;
 import nl.rug.ai.mas.oops.parser.lexer.*;
@@ -34,6 +35,12 @@ import nl.rug.ai.mas.oops.tableau.*;
  * Class to transform a parse tree into a formula tree.
  */
 class FormulaAdapter extends DepthFirstAdapter {
+	private Context d_context;
+
+	public FormulaAdapter(Context c) {
+		d_context = c;
+	}
+
 	public boolean parse(InputStream is) {
 		try {
 			reset(); // reset internal variables
@@ -56,15 +63,67 @@ class FormulaAdapter extends DepthFirstAdapter {
 		return (first != null ? first.d_formula : null);
 	}
 
+	public Context getContext() {
+		return new Context(d_propMap, d_aidMap, d_varMap.getCodeMap(),
+			new VariableCodeMap<Agent>());
+	}
+
 	public Exception getErrorCause() {
 		return d_errorCause;
+	}
+
+	private class CombinedVarMap<T> {
+		private VariableMap<T> d_varMap;
+		private VariableCodeMap<T> d_codeMap;
+
+		public CombinedVarMap() {
+			this(new VariableCodeMap<T>());
+		}
+
+		public CombinedVarMap(VariableCodeMap<T> codeMap) {
+			d_varMap = new VariableMap<T>();
+			d_codeMap = codeMap;
+		}
+
+		public VariableCodeMap<T> getCodeMap() {
+			return d_codeMap;
+		}
+
+		public Variable<T> getOrCreate(String name) {
+			return d_varMap.getOrCreate(name);
+		}
+
+		public BigInteger code(Variable<T> var) {
+			return d_codeMap.code(var);
+		}
+	}
+
+	private class FormulaVarMap extends CombinedVarMap<Formula> {
+		public FormulaVarMap() {
+			super();
+		}
+
+		public FormulaVarMap(VariableCodeMap<Formula> map) {
+			super(map);
+		}
+
+		public FormulaReference getOrCreateReference(String name) {
+			Variable<Formula> v = super.getOrCreate(name);
+			FormulaReference r = new FormulaReference(v, super.code(v));
+			v.add(r);
+			return r;
+		}
+	}
+
+	private class AgentVarMap extends CombinedVarMap<Agent> {
+		// FIXME: not used
 	}
 
 	private class StackEntry {
 		public Formula d_formula = null;
 		public Agent d_agent = null;
-		public VariableMap<Formula> d_variableMap = null;
-		public VariableMap<Agent> d_agentMap = null;
+		// public VariableMap<Formula> d_variableMap = null;
+		// public VariableMap<Agent> d_agentMap = null; FIXME: not used
 
 		public String toString() {
 			return d_formula.toString();
@@ -74,19 +133,20 @@ class FormulaAdapter extends DepthFirstAdapter {
 	private LinkedList<StackEntry> d_stack;
 	private PropositionMap d_propMap;
 	private AgentIdMap d_aidMap;
+	private FormulaVarMap d_varMap;
 	private Exception d_errorCause;
 
 	private void reset() {
 		d_stack = new LinkedList<StackEntry>(); 
-		d_propMap = new PropositionMap();
-		d_aidMap = new AgentIdMap();
+		d_propMap = d_context.getPropositionMap();
+		d_aidMap = d_context.getAgentIdMap();
+		d_varMap = new FormulaVarMap(d_context.getFormulaCodeMap());
 		d_errorCause = null;
 	}
 
 	public void outAPropositionFormula(APropositionFormula node) {
 		StackEntry entry = new StackEntry();
 		entry.d_formula = d_propMap.getOrCreate(node.getProp().getText());
-		entry.d_variableMap = new VariableMap<Formula>();
 		d_stack.addLast(entry);
 	}
 
@@ -121,15 +181,11 @@ class FormulaAdapter extends DepthFirstAdapter {
 	}
 
 	public void outAVariableFormula(AVariableFormula node) {
-		VariableMap<Formula> m = new VariableMap<Formula>();
-		Variable<Formula> v = m.getOrCreate(node.getVar().getText());
-		FormulaReference r = new FormulaReference(v);
-		v.add(r);
-
+		FormulaReference r = d_varMap.getOrCreateReference(
+			node.getVar().getText());
 		StackEntry entry = new StackEntry();
 		entry.d_formula = r;
-		entry.d_variableMap = m;
-		
+
 		d_stack.addLast(entry);
 	}
 
@@ -143,7 +199,6 @@ class FormulaAdapter extends DepthFirstAdapter {
 		StackEntry right = d_stack.removeLast();
 		StackEntry left = d_stack.removeLast();
 		left.d_formula = new Conjunction(left.d_formula, right.d_formula);
-		left.d_variableMap.merge(right.d_variableMap);
 		d_stack.addLast(left);
 	}
 
@@ -151,7 +206,6 @@ class FormulaAdapter extends DepthFirstAdapter {
 		StackEntry right = d_stack.removeLast();
 		StackEntry left = d_stack.removeLast();
 		left.d_formula = new Disjunction(left.d_formula, right.d_formula);
-		left.d_variableMap.merge(right.d_variableMap);
 		d_stack.addLast(left);
 	}
 
@@ -159,7 +213,6 @@ class FormulaAdapter extends DepthFirstAdapter {
 		StackEntry right = d_stack.removeLast();
 		StackEntry left = d_stack.removeLast();
 		left.d_formula = new Implication(left.d_formula, right.d_formula);
-		left.d_variableMap.merge(right.d_variableMap);
 		d_stack.addLast(left);
 	}
 
@@ -167,7 +220,6 @@ class FormulaAdapter extends DepthFirstAdapter {
 		StackEntry right = d_stack.removeLast();
 		StackEntry left = d_stack.removeLast();
 		left.d_formula = new BiImplication(left.d_formula, right.d_formula);
-		left.d_variableMap.merge(right.d_variableMap);
 		d_stack.addLast(left);
 	}
 }

@@ -32,25 +32,26 @@ public class PropositionalRuleFactory {
 	private PropositionalRuleFactory() {
 	}
 
-	public static Vector<Rule> build() {
+	public static Vector<Rule> build(Context context) {
 		Vector<Rule> rules = new Vector<Rule>(7);
-		rules.add(buildNeg());
-		rules.add(buildCon1());
-		rules.add(buildCon2());
-		rules.add(buildCon3());
-		rules.add(buildCon4());
-		rules.add(buildDis1());
-		rules.add(buildDis2());
-		rules.add(buildDis3());
-		rules.add(buildDis4());
+		rules.add(buildNeg(context));
+		rules.add(buildCon1(context));
+		rules.add(buildCon2(context));
+		rules.add(buildCon3(context));
+		rules.add(buildCon4(context));
+		rules.add(buildDis1(context));
+		rules.add(buildDis2(context));
+		rules.add(buildDis3(context));
+		rules.add(buildDis4(context));
 		return rules;
 	}
 
-	public static Rule buildNeg() {
+	public static Rule buildNeg(Context context) {
 		String html = NEG;
 		// variables occuring
 		Variable<Formula> r = new Variable<Formula>("R");
-		FormulaReference rref = new FormulaReference(r);
+		FormulaReference rref = new FormulaReference(r, 
+			context.getFormulaCodeMap().code(r));
 
 		// the formula
 		Formula f = new Negation(new Negation(rref));
@@ -62,14 +63,16 @@ public class PropositionalRuleFactory {
 		return new LinearRule("NEG", html, f, rwt);
 	}
 
-	public static Rule buildCon1() {
+	public static Rule buildCon1(Context context) {
 		String html = CONJ + "<sub>" + CONJ + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
-		FormulaReference lref = new FormulaReference(l);
+		FormulaReference lref = new FormulaReference(l, 
+			context.getFormulaCodeMap().code(l));
 
 		Variable<Formula> r = new Variable<Formula>("R");
-		FormulaReference rref = new FormulaReference(r);
+		FormulaReference rref = new FormulaReference(r, 
+			context.getFormulaCodeMap().code(r));
 
 		// formula
 		Formula f = new Conjunction(lref, rref);
@@ -82,14 +85,16 @@ public class PropositionalRuleFactory {
 		return new LinearRule("CON1", html, f, rwt);
 	}
 
-	public static Rule buildCon2() {
+	public static Rule buildCon2(Context context) {
 		String html = CONJ + "<sub>" + DISJ + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
-		FormulaReference lref = new FormulaReference(l);
+		FormulaReference lref = new FormulaReference(l, 
+			context.getFormulaCodeMap().code(l));
 
 		Variable<Formula> r = new Variable<Formula>("R");
-		FormulaReference rref = new FormulaReference(r);
+		FormulaReference rref = new FormulaReference(r, 
+			context.getFormulaCodeMap().code(r));
 
 		// formula
 		Formula f = new Negation(new Disjunction(lref, rref));
@@ -102,14 +107,16 @@ public class PropositionalRuleFactory {
 		return new LinearRule("CON2", html, f, rwt);
 	}
 
-	public static Rule buildCon3() {
+	public static Rule buildCon3(Context context) {
 		String html = CONJ + "<sub>" + IMPL + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
-		FormulaReference lref = new FormulaReference(l);
+		FormulaReference lref = new FormulaReference(l, 
+			context.getFormulaCodeMap().code(l));
 
 		Variable<Formula> r = new Variable<Formula>("R");
-		FormulaReference rref = new FormulaReference(r);
+		FormulaReference rref = new FormulaReference(r, 
+			context.getFormulaCodeMap().code(r));
 
 		// formula
 		Formula f = new Negation(new Implication(lref, rref));
@@ -122,14 +129,16 @@ public class PropositionalRuleFactory {
 		return new LinearRule("CON3", html, f, rwt);
 	}
 
-	public static Rule buildCon4() {
+	public static Rule buildCon4(Context context) {
 		String html = CONJ + "<sub>" + BIIM + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
-		FormulaReference lref = new FormulaReference(l);
+		FormulaReference lref = new FormulaReference(l, 
+			context.getFormulaCodeMap().code(l));
 
 		Variable<Formula> r = new Variable<Formula>("R");
-		FormulaReference rref = new FormulaReference(r);
+		FormulaReference rref = new FormulaReference(r, 
+			context.getFormulaCodeMap().code(r));
 
 		// formula
 		Formula f = new Negation(new BiImplication(lref, rref));
@@ -144,14 +153,16 @@ public class PropositionalRuleFactory {
 		return new LinearRule("CON4", html, f, rwt);
 	}
 
-	public static Rule buildDis1() {
+	public static Rule buildDis1(Context context) {
 		String html = DISJ + "<sub>" + DISJ + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
-		FormulaReference lref = new FormulaReference(l);
+		FormulaReference lref = new FormulaReference(l, 
+			context.getFormulaCodeMap().code(l));
 
 		Variable<Formula> r = new Variable<Formula>("R");
-		FormulaReference rref = new FormulaReference(r);
+		FormulaReference rref = new FormulaReference(r, 
+			context.getFormulaCodeMap().code(r));
 
 		// formula
 		Formula f = new Disjunction(lref, rref);
@@ -164,14 +175,16 @@ public class PropositionalRuleFactory {
 		return new SplitRule("DIS1", html, f, rwt);
 	}
 
-	public static Rule buildDis2() {
+	public static Rule buildDis2(Context context) {
 		String html = DISJ + "<sub>" + CONJ + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
-		FormulaReference lref = new FormulaReference(l);
+		FormulaReference lref = new FormulaReference(l, 
+			context.getFormulaCodeMap().code(l));
 
 		Variable<Formula> r = new Variable<Formula>("R");
-		FormulaReference rref = new FormulaReference(r);
+		FormulaReference rref = new FormulaReference(r, 
+			context.getFormulaCodeMap().code(r));
 
 		// formula
 		Formula f = new Negation(new Conjunction(lref, rref));
@@ -184,14 +197,16 @@ public class PropositionalRuleFactory {
 		return new SplitRule("DIS2", html, f, rwt);
 	}
 
-	public static Rule buildDis3() {
+	public static Rule buildDis3(Context context) {
 		String html = DISJ + "<sub>" + IMPL + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
-		FormulaReference lref = new FormulaReference(l);
+		FormulaReference lref = new FormulaReference(l, 
+			context.getFormulaCodeMap().code(l));
 
 		Variable<Formula> r = new Variable<Formula>("R");
-		FormulaReference rref = new FormulaReference(r);
+		FormulaReference rref = new FormulaReference(r, 
+			context.getFormulaCodeMap().code(r));
 
 		// formula
 		Formula f = new Implication(lref, rref);
@@ -204,14 +219,16 @@ public class PropositionalRuleFactory {
 		return new SplitRule("DIS3", html, f, rwt);
 	}
 
-	public static Rule buildDis4() {
+	public static Rule buildDis4(Context context) {
 		String html = DISJ + "<sub>" + BIIM + "</sub>";
 		// variables
 		Variable<Formula> l = new Variable<Formula>("L");
-		FormulaReference lref = new FormulaReference(l);
+		FormulaReference lref = new FormulaReference(l, 
+			context.getFormulaCodeMap().code(l));
 
 		Variable<Formula> r = new Variable<Formula>("R");
-		FormulaReference rref = new FormulaReference(r);
+		FormulaReference rref = new FormulaReference(r, 
+			context.getFormulaCodeMap().code(r));
 
 		// formula
 		Formula f = new BiImplication(lref, rref);

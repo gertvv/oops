@@ -19,48 +19,43 @@
 
 package nl.rug.ai.mas.oops.formula;
 
-import java.math.BigInteger;
+/**
+ * Context in which to interpret a formula.
+ */
+public class Context {
+	private PropositionMap d_propMap;
+	private AgentIdMap d_aidMap;
+	private VariableCodeMap<Formula> d_formulaCodeMap;
+	private VariableCodeMap<Agent> d_agentCodeMap;
 
-public class NullAgent implements Agent {
-	private BigInteger d_code;
-
-	public NullAgent() {
-		d_code = BigInteger.ZERO;
+	public Context() {
+		d_propMap = new PropositionMap();
+		d_aidMap = new AgentIdMap();
+		d_formulaCodeMap = new VariableCodeMap<Formula>();
+		d_agentCodeMap = new VariableCodeMap<Agent>();
 	}
 
-	public Substitution<Agent> match(Agent other) {
-		if (equals(other)) {
-			return new Substitution<Agent>();
-		}
-		return null;
+	public Context(PropositionMap p, AgentIdMap a, VariableCodeMap<Formula> vf,
+			VariableCodeMap<Agent> va) {
+		d_propMap = p;
+		d_aidMap = a;
+		d_formulaCodeMap = vf;
+		d_agentCodeMap = va;
 	}
 
-	public Agent substitute(Substitution<Agent> s) {
-		return this;
+	public PropositionMap getPropositionMap() {
+		return d_propMap;
 	}
 
-	public boolean equals(Object o) {
-		try {
-			NullAgent other = (NullAgent)o;
-			return true;
-		} catch (ClassCastException e) {
-		}
-		return false;
+	public AgentIdMap getAgentIdMap() {
+		return d_aidMap;
 	}
 
-	public String toString() {
-		return "NullAgent";
+	public VariableCodeMap<Formula> getFormulaCodeMap() {
+		return d_formulaCodeMap;
 	}
 
-	public boolean isConcrete() {
-		return true;
-	}
-
-	public BigInteger code() {
-		return d_code;
-	}
-
-	public int hashCode() {
-		return d_code.hashCode();
+	public VariableCodeMap<Agent> getAgentCodeMap() {
+		return d_agentCodeMap;
 	}
 }

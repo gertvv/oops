@@ -19,11 +19,17 @@
 
 package nl.rug.ai.mas.oops.formula;
 
+import java.math.BigInteger;
+
 public class Negation implements PropositionalF {
+	public static final BigInteger s_code = new BigInteger("2");
+
 	private Formula d_right;
+	private BigInteger d_code;
 
 	public Negation(Formula r) {
 		d_right = r;
+		d_code = CodeUtil.codeUnary(s_code, r.code());
 	}
 
 	public Formula getRight() {
@@ -45,10 +51,6 @@ public class Negation implements PropositionalF {
 			}
 		}
 		return false;
-	}
-
-	public int hashCode() {
-		return 1;
 	}
 
 	public FullSubstitution match(Formula f) {
@@ -75,7 +77,7 @@ public class Negation implements PropositionalF {
 
 	public boolean isSimple() {
 		if (d_right.match(
-					new Negation(new FormulaReference(new Variable<Formula>("F")))
+					new Negation(new FormulaReference(new Variable<Formula>("F"), java.math.BigInteger.ONE))
 					) == null && d_right.isSimple())
 			return true;
 		return false;
@@ -83,5 +85,13 @@ public class Negation implements PropositionalF {
 
 	public boolean isConcrete() {
 		return d_right.isConcrete();
+	}
+
+	public BigInteger code() {
+		return d_code;
+	}
+
+	public int hashCode() {
+		return d_code.hashCode();
 	}
 }

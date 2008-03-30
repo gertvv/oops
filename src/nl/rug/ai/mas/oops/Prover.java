@@ -34,11 +34,13 @@ public class Prover {
 			return;
 		}
 
-		// build rules
-		Vector<Rule> rules = PropositionalRuleFactory.build();
-		rules.addAll(ModalRuleFactory.build());
+		Context c = new Context();
 
-		Prover p = new Prover(rules);
+		// build rules
+		Vector<Rule> rules = PropositionalRuleFactory.build(c);
+		rules.addAll(ModalRuleFactory.build(c));
+
+		Prover p = new Prover(rules, c);
 		try {
 			System.out.println(p.proveable(args[0]));
 		} catch (TableauErrorException e) {
@@ -49,8 +51,8 @@ public class Prover {
 	FormulaAdapter d_formulaAdapter;
 	Tableau d_tableau;
 
-	public Prover(Vector<Rule> rules) {
-		d_formulaAdapter = new FormulaAdapter();
+	public Prover(Vector<Rule> rules, Context c) {
+		d_formulaAdapter = new FormulaAdapter(c);
 		d_tableau = new Tableau(rules);
 	}
 

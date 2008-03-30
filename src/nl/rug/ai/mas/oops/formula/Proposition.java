@@ -19,11 +19,15 @@
 
 package nl.rug.ai.mas.oops.formula;
 
+import java.math.BigInteger;
+
 public class Proposition implements PropositionalF {
 	private String d_name;
-	
-	public Proposition(String name) {
+	private BigInteger d_code;
+
+	public Proposition(String name, BigInteger code) {
 		d_name = name;
+		d_code = CodeUtil.codeProposition(code);
 	}
 
 	public String getName() {
@@ -35,8 +39,8 @@ public class Proposition implements PropositionalF {
 	}
 
 	/**
-	 * Propositions are only considered equal if they are references to the same
-	 * Proposition object.
+	 * Propositions are only considered equal if they are references to the
+	 * same Proposition object.
 	 */
 	public boolean equals(Object other) {
 		return this == other;
@@ -67,5 +71,13 @@ public class Proposition implements PropositionalF {
 
 	public boolean isConcrete() {
 		return true;
+	}
+
+	public BigInteger code() {
+		return d_code;
+	}
+
+	public int hashCode() {
+		return d_code.hashCode();
 	}
 }

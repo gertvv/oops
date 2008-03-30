@@ -19,13 +19,19 @@
 
 package nl.rug.ai.mas.oops.formula;
 
+import java.math.BigInteger;
+
 public class MultiBox implements MultiModalF {
+	public static final BigInteger s_code = new BigInteger("7");
+
 	Formula d_right;
 	Agent d_agent;
+	private BigInteger d_code;
 
 	public MultiBox(Agent a, Formula f) {
 		d_agent = a;
 		d_right = f;
+		d_code = CodeUtil.codeModal(s_code, a.code(), f.code());
 	}
 
 	public Agent getAgent() {
@@ -45,10 +51,6 @@ public class MultiBox implements MultiModalF {
 		} catch (ClassCastException e) {
 		}
 		return false;
-	}
-
-	public int hashCode() {
-		return 1;
 	}
 
 	public FullSubstitution match(Formula f) {
@@ -88,5 +90,13 @@ public class MultiBox implements MultiModalF {
 
 	public boolean isConcrete() {
 		return d_agent.isConcrete() && d_right.isConcrete();
+	}
+
+	public BigInteger code() {
+		return d_code;
+	}
+
+	public int hashCode() {
+		return d_code.hashCode();
 	}
 }

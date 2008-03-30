@@ -19,13 +19,18 @@
 
 package nl.rug.ai.mas.oops.formula;
 
+import java.math.BigInteger;
+
 /**
  * Wraps a VariableReference&lt;Agent&gt; such that it can be used as an Agent.
  */
 public class AgentReference extends VariableReference<Agent>
 implements Agent {
-	public AgentReference(Variable<Agent> var) {
+	private BigInteger d_code;
+
+	public AgentReference(Variable<Agent> var, BigInteger code) {
 		super(var);
+		d_code = code.multiply(CodeUtil.TWO).add(CodeUtil.ONE);
 	}
 
 	/**
@@ -53,5 +58,13 @@ implements Agent {
 
 	public boolean isConcrete() {
 		return false;
+	}
+
+	public BigInteger code() {
+		return d_code;
+	}
+
+	public int d_hashCode() {
+		return d_code.hashCode();
 	}
 }

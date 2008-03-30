@@ -26,10 +26,14 @@ import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
 import nl.rug.ai.mas.oops.*;
 
+import java.math.BigInteger;
+
 /**
  * Test functionality related to Label.
  */
 public class CreationRulesTest {
+	private static final BigInteger ONE = BigInteger.ONE;
+	private static final BigInteger TWO = ONE.add(BigInteger.ONE);
 	/**
 	 * This
 	        {NullLabel.(World(15dfd77),NoAgent).(n,1),a}
@@ -39,13 +43,13 @@ public class CreationRulesTest {
 	 */
 	@Test public void entailsTest() {
 		// introduce necessary constants
-		Proposition pA = new Proposition("a");
-		Proposition pB = new Proposition("b");
+		Proposition pA = new Proposition("a", ONE);
+		Proposition pB = new Proposition("b", TWO);
 		Label nullLabel = new NullLabel();
 		World topWorld = new WorldInstance(null);
-		Agent noAgent = new AgentId("NoAgent");
-		Agent a1 = new AgentId("1");
-		Agent a2 = new AgentId("2");
+		Agent noAgent = new NullAgent(); 
+		Agent a1 = new AgentId("1", ONE);
+		Agent a2 = new AgentId("2", TWO);
 		Label topLabel = new LabelInstance(nullLabel, topWorld, noAgent);
 
 		// world variables

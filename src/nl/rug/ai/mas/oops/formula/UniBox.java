@@ -19,11 +19,17 @@
 
 package nl.rug.ai.mas.oops.formula;
 
+import java.math.BigInteger;
+
 public class UniBox implements UniModalF {
+	public static final BigInteger s_code = new BigInteger("7");
+
 	Formula d_right;
+	private BigInteger d_code;
 
 	public UniBox(Formula f) {
 		d_right = f;
+		d_code = CodeUtil.codeModal(s_code, BigInteger.ZERO, f.code());
 	}
 
 	public String toString() {
@@ -39,10 +45,6 @@ public class UniBox implements UniModalF {
 		} catch (ClassCastException e) {
 		}
 		return false;
-	}
-
-	public int hashCode() {
-		return 1;
 	}
 
 	public FullSubstitution match(Formula f) {
@@ -73,5 +75,13 @@ public class UniBox implements UniModalF {
 
 	public boolean isConcrete() {
 		return d_right.isConcrete();
+	}
+
+	public BigInteger code() {
+		return d_code;
+	}
+
+	public int hashCode() {
+		return d_code.hashCode();
 	}
 }

@@ -28,14 +28,16 @@ import static org.junit.Assert.fail;
 import java.util.Vector;
 import nl.rug.ai.mas.oops.tableau.*;
 import nl.rug.ai.mas.oops.*;
+import nl.rug.ai.mas.oops.formula.Context;
 
 public class ProverTest {
 	private static Prover s_prover;
 
 	@BeforeClass public static void initProver() {
-		Vector<Rule> rules = PropositionalRuleFactory.build();
-		rules.addAll(ModalRuleFactory.build());
-		s_prover = new Prover(rules);
+		Context c = new Context();
+		Vector<Rule> rules = PropositionalRuleFactory.build(c);
+		rules.addAll(ModalRuleFactory.build(c));
+		s_prover = new Prover(rules, c);
 	}
 
 	/* 	#1  */

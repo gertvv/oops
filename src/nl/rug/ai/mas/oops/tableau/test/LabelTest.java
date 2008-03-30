@@ -28,10 +28,15 @@ import static org.junit.Assert.assertNotSame;
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
 
+import java.math.BigInteger;
+
 /**
  * Test functionality related to Label.
  */
 public class LabelTest {
+	private static final BigInteger ONE = BigInteger.ONE;
+	private static final BigInteger TWO = ONE.add(BigInteger.ONE);
+
 	/**
 	 * Label s.k_i should match null.(w0,null).(w1,1)
 	 */
@@ -42,14 +47,14 @@ public class LabelTest {
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i);
+		AgentReference iref = new AgentReference(i, ONE);
 		Label tpl = new LabelInstance(lref, kref, iref);
 
 		// build label
 		World w0 = new WorldInstance(null);
 		World w1 = new WorldInstance(null);
-		Agent a0 = new AgentId("NoAgent");
-		Agent a1 = new AgentId("1");
+		Agent a0 = new NullAgent();
+		Agent a1 = new AgentId("1", ONE);
 		Label lbl = new LabelInstance(
 			new LabelInstance(new NullLabel(), w0, a0),
 			w1, a1);

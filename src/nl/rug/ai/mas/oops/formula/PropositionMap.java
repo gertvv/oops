@@ -21,20 +21,26 @@ package nl.rug.ai.mas.oops.formula;
 
 import java.util.*;
 
+import java.math.BigInteger;
+
 /**
  * A map from proposition symbols to a class implementing them. This enables
  * identification of different propositions.
  */
 public class PropositionMap extends HashMap<String, Proposition> {
+	private BigInteger d_code;
+
 	public PropositionMap() {
 		super();
+		d_code = BigInteger.ZERO;
 	}
 
 	public Proposition getOrCreate(String name) {
 		Proposition p = get(name);
 		if (p != null)
 			return p;
-		p = new Proposition(name);
+		d_code = d_code.add(BigInteger.ONE);
+		p = new Proposition(name, d_code);
 		put(name, p);
 		return p;
 	}

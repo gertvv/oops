@@ -26,6 +26,8 @@ import static org.junit.Assert.assertNotSame;
 
 import nl.rug.ai.mas.oops.formula.*;
 
+import java.math.BigInteger;
+
 /**
  * Test functionality related to Agent.
  */
@@ -54,8 +56,8 @@ public class AgentTest {
 
 	@Test public void referenceMatch() {
 		Variable<Agent> avar = new Variable<Agent>("A");
-		AgentReference aref = new AgentReference(avar);
-		Agent a = new AgentId("1");
+		AgentReference aref = new AgentReference(avar, BigInteger.ONE);
+		Agent a = new AgentId("1", BigInteger.ONE);
 		Substitution s = aref.match(a);
 		assertNotNull("AgentReference.match() should not return null", s);
 		assertEquals("AgentReference.match() should substitute for it's own" +

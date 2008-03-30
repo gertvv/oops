@@ -64,6 +64,10 @@ public class Tableau {
 		}
 	}
 
+	public String getError() {
+		return d_error;
+	}
+
 	private class Worker { 
 		/**
 		 * Node that generates this branch.

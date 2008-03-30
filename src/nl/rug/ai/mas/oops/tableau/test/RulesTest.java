@@ -28,15 +28,18 @@ import static org.junit.Assert.assertNotSame;
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
 
+import java.math.BigInteger;
+
 /**
  * Test functionality related to rules.
  */
 public class RulesTest {
 	@Test public void bNecS2Test0() {
+		Context c = new Context();
 		// build rule
-		Rule r = ModalRuleFactory.buildBNecS2();
+		Rule r = ModalRuleFactory.buildBNecS2(c);
 		// build node
-		Node n = buildNode1();
+		Node n = buildNode1(c);
 
 		// perform match
 		Match m = r.match(n);
@@ -44,10 +47,11 @@ public class RulesTest {
 	}
 
 	@Test public void bNecS2Test1() {
+		Context c = new Context();
 		// build rule
-		ModalRule r = (ModalRule)ModalRuleFactory.buildBNecS2();
+		ModalRule r = (ModalRule)ModalRuleFactory.buildBNecS2(c);
 		// build node
-		Node n = buildNode1();
+		Node n = buildNode1(c);
 
 		assertNull(r.getConstraint());
 
@@ -55,10 +59,11 @@ public class RulesTest {
 	}
 
 	@Test public void SNecS2Test() {
+		Context c = new Context();
 		// build rule
-		Rule r = ModalRuleFactory.buildSNecS2();
+		Rule r = ModalRuleFactory.buildSNecS2(c);
 		// build node
-		Node n = buildNode1();
+		Node n = buildNode1(c);
 
 		// perform match
 		Match m = r.match(n);
@@ -69,14 +74,14 @@ public class RulesTest {
 	 * build formula and label:
 	 * s.k_1 ~%_i p
 	 */
-	private Node buildNode1() {
-		Proposition p = new Proposition("p");
-		AgentId a = new AgentId("1");
+	private Node buildNode1(Context c) {
+		Proposition p = new Proposition("p", BigInteger.ONE);
+		AgentId a = new AgentId("1", BigInteger.ONE);
 		Formula f = new Negation(new MultiDiamond(a, p));
 		World w0 = new WorldInstance(null);
 		World w1 = new WorldInstance(null);
 		Label l = new LabelInstance(
-			new LabelInstance(new NullLabel(), w0, new AgentId("NoAgent")),
+			new LabelInstance(new NullLabel(), w0, new NullAgent()),
 			w1, a);
 		return new Node(l, f);
 	}

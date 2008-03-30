@@ -19,18 +19,22 @@
 
 package nl.rug.ai.mas.oops.formula;
 
+import java.math.BigInteger;
+
 /**
  * Class representing a concrete Agent
  */
 public class AgentId implements Agent {
 	private String d_name;
+	private BigInteger d_code;
 	
 	/**
 	 * Constructor.
 	 * @param name The name for this Agent.
 	 */
-	public AgentId(String name) {
+	public AgentId(String name, BigInteger code) {
 		d_name = name;
+		d_code = code.multiply(CodeUtil.TWO);
 	}
 
 	public String toString() {
@@ -64,5 +68,13 @@ public class AgentId implements Agent {
 
 	public boolean isConcrete() {
 		return true;
+	}
+
+	public BigInteger code() {
+		return d_code;
+	}
+
+	public int hashCode() {
+		return d_code.hashCode();
 	}
 }

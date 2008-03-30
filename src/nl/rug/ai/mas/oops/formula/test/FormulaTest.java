@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 
 import nl.rug.ai.mas.oops.formula.*;
+import java.math.BigInteger;
 
 /**
  * Test functionality related to Formula.
@@ -33,14 +34,14 @@ public class FormulaTest {
 	@Test public void variableDiamondMatchTest() {
 		// build template
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i);
+		AgentReference iref = new AgentReference(i, BigInteger.ONE);
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f);
+		FormulaReference fref = new FormulaReference(f, BigInteger.ONE);
 		Formula tpl = new MultiDiamond(iref, fref);
 		
 		// build formula
-		Agent a = new AgentId("1");
-		Formula p = new Proposition("p");
+		Agent a = new AgentId("1", BigInteger.ONE);
+		Formula p = new Proposition("p", BigInteger.ONE);
 		Formula fml = new MultiDiamond(a, p);
 
 		assertNotNull(tpl.match(fml));
@@ -49,14 +50,14 @@ public class FormulaTest {
 	@Test public void bNecTest() {
 		// build template
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i);
+		AgentReference iref = new AgentReference(i, BigInteger.ONE);
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f);
+		FormulaReference fref = new FormulaReference(f, BigInteger.ONE);
 		Formula tpl = new Negation(new MultiDiamond(iref, fref));
 		
 		// build formula
-		Agent a = new AgentId("1");
-		Formula p = new Proposition("p");
+		Agent a = new AgentId("1", BigInteger.ONE);
+		Formula p = new Proposition("p", BigInteger.ONE);
 		Formula fml = new Negation(new MultiDiamond(a, p));
 
 		assertNotNull(tpl.match(fml));
@@ -66,9 +67,9 @@ public class FormulaTest {
 	 * []%_3#_3#_2#_3a should equal %_3#_3#_2#_3a
 	 */
 	@Test public void complexModalTest() {
-		Agent a3 = new AgentId("3");
-		Agent a2 = new AgentId("2");
-		Proposition pA = new Proposition("a");
+		Agent a3 = new AgentId("3", BigInteger.ONE);
+		Agent a2 = new AgentId("2", BigInteger.ONE.add(BigInteger.ONE));
+		Proposition pA = new Proposition("a", BigInteger.ONE);
 		Formula f0 = new MultiDiamond(a3, new MultiBox(a3, new MultiBox(a2,
 			new MultiBox(a3, pA))));
 		FullSubstitution s = new FullSubstitution();

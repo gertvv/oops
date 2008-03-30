@@ -19,6 +19,8 @@
 
 package nl.rug.ai.mas.oops.formula;
 
+import java.math.BigInteger;
+
 public interface Formula {
 	/**
 	 * Attempt to match this formula to another formula, returning a
@@ -45,4 +47,8 @@ public interface Formula {
 	 * @return true if the formula contains no free variables, false otherwise
 	 */
 	public boolean isConcrete();
+	/**
+	 * @return The code number for this Formula.
+	 */
+	public BigInteger code();
 }
