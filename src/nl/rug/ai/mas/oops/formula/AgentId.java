@@ -26,15 +26,15 @@ import java.math.BigInteger;
  */
 public class AgentId implements Agent {
 	private String d_name;
-	private BigInteger d_code;
+	private int d_code;
 	
 	/**
 	 * Constructor.
 	 * @param name The name for this Agent.
 	 */
-	public AgentId(String name, BigInteger code) {
+	public AgentId(String name, int code) {
 		d_name = name;
-		d_code = code.multiply(CodeUtil.TWO);
+		d_code = 2 * code;
 	}
 
 	public String toString() {
@@ -70,11 +70,11 @@ public class AgentId implements Agent {
 		return true;
 	}
 
-	public BigInteger code() {
+	public int code() {
 		return d_code;
 	}
 
 	public int hashCode() {
-		return d_code.hashCode();
+		return d_code;
 	}
 }

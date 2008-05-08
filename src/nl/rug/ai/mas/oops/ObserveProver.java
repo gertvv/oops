@@ -32,11 +32,13 @@ public class ObserveProver {
 			return;
 		}
 
-		// build rules
-		Vector<Rule> rules = PropositionalRuleFactory.build();
-		rules.addAll(ModalRuleFactory.build());
+		Context c = new Context();
 
-		Prover p = new Prover(rules);
+		// build rules
+		Vector<Rule> rules = PropositionalRuleFactory.build(c);
+		rules.addAll(ModalRuleFactory.build(c));
+
+		Prover p = new Prover(rules, c);
 		p.getTableau().attachObserver(new SystemOutObserver());
 		p.getTableau().attachObserver(new FormulaObserver());
 		try {

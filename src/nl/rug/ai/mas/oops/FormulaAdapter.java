@@ -21,7 +21,6 @@ package nl.rug.ai.mas.oops;
 
 import java.io.*;
 import java.util.*;
-import java.math.BigInteger;
 
 import nl.rug.ai.mas.oops.parser.parser.*;
 import nl.rug.ai.mas.oops.parser.lexer.*;
@@ -93,7 +92,7 @@ class FormulaAdapter extends DepthFirstAdapter {
 			return d_varMap.getOrCreate(name);
 		}
 
-		public BigInteger code(Variable<T> var) {
+		public int code(Variable<T> var) {
 			return d_codeMap.code(var);
 		}
 	}

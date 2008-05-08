@@ -19,17 +19,19 @@
 
 package nl.rug.ai.mas.oops.formula;
 
-import java.math.BigInteger;
-
 public class UniDiamond implements UniModalF {
-	public static final BigInteger s_code = new BigInteger("8");
+	public static final int s_code = CodeUtil.codeModalOperator(8, 0);
 
-	Formula d_right;
-	private BigInteger d_code;
+	private Formula d_right;
+	private int d_hash;
 
 	public UniDiamond(Formula f) {
 		d_right = f;
-		d_code = CodeUtil.codeModal(s_code, BigInteger.ZERO, f.code());
+		d_hash = CodeUtil.codeUnary(s_code, f.hashCode());
+	}
+
+	public Formula getRight() {
+		return d_right;
 	}
 
 	public String toString() {
@@ -37,12 +39,17 @@ public class UniDiamond implements UniModalF {
 	}
 
 	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		try {
-			UniDiamond other = (UniDiamond)o;
-			return d_code.equals(other.d_code);
-		} catch (ClassCastException e) {
+		if (o != null) {
+			try {
+				UniDiamond other = (UniDiamond) o;
+				if (other.d_hash != d_hash) {
+					return false;
+				}
+				if (other.d_right.equals(d_right)) {
+					return true;
+				}
+			} catch (ClassCastException e) {
+			}
 		}
 		return false;
 	}
@@ -77,11 +84,11 @@ public class UniDiamond implements UniModalF {
 		return d_right.isConcrete();
 	}
 
-	public BigInteger code() {
-		return d_code;
+	public int code() {
+		return s_code;
 	}
 
 	public int hashCode() {
-		return d_code.hashCode();
+		return d_hash;
 	}
 }

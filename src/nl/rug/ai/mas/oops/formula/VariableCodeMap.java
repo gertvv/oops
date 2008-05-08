@@ -26,19 +26,19 @@ import java.math.BigInteger;
  * A map from Variable to code numbers.
  */
 public class VariableCodeMap<T> {
-	private HashMap<Variable<T>, BigInteger> d_map;
-	private BigInteger d_code;
+	private HashMap<Variable<T>, Integer> d_map;
+	private int d_code;
 
 	public VariableCodeMap() {
-		d_map = new HashMap<Variable<T>, BigInteger>();
-		d_code = BigInteger.ZERO;
+		d_map = new HashMap<Variable<T>, Integer>();
+		d_code = 0;
 	}
 
-	public BigInteger code(Variable<T> k) {
-		BigInteger v = d_map.get(k);
+	public int code(Variable<T> k) {
+		Integer v = d_map.get(k);
 		if (v != null)
-			return v;
-		d_code = d_code.add(BigInteger.ONE);
+			return v.intValue();
+		d_code++;
 		d_map.put(k, d_code);
 		return d_code;
 	}

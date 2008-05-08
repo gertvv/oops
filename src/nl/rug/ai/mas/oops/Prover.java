@@ -28,8 +28,22 @@ import nl.rug.ai.mas.oops.tableau.*;
  * Proves formulas using a tableau.
  */
 public class Prover {
+	private enum Mode {
+		PROVE,
+		SAT
+	};
+
 	public static void main(String [] args) {
-		if (args.length != 1) {
+		String formula = null;
+		Mode mode = null;
+
+		if (args.length == 1) {
+			mode = Mode.PROVE;
+			formula = args[0];
+		} else if (args.length == 2 && args[0].equals("--sat")) {
+			mode = Mode.SAT;
+			formula = args[1];
+		} else {
 			System.out.println("Please supply a formula on the command line.");
 			return;
 		}
@@ -42,7 +56,11 @@ public class Prover {
 
 		Prover p = new Prover(rules, c);
 		try {
-			System.out.println(p.proveable(args[0]));
+			if (mode == Mode.PROVE) {
+				System.out.println(p.proveable(formula));
+			} else {
+				System.out.println(p.satisfiable(formula));
+			}
 		} catch (TableauErrorException e) {
 			System.out.println(e);
 		}
@@ -68,6 +86,20 @@ public class Prover {
 			throw new TableauErrorException(d_tableau.getError());
 		}
 		return result == Tableau.BranchState.CLOSED;
+	}
+
+	public boolean satisfiable(String formula)
+			throws TableauErrorException {
+		if (!d_formulaAdapter.parse(
+				new ByteArrayInputStream(formula.getBytes()))) {
+			throw new TableauErrorException("Could not parse formula");
+		}
+		Tableau.BranchState result = d_tableau.tableau(
+			d_formulaAdapter.getFormula());
+		if (result == Tableau.BranchState.ERROR) {
+			throw new TableauErrorException(d_tableau.getError());
+		}
+		return result == Tableau.BranchState.OPEN;
 	}
 
 	public Tableau getTableau() {

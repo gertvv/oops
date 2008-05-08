@@ -17,29 +17,35 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.oops.formula;
+package nl.rug.ai.mas.oops.rndcnf;
 
-import java.util.*;
+import java.util.Random;
+import java.util.List;
 
-/**
- * A map from proposition symbols to a class implementing them. This enables
- * identification of different propositions.
- */
-public class PropositionMap extends HashMap<String, Proposition> {
-	private int d_code;
+public class DiscreteDist {
+	int[] d_dist;
+	int d_sum;
 
-	public PropositionMap() {
-		super();
-		d_code = 0;
+	public DiscreteDist(List<Integer> dist) {
+		d_dist = new int[dist.size()];
+		d_sum = 0;
+
+		int i = 0;
+		for (Integer x : dist) {
+			d_dist[i] = x.intValue();
+			d_sum += d_dist[i];
+			++i;
+		}
 	}
 
-	public Proposition getOrCreate(String name) {
-		Proposition p = get(name);
-		if (p != null)
-			return p;
-		d_code++;
-		p = new Proposition(name, d_code);
-		put(name, p);
-		return p;
+	public int generate(Random rnd) {
+		int r = rnd.nextInt(d_sum);
+		for (int i = 0; i < d_dist.length; ++i) {
+			int x = d_dist[i];
+			if (x > r)
+				return i;
+			r -= x;
+		}
+		return 0; // should not occur
 	}
 }

@@ -19,15 +19,13 @@
 
 package nl.rug.ai.mas.oops.formula;
 
-import java.math.BigInteger;
-
 public class Proposition implements PropositionalF {
 	private String d_name;
-	private BigInteger d_code;
+	private int d_code;
 
-	public Proposition(String name, BigInteger code) {
+	public Proposition(String name, int code) {
 		d_name = name;
-		d_code = CodeUtil.codeProposition(code);
+		d_code = code;
 	}
 
 	public String getName() {
@@ -73,11 +71,11 @@ public class Proposition implements PropositionalF {
 		return true;
 	}
 
-	public BigInteger code() {
+	public int code() {
 		return d_code;
 	}
 
 	public int hashCode() {
-		return d_code.hashCode();
+		return d_code;
 	}
 }

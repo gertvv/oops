@@ -21,18 +21,16 @@ package nl.rug.ai.mas.oops.formula;
 
 import java.util.*;
 
-import java.math.BigInteger;
-
 /**
  * A map from agent symbols to a class implementing them. This enables
  * identification of different agents.
  */
 public class AgentIdMap extends HashMap<String, AgentId> {
-	private BigInteger d_code;
+	private int d_code;
 
 	public AgentIdMap() {
 		super();
-		d_code = BigInteger.ZERO;
+		d_code = 0;
 	}
 
 	/**
@@ -43,7 +41,7 @@ public class AgentIdMap extends HashMap<String, AgentId> {
 		AgentId id = get(name);
 		if (id != null)
 			return id;
-		d_code = d_code.add(BigInteger.ONE);
+		d_code++;
 		id = new AgentId(name, d_code);
 		put(name, id);
 		return id;

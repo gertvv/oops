@@ -19,23 +19,27 @@
 
 package nl.rug.ai.mas.oops.formula;
 
-import java.math.BigInteger;
-
 public class MultiDiamond implements MultiModalF {
-	public static final BigInteger s_code = new BigInteger("8");
+	public static final int s_code = 8;
 
-	Formula d_right;
-	Agent d_agent;
-	private BigInteger d_code;
+	private Formula d_right;
+	private Agent d_agent;
+	private int d_code;
+	private int d_hash;
 
 	public MultiDiamond(Agent a, Formula f) {
 		d_agent = a;
 		d_right = f;
-		d_code = CodeUtil.codeModal(s_code, a.code(), f.code());
+		d_code = CodeUtil.codeModalOperator(s_code, a.code());
+		d_hash = CodeUtil.codeUnary(d_code, f.hashCode());
 	}
 
 	public Agent getAgent() {
 		return d_agent;
+	}
+
+	public Formula getRight() {
+		return d_right;
 	}
 
 	public String toString() {
@@ -43,12 +47,18 @@ public class MultiDiamond implements MultiModalF {
 	}
 
 	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		try {
-			MultiDiamond other = (MultiDiamond)o;
-			return d_code.equals(other.d_code);
-		} catch (ClassCastException e) {
+		if (o != null) {
+			try {
+				MultiDiamond other = (MultiDiamond) o;
+				if (other.d_hash != d_hash) {
+					return false;
+				}
+				if (other.d_code == d_code &&
+						other.d_right.equals(d_right)) {
+					return true;
+				}
+			} catch (ClassCastException e) {
+			}
 		}
 		return false;
 	}
@@ -92,11 +102,11 @@ public class MultiDiamond implements MultiModalF {
 		return d_agent.isConcrete() && d_right.isConcrete();
 	}
 
-	public BigInteger code() {
+	public int code() {
 		return d_code;
 	}
 
 	public int hashCode() {
-		return d_code.hashCode();
+		return d_hash;
 	}
 }

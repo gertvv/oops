@@ -19,19 +19,17 @@
 
 package nl.rug.ai.mas.oops.formula;
 
-import java.math.BigInteger;
-
 public class BiImplication implements PropositionalF {
-	public static final BigInteger s_code = new BigInteger("6");
+	public static final int s_code = 6;
 
 	private Formula d_left;
 	private Formula d_right;
-	private BigInteger d_code;
+	private int d_hash;
 
 	public BiImplication(Formula l, Formula r) {
 		d_left = l;
 		d_right = r;
-		d_code = CodeUtil.codeBinary(s_code, l.code(), r.code());
+		d_hash = CodeUtil.codeBinary(s_code, l.hashCode(), r.hashCode()); 
 	}
 
 	public Formula getLeft() {
@@ -50,7 +48,11 @@ public class BiImplication implements PropositionalF {
 		if (o != null) {
 			try {
 				BiImplication other = (BiImplication) o;
-				if (other.d_code.equals(d_code)) {
+				if (other.d_hash != d_hash) {
+					return false;
+				}
+				if (other.d_left.equals(d_left) &&
+						other.d_right.equals(d_right)) {
 					return true;
 				}
 			} catch (ClassCastException e) {
@@ -94,11 +96,11 @@ public class BiImplication implements PropositionalF {
 		return d_left.isConcrete() && d_right.isConcrete();
 	}
 
-	public BigInteger code() {
-		return d_code;
+	public int code() {
+		return s_code;
 	}
 
 	public int hashCode() {
-		return d_code.hashCode();
+		return d_hash;
 	}
 }

@@ -36,10 +36,24 @@ public class CodeUtil {
 	}
 
 	/**
+	 * Code a unary operator
+	 */
+	public static int codeUnary(int op, int arg) {
+		return pair(op, arg);
+	}
+
+	/**
 	 * Code a binary operator
 	 */
 	public static BigInteger codeBinary(
 			BigInteger op, BigInteger left, BigInteger right) {
+		return pair(op, pair(left, right));
+	}
+
+	/**
+	 * Code a binary operator
+	 */
+	public static int codeBinary(int op, int left, int right) {
 		return pair(op, pair(left, right));
 	}
 
@@ -51,6 +65,13 @@ public class CodeUtil {
 	}
 
 	/**
+	 * Code a proposition
+	 */
+	public static int codeProposition(int i) {
+		return codeUnary(1, i * 2);
+	}
+
+	/**
 	 * Code a variable
 	 */
 	public static BigInteger codeVariable(BigInteger i) {
@@ -58,20 +79,53 @@ public class CodeUtil {
 	}
 
 	/**
-	 * Code a modal operator
+	 * Code a variable
+	 */
+	public static int codeVariable(int i) {
+		return codeUnary(1, i * 2 + 1);
+	}
+
+	/**
+	 * Code a modal formula
 	 */
 	public static BigInteger codeModal(
 			BigInteger op, BigInteger a, BigInteger f) {
-		return codeUnary(op.add(a.multiply(TWO)), f);
+		return codeUnary(codeModalOperator(op, a), f);
 	}
 
+	/**
+	 * Code a modal formula
+	 */
+	public static int codeModal(int op, int a, int f) {
+		return codeUnary(codeModalOperator(op, a), f);
+	}
+
+	/**
+	 * Code a modal operator
+	 */
+	public static BigInteger codeModalOperator(BigInteger op, BigInteger a) {
+		return op.add(a.multiply(TWO));
+	}
+
+	/**
+	 * Code a modal operator
+	 */
+	public static int codeModalOperator(int op, int a) {
+		return op + a * 2;
+	}
+
+	/**
+	 * The standard pairing function
+	 */
 	public static BigInteger pair(BigInteger x, BigInteger y) {
-		return x.pow(2).add(
-				x.multiply(y).multiply(TWO)
-			).add(
-				y.pow(2)
-			).add(
-				x.multiply(THREE)
-			).add(y);
+		return x.add(y).add(ONE).multiply(x.add(y)).add(x.multiply(TWO)
+			).divide(TWO);
+	}
+
+	/**
+	 * The standard pairing function
+	 */
+	public static int pair(int x, int y) {
+		return ((x + y + 1) * (x + y) + 2 * x) / 2;
 	}
 }

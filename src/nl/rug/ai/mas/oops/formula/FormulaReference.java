@@ -19,18 +19,16 @@
 
 package nl.rug.ai.mas.oops.formula;
 
-import java.math.BigInteger;
-
 /**
  * Holds a reference to a Variable object, used for unification of variables.
  */
 public class FormulaReference extends VariableReference<Formula>
 implements Formula {
-	private BigInteger d_code;
+	private int d_code;
 
-	public FormulaReference(Variable<Formula> var, BigInteger code) {
+	public FormulaReference(Variable<Formula> var, int code) {
 		super(var);
-		d_code = CodeUtil.codeVariable(code);
+		d_code = code;
 	}
 
 	public FullSubstitution match(Formula f) {
@@ -62,11 +60,11 @@ implements Formula {
 		return false;
 	}
 
-	public BigInteger code() {
+	public int code() {
 		return d_code;
 	}
 
 	public int hashCode() {
-		return d_code.hashCode();
+		return d_code;
 	}
 }

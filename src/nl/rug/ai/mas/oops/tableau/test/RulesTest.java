@@ -28,8 +28,6 @@ import static org.junit.Assert.assertNotSame;
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
 
-import java.math.BigInteger;
-
 /**
  * Test functionality related to rules.
  */
@@ -75,8 +73,8 @@ public class RulesTest {
 	 * s.k_1 ~%_i p
 	 */
 	private Node buildNode1(Context c) {
-		Proposition p = new Proposition("p", BigInteger.ONE);
-		AgentId a = new AgentId("1", BigInteger.ONE);
+		Proposition p = new Proposition("p", 1);
+		AgentId a = new AgentId("1", 1);
 		Formula f = new Negation(new MultiDiamond(a, p));
 		World w0 = new WorldInstance(null);
 		World w1 = new WorldInstance(null);

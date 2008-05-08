@@ -19,13 +19,10 @@
 
 package nl.rug.ai.mas.oops.formula;
 
-import java.math.BigInteger;
-
 public class NullAgent implements Agent {
-	private BigInteger d_code;
+	private static final int s_code = 0;
 
 	public NullAgent() {
-		d_code = BigInteger.ZERO;
 	}
 
 	public Substitution<Agent> match(Agent other) {
@@ -56,11 +53,11 @@ public class NullAgent implements Agent {
 		return true;
 	}
 
-	public BigInteger code() {
-		return d_code;
+	public int code() {
+		return s_code;
 	}
 
 	public int hashCode() {
-		return d_code.hashCode();
+		return s_code;
 	}
 }

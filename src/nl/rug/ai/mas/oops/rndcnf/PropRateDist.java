@@ -17,36 +17,39 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.oops.formula;
+package nl.rug.ai.mas.oops.rndcnf;
 
-public interface Formula {
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
+
+public class PropRateDist {
+	private List<List<DiscreteDist>> d_dist;
+
+	public PropRateDist(String dist) {
+		this(ListParser.parseList3(dist));
+	}
+
+	public PropRateDist(List<List<List<Integer>>> dist) {
+		d_dist = new ArrayList<List<DiscreteDist>>();
+		for (List<List<Integer>> l : dist) {
+			List<DiscreteDist> d = new ArrayList<DiscreteDist>();
+			for (List<Integer> l1 : l) {
+				d.add(new DiscreteDist(l1));
+			}
+			d_dist.add(d);
+		}
+	}
+
 	/**
-	 * Attempt to match this formula to another formula, returning a
-	 * substitution for the variables in this formula.
+	 * @param rnd Random number generator
+	 * @param d Depth
+	 * @param k Clause length
 	 */
-	public FullSubstitution match(Formula f);
-	/**
-	 * Substitute for all variables the values in the substitution s.
-	 */
-	public Formula substitute(FullSubstitution s);
-	/**
-	 * Accept a Visitor to this formula (Visitor pattern).
-	 */
-	public void accept(FormulaVisitor v);
-	/**
-	 * Return the simplest opposite for the formula
-	 */
-	public Formula opposite();
-	/**
-	 * Return wether the formula is simple (an atom or a negation of an atom).
-	 */
-	public boolean isSimple();
-	/**
-	 * @return true if the formula contains no free variables, false otherwise
-	 */
-	public boolean isConcrete();
-	/**
-	 * @return The code number for this Formula.
-	 */
-	public int code();
+	public int rndPropNum(Random rnd, int d, int k) {
+		List<DiscreteDist> dist = d_dist.get(Math.min(d, d_dist.size() - 1));
+		DiscreteDist ddist = dist.get(k - 1); // assume it exists
+		return ddist.generate(rnd);
+	}
 }
+
