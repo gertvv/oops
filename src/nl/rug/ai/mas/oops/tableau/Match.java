@@ -38,11 +38,11 @@ public class Match implements Comparable<Match> {
 				d_badness = 2;
 			}
 		} else if (rule.getType() == Rule.Type.SPLIT) {
-			d_badness = 5;
+			d_badness = 4;
 		} else if (rule.getType() == Rule.Type.ACCESS) {
 			d_badness = 3;
 		} else if (rule.getType() == Rule.Type.CREATE) {
-			d_badness = 4;
+			d_badness = 5;
 		}
 	}
 
