@@ -27,12 +27,14 @@ import java.util.Observable;
 public class TreeStructure<CellType extends Cell> extends Observable {
 	ArrayList<CellType> d_cells;
 	HashMap<CellType, ArrayList<Edge<CellType>>> d_edges;
+	HashMap<CellType, CellType> d_reverse;
 	CellType d_root;
 
 	public TreeStructure(CellType root) {
 		super();
 		d_cells = new ArrayList<CellType>();
 		d_edges = new HashMap<CellType, ArrayList<Edge<CellType>>>();
+		d_reverse = new HashMap<CellType, CellType>();
 		d_root = root;
 		d_cells.add(root);
 	}
@@ -45,6 +47,7 @@ public class TreeStructure<CellType extends Cell> extends Observable {
 			d_edges.put(parent, edgeList);
 		}
 		edgeList.add(new Edge<CellType>(parent, cell));
+		d_reverse.put(cell, parent);
 
 		notifyObservers(); // changes have been made
 	}
@@ -95,5 +98,35 @@ public class TreeStructure<CellType extends Cell> extends Observable {
 			return null;
 		}
 		return l.get(l.size() - 1).getDestination();
+	}
+
+	public CellType getParent(CellType child) {
+		return d_reverse.get(child);
+	}
+
+	public int index(CellType cell) {
+		CellType parent = getParent(cell);
+		int i = 1;
+		if (parent == null) {
+			return 0;
+		} else {
+			for (CellType c : new IterableImpl<CellType>(
+					childIterator(parent))) {
+				if (c == cell) {
+					return i;
+				}
+				++i;
+			}
+		}
+		return i;
+	}
+
+	public int level(CellType cell) {
+		int i = 0;
+		while (cell != d_root) {
+			cell = getParent(cell);
+			++i;
+		}
+		return i;
 	}
 }

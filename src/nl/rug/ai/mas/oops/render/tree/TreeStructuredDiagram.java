@@ -23,6 +23,7 @@ import java.util.Observer;
 import java.util.Observable;
 import java.awt.Point;
 import java.awt.Dimension;
+import java.util.List;
 
 public class TreeStructuredDiagram<CellType extends Cell> implements Observer {
 	private TreeStructure<CellType> d_tree;
@@ -109,22 +110,67 @@ public class TreeStructuredDiagram<CellType extends Cell> implements Observer {
 					freeY));
 				d_freeX = Math.max(d_freeX, p.get(v).x + v.getWidth());
 			}
-			// according to Miyadera the following should be within the
-			// for-loop, but that does not seem to make sense (how would
-			// p(vLast) ever be initialized?
-			/*
-			CellType vFirst = d_tree.firstChild(v);
-			CellType vLast = d_tree.lastChild(v);
-			p.put(v, new Point(
-				p.get(vFirst).x +
-				Math.min(d_coherence, p.get(vLast).x - p.get(vFirst).x),
-				freeY));
-			d_freeX = Math.max(d_freeX, p.get(v).x + v.getWidth());
-			*/
 		}
 	}
 
 	private Placement<CellType> subOpt(Placement<CellType> init) {
-		return init;
+		Placement<CellType> placement = new Placement<CellType>();
+		subOpt(d_tree.getRoot(), init, placement);
+		return placement;
+	}
+
+	private void subOpt(CellType q, Placement<CellType> in,
+			Placement<CellType> out) {
+		if (d_tree.childCount(q) == 0) {
+			shift(q, in, out);
+		} else {
+			for(CellType p : new IterableImpl<CellType>(
+					d_tree.childIterator(q))) {
+				subOpt(p, in, out);
+				in = out.copy();
+			}
+			// re-evaluate pi_in_x(q) satisfying C3(j)
+			int p1x = in.get(d_tree.firstChild(q)).x;
+			int pkx = in.get(d_tree.lastChild(q)).x;
+			int qx = p1x + Math.min(d_coherence, pkx - p1x);
+			in.put(q, new Point(qx, in.get(q).y));
+			shift(q, in, out);
+		}
+	}
+
+	private void shift(CellType q, Placement<CellType> in,
+			Placement<CellType> out) {
+		int move = 0;
+		if (d_tree.index(q) != 1) {
+			move = leftMovement(q, in);
+		}
+		moveLeft(q, move, in, out);
+	}
+
+	private int leftMovement(CellType q, Placement<CellType> placement) {
+		List uj = placement.getByY(placement.get(q).y);
+		int idx = uj.indexOf(q);
+		if (idx == 0) {
+			return placement.get(q).y;
+		}
+		CellType c = (CellType)uj.get(idx - 1);
+		return placement.get(q).y - placement.get(c).y - c.getWidth();
+	}
+
+	private void moveLeft(CellType q, int dx,
+			Placement<CellType> in, Placement<CellType> out) {
+		out.clear();
+		out.putAll(in);
+		if (dx > 0) {
+			moveLeft(q, dx, out);
+		}
+	}
+
+	private void moveLeft(CellType q, int dx, Placement<CellType> p) {
+		Point point = p.get(q);
+		p.put(q, new Point(point.x - dx, point.y));
+		for (CellType r : new IterableImpl<CellType>(d_tree.childIterator(q))) {
+			moveLeft(r, dx, p);
+		}
 	}
 }

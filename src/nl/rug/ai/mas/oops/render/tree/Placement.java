@@ -20,8 +20,38 @@
 package nl.rug.ai.mas.oops.render.tree;
 
 import java.awt.Point;
+import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Collections;
 
 public class Placement<CellType extends Cell> 
 extends HashMap<CellType, Point> {
+	public Placement<CellType> copy() {
+		return (Placement<CellType>)clone();
+	}
+
+	/**
+	 * Retreive the set U_y of cells with the same y coordinate in the
+	 * placement. */
+	public List<CellType> getByY(int y) {
+		List<CellType> list = new ArrayList<CellType>();
+		for (Map.Entry<CellType, Point> entry : entrySet()) {
+			if (entry.getValue().y == y) {
+				list.add(entry.getKey());
+			}
+		}
+		Collections.sort(list, new CompareByX());
+		return list;
+	}
+
+	private class CompareByX implements Comparator<CellType> {
+		public int compare(CellType o1, CellType o2) {
+			int x1 = Placement.this.get(o1).x;
+			int x2 = Placement.this.get(o2).x;
+			return x1 - x2;
+		}
+	}
 }
