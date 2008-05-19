@@ -71,10 +71,27 @@ public class Branch {
 	 * the appropriate implementation of the hashCode() method in Label.
 	 */
 	public Set<Label> getLabels() {
-		HashSet<Label> l = new HashSet(d_current.keySet());
+		HashSet<Label> l = new HashSet<Label>(d_current.keySet());
 		if (d_parent != null)
 			l.addAll(d_parent.getLabels());
 		return l;
+	}
+
+	/**
+	 * Get a set of all formulas for a label.
+	 */
+	public Set<Formula> getFormulas(Label l) {
+		Set<Formula> f = new HashSet<Formula>();
+		if (d_parent != null) {
+			f = d_parent.getFormulas(l);
+		}
+		Collection<Node> nodes = d_current.get(l);
+		if (nodes != null) {
+			for (Node n : nodes) {
+				f.add(n.getFormula());
+			}
+		}
+		return f;
 	}
 
 	/**

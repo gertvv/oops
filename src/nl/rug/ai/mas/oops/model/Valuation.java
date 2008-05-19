@@ -17,39 +17,32 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.oops.formula;
+package nl.rug.ai.mas.oops.model;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import nl.rug.ai.mas.oops.formula.Proposition;
 
 /**
- * A map from agent symbols to a class implementing them. This enables
- * identification of different agents.
+ * Represents a valuation (assignment of truth value to propositions)
  */
-public class AgentIdMap extends HashMap<String, AgentId> {
-	private int d_code;
+public class Valuation {
+	private HashMap<Proposition, Boolean> d_map;
 
-	public AgentIdMap() {
-		super();
-		d_code = 0;
+	public Valuation() {
+		d_map = new HashMap<Proposition, Boolean>();
 	}
 
-	/**
-	 * Get a reference to an AgentId, either an existing one having the supplied
-	 * name, or a new one if one doesn't exist.
-	 */
-	public AgentId getOrCreate(String name) {
-		AgentId id = get(name);
-		if (id != null)
-			return id;
-		d_code++;
-		id = new AgentId(name, d_code);
-		put(name, id);
-		return id;
+	public Set<Map.Entry<Proposition, Boolean>> entrySet() {
+		return d_map.entrySet();
 	}
 
-	public Set<AgentId> getAgentSet() {
-		HashSet<AgentId> set = new HashSet<AgentId>();
-		set.addAll(values());
-		return set;
+	public void setValue(Proposition p, boolean v) {
+		d_map.put(p, new Boolean(v));
+	}
+
+	public String toString() {
+		return d_map.toString();
 	}
 }

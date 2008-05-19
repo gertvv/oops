@@ -17,39 +17,47 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.oops.formula;
+package nl.rug.ai.mas.oops.model;
 
-import java.util.*;
+import nl.rug.ai.mas.oops.formula.AgentId;
 
-/**
- * A map from agent symbols to a class implementing them. This enables
- * identification of different agents.
- */
-public class AgentIdMap extends HashMap<String, AgentId> {
-	private int d_code;
+public class Arrow {
+	private AgentId d_agent;
+	private World d_source;
+	private World d_target;
 
-	public AgentIdMap() {
-		super();
-		d_code = 0;
+	public Arrow(AgentId agent, World source, World target) {
+		d_agent = agent;
+		d_source = source;
+		d_target = target;
 	}
 
-	/**
-	 * Get a reference to an AgentId, either an existing one having the supplied
-	 * name, or a new one if one doesn't exist.
-	 */
-	public AgentId getOrCreate(String name) {
-		AgentId id = get(name);
-		if (id != null)
-			return id;
-		d_code++;
-		id = new AgentId(name, d_code);
-		put(name, id);
-		return id;
+	public boolean equals(Object o) {
+		try {
+			Arrow other = (Arrow)o;
+			if (other.d_agent.equals(d_agent) &&
+					other.d_source.equals(d_source) &&
+					other.d_target.equals(d_target)) {
+				return true;
+			}
+		} catch (ClassCastException e) {
+		}
+		return false;
 	}
 
-	public Set<AgentId> getAgentSet() {
-		HashSet<AgentId> set = new HashSet<AgentId>();
-		set.addAll(values());
-		return set;
+	public AgentId getAgent() {
+		return d_agent;
+	}
+
+	public World getSource() {
+		return d_source;
+	}
+
+	public World getTarget() {
+		return d_target;
+	}
+
+	public String toString() {
+		return d_agent + ":" + "(" + d_source + "," + d_target + ")";
 	}
 }

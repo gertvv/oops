@@ -57,7 +57,7 @@ public class Prover {
 		Prover p = new Prover(rules, c);
 		try {
 			if (mode == Mode.PROVE) {
-				System.out.println(p.proveable(formula));
+				System.out.println(p.provable(formula));
 			} else {
 				System.out.println(p.satisfiable(formula));
 			}
@@ -75,14 +75,15 @@ public class Prover {
 		d_tableau = new Tableau(rules);
 	}
 
-	public boolean proveable(String formula)
+	public boolean provable(String formula)
 			throws TableauErrorException {
-		if (!d_formulaAdapter.parse(
-				new ByteArrayInputStream(formula.getBytes()))) {
-			throw new TableauErrorException("Could not parse formula");
-		}
+		return provable(parse(formula));
+	}
+
+	public boolean provable(Formula formula)
+			throws TableauErrorException {
 		Tableau.BranchState result = d_tableau.tableau(
-			new Negation(d_formulaAdapter.getFormula()));
+			new Negation(formula));
 		if (result == Tableau.BranchState.ERROR) {
 			throw new TableauErrorException(d_tableau.getError());
 		}
@@ -91,16 +92,25 @@ public class Prover {
 
 	public boolean satisfiable(String formula)
 			throws TableauErrorException {
-		if (!d_formulaAdapter.parse(
-				new ByteArrayInputStream(formula.getBytes()))) {
-			throw new TableauErrorException("Could not parse formula");
-		}
-		Tableau.BranchState result = d_tableau.tableau(
-			d_formulaAdapter.getFormula());
+		return satisfiable(parse(formula));
+	}
+	
+	public boolean satisfiable(Formula formula)
+			throws TableauErrorException {
+		Tableau.BranchState result = d_tableau.tableau(formula);
 		if (result == Tableau.BranchState.ERROR) {
 			throw new TableauErrorException(d_tableau.getError());
 		}
 		return result == Tableau.BranchState.OPEN;
+	}
+
+	public Formula parse(String formula)
+			throws TableauErrorException {
+		if (!d_formulaAdapter.parse(
+				new ByteArrayInputStream(formula.getBytes()))) {
+			throw new TableauErrorException("Could not parse formula");
+		}
+		return d_formulaAdapter.getFormula();
 	}
 
 	public Tableau getTableau() {

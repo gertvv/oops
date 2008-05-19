@@ -19,8 +19,6 @@
 
 package nl.rug.ai.mas.oops.formula;
 
-import java.math.BigInteger;
-
 /**
  * Class representing a concrete Agent
  */

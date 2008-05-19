@@ -24,6 +24,8 @@ import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
 import nl.rug.ai.mas.oops.render.FormulaObserverSwing;
 import nl.rug.ai.mas.oops.render.FormulaObserverSVG;
+import nl.rug.ai.mas.oops.model.S5nModel;
+import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
 
 import java.io.OutputStream;
 import java.io.FileOutputStream;
@@ -43,14 +45,34 @@ public class ObserveProver {
 		rules.addAll(ModalRuleFactory.build(c));
 
 		Prover p = new Prover(rules, c);
-		p.getTableau().attachObserver(new SystemOutObserver());
-		p.getTableau().attachObserver(new FormulaObserverSwing());
-		OutputStream os = new FileOutputStream("out.svg");
-		p.getTableau().attachObserver(new FormulaObserverSVG(os));
+		Formula f = null;
 		try {
-			System.out.println(p.proveable(args[0]));
+			f = p.parse(args[0]);
 		} catch (TableauErrorException e) {
 			System.out.println(e);
+			System.exit(1);
+		}
+
+		//p.getTableau().attachObserver(new SystemOutObserver());
+		p.getTableau().attachObserver(new FormulaObserverSwing());
+		//OutputStream os = new FileOutputStream("out.svg");
+		//p.getTableau().attachObserver(new FormulaObserverSVG(os));
+		
+		S5nModel model = new S5nModel(c.getAgentIdMap().getAgentSet());
+		p.getTableau().attachObserver(new ModelConstructingObserver(model));
+
+		System.out.println("Context agents: " + c.getAgentIdMap());
+
+		try {
+			System.out.println(p.provable(f));
+			//System.out.println(model);
+			System.out.println(model.constructMultigraph());
+			for (nl.rug.ai.mas.oops.model.World w : model.getWorlds()) {
+				System.out.println(w + ": " + w.getValuation());
+			}
+		} catch (TableauErrorException e) {
+			System.out.println(e);
+			System.exit(1);
 		}
 	}
 }

@@ -44,6 +44,10 @@ public class LabelInstance implements Label {
 		return d_agent;
 	}
 
+	public Label getParent() {
+		return d_parent;
+	}
+
 	public NodeSubstitution match(Label o) {
 		try {
 			LabelInstance other = (LabelInstance)o;

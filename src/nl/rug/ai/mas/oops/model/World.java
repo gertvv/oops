@@ -17,39 +17,25 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.oops.formula;
-
-import java.util.*;
+package nl.rug.ai.mas.oops.model;
 
 /**
- * A map from agent symbols to a class implementing them. This enables
- * identification of different agents.
+ * Represents a world in a Kripke model
  */
-public class AgentIdMap extends HashMap<String, AgentId> {
-	private int d_code;
+public class World {
+	private String d_label;
+	private Valuation d_valuation;
 
-	public AgentIdMap() {
-		super();
-		d_code = 0;
+	public World(String label, Valuation v) {
+		d_label = label;
+		d_valuation = v;
 	}
 
-	/**
-	 * Get a reference to an AgentId, either an existing one having the supplied
-	 * name, or a new one if one doesn't exist.
-	 */
-	public AgentId getOrCreate(String name) {
-		AgentId id = get(name);
-		if (id != null)
-			return id;
-		d_code++;
-		id = new AgentId(name, d_code);
-		put(name, id);
-		return id;
+	public Valuation getValuation() {
+		return d_valuation;
 	}
 
-	public Set<AgentId> getAgentSet() {
-		HashSet<AgentId> set = new HashSet<AgentId>();
-		set.addAll(values());
-		return set;
+	public String toString() {
+		return d_label;
 	}
 }
