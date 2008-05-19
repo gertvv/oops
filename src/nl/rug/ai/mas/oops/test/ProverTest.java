@@ -43,7 +43,7 @@ public class ProverTest {
 	/* 	#1  */
 	@Test public void test01() {
 		try {
-			assertTrue(s_prover.proveable("#_1 %_1 %_3 #_3 #_2 #_1 a > a"));
+			assertTrue(s_prover.provable("#_1 %_1 %_3 #_3 #_2 #_1 a > a"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -52,7 +52,7 @@ public class ProverTest {
 	/* 	#2  */
 	@Test public void test02() {
 		try {
-			assertTrue(s_prover.proveable(
+			assertTrue(s_prover.provable(
 				"~(#_1(a | ~b) & %_1 ~a & %_1(~a & b))"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
@@ -62,7 +62,7 @@ public class ProverTest {
 	/* 	#3 	*/
 	@Test public void test03() {
 		try {
-			assertTrue(s_prover.proveable("~%_1(~a & a)"));
+			assertTrue(s_prover.provable("~%_1(~a & a)"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -71,7 +71,7 @@ public class ProverTest {
 	/* 	#4 	*/
 	@Test public void test04() {
 		try {
-			assertTrue(s_prover.proveable(
+			assertTrue(s_prover.provable(
 				"#_1 %_1 %_3 #_3 #_2 #_3 a > %_1 %_3 a"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
@@ -81,7 +81,7 @@ public class ProverTest {
 	/* 	#5 	*/
 	@Test public void test05() {
 		try {
-			assertTrue(s_prover.proveable(
+			assertTrue(s_prover.provable(
 				"~(#_1(a | b) & %_1 ~a & %_1 #_1 %_3 ~b & " +
 				"(%_1 #_2 %_1(~a & ~b) | %_1(~a & ~b) | #_1 a))"));
 		} catch (TableauErrorException e) {
@@ -92,7 +92,7 @@ public class ProverTest {
 	/* 	#6 	*/
 	@Test public void test06() {
 		try {
-			assertTrue(s_prover.proveable(
+			assertTrue(s_prover.provable(
 				"~(#_1 %_1 %_3 #_3 #_2 #_3 a & #_1 %_3 %_2 #_3 %_2 ~a)"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
@@ -102,7 +102,7 @@ public class ProverTest {
 	/* 	#7 	*/
 	@Test public void test07() {
 		try {
-			assertTrue(s_prover.proveable("~(#_1 %_1 %_3 #_3 #_2 #_3 a & " + 
+			assertTrue(s_prover.provable("~(#_1 %_1 %_3 #_3 #_2 #_3 a & " + 
 				"#_1 %_3 #_3 #_2 (~a | x) & #_1 ~x)"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
@@ -112,7 +112,7 @@ public class ProverTest {
 	/* 	#8 	*/
 	@Test public void test08() {
 		try {
-			assertTrue(s_prover.proveable("#_1 (a > b) > ( #_1 a > #_1 b)"));
+			assertTrue(s_prover.provable("#_1 (a > b) > ( #_1 a > #_1 b)"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -121,7 +121,7 @@ public class ProverTest {
 	/* 	#9 	*/
 	@Test public void test09() { 
 		try {
-			assertTrue(s_prover.proveable("#_1 a > a"));
+			assertTrue(s_prover.provable("#_1 a > a"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -130,7 +130,7 @@ public class ProverTest {
 	/* #10	*/
 	@Test public void test10() { 
 		try {
-			assertTrue(s_prover.proveable("#_1 a > #_1 #_1 a"));
+			assertTrue(s_prover.provable("#_1 a > #_1 #_1 a"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -139,7 +139,7 @@ public class ProverTest {
 	/* #11	*/
 	@Test public void test11() { 
 		try {
-			assertTrue(s_prover.proveable("%_1 a > #_1 %_1 a"));
+			assertTrue(s_prover.provable("%_1 a > #_1 %_1 a"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -148,7 +148,7 @@ public class ProverTest {
 	/* #12	*/
 	@Test public void test12() { 
 		try {
-			assertTrue(s_prover.proveable("%_1 (#_1 p | %_2 #_2 #_1 q) > #_1 (~q > p)"));
+			assertTrue(s_prover.provable("%_1 (#_1 p | %_2 #_2 #_1 q) > #_1 (~q > p)"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -157,7 +157,7 @@ public class ProverTest {
 	/* #13	*/
 	@Test public void test13() { 
 		try {
-			assertTrue(s_prover.proveable("((p & ~#_1 p) > ~p) | ((p & ~#_1 p) > ~((p & ~#_1 p) > ~#_1((p & ~#_1 p) > p )))"));
+			assertTrue(s_prover.provable("((p & ~#_1 p) > ~p) | ((p & ~#_1 p) > ~((p & ~#_1 p) > ~#_1((p & ~#_1 p) > p )))"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -166,7 +166,7 @@ public class ProverTest {
 	/* #14	*/
 	@Test public void test14() { 
 		try {
-			assertTrue(s_prover.proveable("(#_1 (a | b) & (c > #_1 ~b) & (#_1 a > d)) > (c > d)"));
+			assertTrue(s_prover.provable("(#_1 (a | b) & (c > #_1 ~b) & (#_1 a > d)) > (c > d)"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -175,7 +175,7 @@ public class ProverTest {
 	/* #15	*/
 	@Test public void test15() { 
 		try {
-			assertTrue(s_prover.proveable("(#_1(g = #_1 p) & %_1 g) > (g & p)"));
+			assertTrue(s_prover.provable("(#_1(g = #_1 p) & %_1 g) > (g & p)"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -184,7 +184,7 @@ public class ProverTest {
 	/* #16	*/
 	@Test public void test16() { 
 		try {
-			assertTrue(s_prover.proveable("(#_1(g = #_1 p) & %_1 ~g) > ~g"));
+			assertTrue(s_prover.provable("(#_1(g = #_1 p) & %_1 ~g) > ~g"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -193,7 +193,7 @@ public class ProverTest {
 	/* #17	*/
 	@Test public void test17() { 
 		try {
-			assertTrue(s_prover.proveable("(#_1p & #_1((a & p) > b)) > #_1 (a > b)"));
+			assertTrue(s_prover.provable("(#_1p & #_1((a & p) > b)) > #_1 (a > b)"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -202,7 +202,7 @@ public class ProverTest {
 	/* #18  */
 	@Test public void test18() { 
 		try {
-			assertFalse(s_prover.proveable("(#_1 p & #_1 ((a & p) > b)) > (%_1 ~b & #_1 (a > b))"));
+			assertFalse(s_prover.provable("(#_1 p & #_1 ((a & p) > b)) > (%_1 ~b & #_1 (a > b))"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -211,7 +211,7 @@ public class ProverTest {
 	/* #19  */
 	@Test public void test19() { 
 		try {
-			assertFalse(s_prover.proveable("#_1 %_1 %_3 #_3 #_2 #_3 a > b"));
+			assertFalse(s_prover.provable("#_1 %_1 %_3 #_3 #_2 #_3 a > b"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -220,7 +220,7 @@ public class ProverTest {
 	/* #20	*/
 	@Test public void test20() { 
 		try {
-			assertFalse(s_prover.proveable("~(#_1 (a | ~b) & %_1 ~a & %_1 b)"));
+			assertFalse(s_prover.provable("~(#_1 (a | ~b) & %_1 ~a & %_1 b)"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -229,7 +229,7 @@ public class ProverTest {
 	/* #21	*/
 	@Test public void test21() { 
 		try {
-			assertFalse(s_prover.proveable("#_1 %_1 %_3 #_3 #_2 %_3 a > #_1 #_3 a"));
+			assertFalse(s_prover.provable("#_1 %_1 %_3 #_3 #_2 %_3 a > #_1 #_3 a"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -238,7 +238,7 @@ public class ProverTest {
 	/* #22	*/
 	@Test public void test22() { 
 		try {
-			assertFalse(s_prover.proveable("~(#_1 (a | b) & %_1 ~a & (%_1 (~a & ~b) | %_1 a))"));
+			assertFalse(s_prover.provable("~(#_1 (a | b) & %_1 ~a & (%_1 (~a & ~b) | %_1 a))"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -247,7 +247,7 @@ public class ProverTest {
 	/* #23	*/
 	@Test public void test23() { 
 		try {
-			assertFalse(s_prover.proveable("~(#_1 %_1 %_3 #_3 #_2 #_3 a & #_1 %_3 #_3 #_2 (~a | x) & ~x)"));
+			assertFalse(s_prover.provable("~(#_1 %_1 %_3 #_3 #_2 #_3 a & #_1 %_3 #_3 #_2 (~a | x) & ~x)"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -256,7 +256,7 @@ public class ProverTest {
 	/* #24	*/
 	@Test public void test24() { 
 		try {
-			assertFalse(s_prover.proveable("((p & ~#_1 p) > p) & ((p & ~#_1 p) > ~((p & ~#_1 p) > #_1((p & ~#_1 p) > p )))"));
+			assertFalse(s_prover.provable("((p & ~#_1 p) > p) & ((p & ~#_1 p) > ~((p & ~#_1 p) > #_1((p & ~#_1 p) > p )))"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
@@ -265,7 +265,7 @@ public class ProverTest {
 	/* #25	*/
 	@Test public void test25() { 
 		try {
-			assertFalse(s_prover.proveable("~(#_1 %_3 (%_1 a | #_4 b) & #_3 (#_1 #_3 ~a & %_3 #_4 #_3 %_6 ~b))"));
+			assertFalse(s_prover.provable("~(#_1 %_3 (%_1 a | #_4 b) & #_3 (#_1 #_3 ~a & %_3 #_4 #_3 %_6 ~b))"));
 		} catch (TableauErrorException e) {
 			fail(e.toString());
 		}
