@@ -18,16 +18,7 @@
   */
 package nl.rug.ai.mas.oops.render;
 
-/*
-import nl.rug.ai.mas.oops.tableau.Tableau;
-import nl.rug.ai.mas.oops.tableau.TableauEvent;
-import nl.rug.ai.mas.oops.tableau.TableauObserver;
-import nl.rug.ai.mas.oops.tableau.NodeAddedEvent;
-import nl.rug.ai.mas.oops.tableau.Node;
-import nl.rug.ai.mas.oops.tableau.Label;
-*/
 import nl.rug.ai.mas.oops.tableau.*;
-
 import nl.rug.ai.mas.oops.formula.Formula;
 
 import java.io.File;
@@ -35,10 +26,9 @@ import java.io.IOException;
 import java.awt.Font;
 import java.awt.FontFormatException;
 
-import javax.swing.JFrame;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
-import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -46,7 +36,6 @@ import java.awt.GridBagConstraints;
 import java.util.HashMap;
 
 public class FormulaObserver implements TableauObserver {
-	private JFrame d_frame; // root window
 	private TidyTree d_tree; // tree display
 	private int d_count; // count lines
 	private Font d_font;
@@ -55,15 +44,8 @@ public class FormulaObserver implements TableauObserver {
 	private static String s_font = "DejaVuSans.ttf";
 
 	public FormulaObserver() throws IOException, FontFormatException {
-		d_frame = new JFrame("Tableau Observer");
 		d_tree = new TidyTree();
 		d_count = 0;
-		JScrollPane panel = new JScrollPane(d_tree);
-		d_frame.add(panel);
-		d_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		d_frame.pack();
-		d_frame.setSize(800, 600);
-		d_frame.setVisible(true);
 
 		File ff = new File(s_font);
 		d_font = Font.createFont(Font.TRUETYPE_FONT, ff);
@@ -71,6 +53,10 @@ public class FormulaObserver implements TableauObserver {
 
 		d_branchMap = new HashMap<Branch, ComponentCell>();
 		d_lineMap = new NestedMap<Branch, Node, Integer>();
+	}
+
+	protected TidyTree getTree() {
+		return d_tree;
 	}
 
 	public void update(Tableau t, TableauEvent e) {
@@ -135,6 +121,7 @@ public class FormulaObserver implements TableauObserver {
 			JPanel panel = new JPanel();
 			GridBagLayout layout = new GridBagLayout();
 			panel.setLayout(layout);
+			//panel.setOpaque(false);
 			ComponentCell branch = d_tree.addComponent(panel, parent);
 			d_branchMap.put(b, branch);
 		} else if (e instanceof BranchClosedEvent) {

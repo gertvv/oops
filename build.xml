@@ -29,10 +29,11 @@
 
 	<!-- dependencies for zest -->
 	<property name="zest-layouts" location="${local}/org.eclipse.mylyn.zest.layouts_0.5.0.0.jar" />
+	<property name="batik" location="${local}/batik-1.7/batik.jar" />
 
 	<!-- global definition of the classpath -->
 	<path id="project.class.path">
-		<pathelement path="${zest-layouts}" />
+		<pathelement path="${batik}" />
 
 		<pathelement location="build/"/>
 		<pathelement path="${java.class.path}/"/>

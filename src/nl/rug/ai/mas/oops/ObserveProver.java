@@ -22,7 +22,11 @@ package nl.rug.ai.mas.oops;
 import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
-import nl.rug.ai.mas.oops.render.FormulaObserver;
+import nl.rug.ai.mas.oops.render.FormulaObserverSwing;
+import nl.rug.ai.mas.oops.render.FormulaObserverSVG;
+
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 
 public class ObserveProver {
 	public static void main(String [] args)
@@ -40,7 +44,9 @@ public class ObserveProver {
 
 		Prover p = new Prover(rules, c);
 		p.getTableau().attachObserver(new SystemOutObserver());
-		p.getTableau().attachObserver(new FormulaObserver());
+		p.getTableau().attachObserver(new FormulaObserverSwing());
+		OutputStream os = new FileOutputStream("out.svg");
+		p.getTableau().attachObserver(new FormulaObserverSVG(os));
 		try {
 			System.out.println(p.proveable(args[0]));
 		} catch (TableauErrorException e) {

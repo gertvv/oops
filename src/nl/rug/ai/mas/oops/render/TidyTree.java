@@ -25,6 +25,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Point;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 
 import nl.rug.ai.mas.oops.render.tree.Edge;
 
@@ -58,7 +59,9 @@ public class TidyTree extends JComponent {
 
 	protected void paintChildren(Graphics g) {
 		super.paintChildren(g);
+	}
 
+	protected void paintComponent(Graphics g) {
 		if (g instanceof Graphics2D) {
 			((Graphics2D) g).setRenderingHint(
 				RenderingHints.KEY_ANTIALIASING,
@@ -73,7 +76,6 @@ public class TidyTree extends JComponent {
 				RenderingHints.KEY_FRACTIONALMETRICS,
 				RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 		}
-
 		// draw edges
 		for (Edge<ComponentCell> edge : d_layout.edgeIterable()) {
 			JComponent cs = edge.getSource().getComponent();
