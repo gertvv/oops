@@ -30,6 +30,12 @@ import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
 
+import javax.swing.JFrame;
+import nl.rug.ai.mas.oops.model.World;
+import nl.rug.ai.mas.oops.model.Arrow;
+import org.jgraph.JGraph;
+import org.jgrapht.ext.JGraphModelAdapter;
+
 public class ObserveProver {
 	public static void main(String [] args)
 	throws java.io.IOException, java.awt.FontFormatException {
@@ -66,6 +72,17 @@ public class ObserveProver {
 		try {
 			System.out.println(p.provable(f));
 			//System.out.println(model);
+			JGraphModelAdapter<World, Arrow> graphModel =
+				new JGraphModelAdapter<World, Arrow>(
+					model.constructMultigraph());
+			JGraph jgraph = new JGraph(graphModel);
+			JFrame frame = new JFrame("Model Observer");
+			frame.add(jgraph);
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.pack();
+			frame.setSize(800, 600);
+			frame.setVisible(true);
+
 			System.out.println(model.constructMultigraph());
 			for (nl.rug.ai.mas.oops.model.World w : model.getWorlds()) {
 				System.out.println(w + ": " + w.getValuation());

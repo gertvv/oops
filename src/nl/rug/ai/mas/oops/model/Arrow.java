@@ -58,6 +58,6 @@ public class Arrow {
 	}
 
 	public String toString() {
-		return d_agent + ":" + "(" + d_source + "," + d_target + ")";
+		return d_agent.toString();
 	}
 }
