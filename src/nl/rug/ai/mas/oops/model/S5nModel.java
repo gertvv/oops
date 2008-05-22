@@ -70,18 +70,22 @@ public class S5nModel extends KripkeModel {
 		Arrow r = null;
 		while ((r = fringe.poll()) != null) {
 			// get all outgoing arrows from the target
-			Set<Arrow> arrows = getArrows(r.getAgent(), r.getTarget());
+			Set<Arrow> arrows = getArrowsFrom(r.getAgent(), r.getTarget());
 			// and add the merge of r and each arrow
 			for (Arrow s : arrows) {
 				Arrow t1 =
 					new Arrow(r.getAgent(), r.getSource(), s.getTarget());
-				Arrow t2 =
-					new Arrow(r.getAgent(), s.getTarget(), r.getSource());
 				if (super.addArrow(t1)) { // t1 is a new arrow
 					fringe.offer(t1);
 				}
-				if (super.addArrow(t2)) { // t2 is a new arrow
-					fringe.offer(t2);
+			}
+			// get all ingoing arrows to the source
+			arrows = getArrowsTo(r.getAgent(), r.getSource());
+			for (Arrow s : arrows) {
+				Arrow t1 =
+					new Arrow(r.getAgent(), s.getSource(), r.getTarget());
+				if (super.addArrow(t1)) { // t1 is a new arrow
+					fringe.offer(t1);
 				}
 			}
 		}

@@ -69,16 +69,23 @@ public class KripkeModel {
 		return addArrow(new Arrow(agent, source, target));
 	}
 
-	public Set<Arrow> getArrows(AgentId agent, World source) {
+	public Set<Arrow> getArrowsFrom(AgentId agent, World source) {
 		Set<Arrow> arrows = new HashSet<Arrow>();
-		System.out.println("getArrows " + agent + ":(" + source + ",?): " +
-			d_graphs.get(agent).edgesOf(source));
 		for (Arrow r : d_graphs.get(agent).edgesOf(source)) {
 			if (r.getSource().equals(source)) {
 				arrows.add(r);
 			}
 		}
-		System.out.println(arrows);
+		return arrows;
+	}
+
+	public Set<Arrow> getArrowsTo(AgentId agent, World target) {
+		Set<Arrow> arrows = new HashSet<Arrow>();
+		for (Arrow r : d_graphs.get(agent).edgesOf(target)) {
+			if (r.getTarget().equals(target)) {
+				arrows.add(r);
+			}
+		}
 		return arrows;
 	}
 
