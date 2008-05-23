@@ -22,6 +22,7 @@ import nl.rug.ai.mas.oops.tableau.*;
 import nl.rug.ai.mas.oops.formula.Formula;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.IOException;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -41,15 +42,18 @@ public class FormulaObserver implements TableauObserver {
 	private Font d_font;
 	private HashMap<Branch, ComponentCell> d_branchMap;
 	private NestedMap<Branch, Node, Integer> d_lineMap;
-	private static String s_font = "DejaVuSans.ttf";
+	private static final String s_font = "DejaVuSans.ttf";
+	private static final int s_fontSize = 12;
 
 	public FormulaObserver() throws IOException, FontFormatException {
 		d_tree = new TidyTree();
 		d_count = 0;
 
-		File ff = new File(s_font);
-		d_font = Font.createFont(Font.TRUETYPE_FONT, ff);
-		d_font = d_font.deriveFont((float)12);
+		Class self = this.getClass();
+		InputStream fs = self.getResourceAsStream(s_font);
+		//File ff = new File(s_font);
+		d_font = Font.createFont(Font.TRUETYPE_FONT, fs);
+		d_font = d_font.deriveFont((float)s_fontSize);
 
 		d_branchMap = new HashMap<Branch, ComponentCell>();
 		d_lineMap = new NestedMap<Branch, Node, Integer>();

@@ -23,6 +23,7 @@
 	<property name="dist"  location="dist"/>
 	<property name="docs" location="docs"/>
 	<property name="test" location="test"/>
+	<property name="resource" location="resource"/>
 
 	<!-- location of local packages -->
 	<property name="local" location="/home/gert/local" />
@@ -39,7 +40,7 @@
 		<pathelement path="${jgrapht}" />
 		<pathelement path="${jgraph}" />
 
-		<pathelement location="build/"/>
+		<pathelement location="${build}"/>
 		<pathelement path="${java.class.path}/"/>
 	</path>
 
@@ -71,7 +72,7 @@
 	<!-- disabled because running sablecc ANNOYS ME 
 	<target name="oops" depends="oops-grammar">
 	-->
-	<target name="oops" depends="init">
+	<target name="oops" depends="init,resource">
 		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/oops/**" debug="true" target="1.5" source="1.5" classpathref="project.class.path">
 			<!-- <classpath path="${project.class.path}" /> -->
 		</javac>
@@ -85,6 +86,12 @@
 			 <include name="**/*.dat"/>
 			 <include name="**/*.txt"/>
 		  </fileset>
+		</copy>
+	</target>
+
+	<target name="resource" depends="init">
+		<copy todir="${build}">
+			<fileset dir="${resource}" />
 		</copy>
 	</target>
 

@@ -1,0 +1,39 @@
+Introduction
+==============================================================================
+
+This is OOPS, the Object Oriented Prover for S5n. OOPS was created by Elske
+van der Vaart (http://www.ai.rug.nl/~elskevdv/) and Gert van Valkenhoef
+(http://www.ai.rug.nl/~valkenhoef/) in the context of a Multi-Agent Systems
+project (http://www.ai.rug.nl/mas/).
+
+OOPS makes use of a tableau proof method in order to prove or disprove
+formulas in the S5n modal logic. More information can be found in the
+accompanying paper (http://www.ai.rug.nl/~valkenhoef/oops/).
+
+
+License
+==============================================================================
+
+The fonts included with this package are from the DejaVu project
+(http://dejavu.sourceforge.net/), for copyright information, see
+`DejaVu-LICENSE'. All other materials are covered by the following license:
+
+    OOPS - Object Oriented Prover for S5n
+    Copyright (C) 2007  Elske van der Vaart and Gert van Valkenhoef
+	Copyright (C) 2008  Gert van Valkenhoef
+
+	This program is free software; you can redistribute it and/or modify it
+	under the terms of the GNU General Public License version 2 as published
+	by the Free Software Foundation.
+	
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+	The full GNU General Public License is included as the file `GNU-GPL'.
+
