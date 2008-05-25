@@ -24,10 +24,10 @@ import javax.swing.JScrollPane;
 import java.io.IOException;
 import java.awt.FontFormatException;
 
-public class FormulaObserverSwing extends FormulaObserver {
+public class TableauObserverSwing extends TableauObserverBase {
 	private JFrame d_frame; // root window
 
-	public FormulaObserverSwing() throws IOException, FontFormatException {
+	public TableauObserverSwing() throws IOException, FontFormatException {
 		super();
 		d_frame = new JFrame("Tableau Observer");
 		JScrollPane panel = new JScrollPane(getTree());

@@ -28,6 +28,9 @@ import nl.rug.ai.mas.oops.tableau.*;
  * Proves formulas using a tableau.
  */
 public class Prover {
+	/**
+	 * Tableau mode (wether to PROVE a formula, or to do SAT checking).
+	 */
 	private enum Mode {
 		PROVE,
 		SAT
@@ -67,19 +70,38 @@ public class Prover {
 		}
 	}
 
+	/**
+	 * The parser instance.
+	 */
 	FormulaAdapter d_formulaAdapter;
+	/**
+	 * The Tableau instance.
+	 */
 	Tableau d_tableau;
 
+	/**
+	 * Constructor.
+	 * Constructs a new prover object. May be used to parse, prove or sat-check
+	 * any number of formulas.
+	 */
 	public Prover(Vector<Rule> rules, Context c) {
 		d_formulaAdapter = new FormulaAdapter(c);
 		d_tableau = new Tableau(rules);
 	}
 
+	/**
+	 * @return true if formula is provable.
+	 */
 	public boolean provable(String formula)
 			throws TableauErrorException {
 		return provable(parse(formula));
 	}
 
+	/**
+	 * Provability checker (uses ~formula not satisfiable, then formula
+	 * provable).
+	 * @return true if formula is provable.
+	 */
 	public boolean provable(Formula formula)
 			throws TableauErrorException {
 		Tableau.BranchState result = d_tableau.tableau(
@@ -90,11 +112,17 @@ public class Prover {
 		return result == Tableau.BranchState.CLOSED;
 	}
 
+	/**
+	 * @return true if formula is satisfiable.
+	 */
 	public boolean satisfiable(String formula)
 			throws TableauErrorException {
 		return satisfiable(parse(formula));
 	}
 	
+	/**
+	 * @return true if formula is satisfiable.
+	 */
 	public boolean satisfiable(Formula formula)
 			throws TableauErrorException {
 		Tableau.BranchState result = d_tableau.tableau(formula);
@@ -104,6 +132,12 @@ public class Prover {
 		return result == Tableau.BranchState.OPEN;
 	}
 
+	/**
+	 * Parse a string into a Formula object.
+	 * Note that calling this method seperately is useful, e.g. when using a
+	 * Tableau Observer that expects a list of syntactic entities in advance.
+	 * @see nl.rug.ai.mas.oops.model.ModelConstructingObserver
+	 */
 	public Formula parse(String formula)
 			throws TableauErrorException {
 		if (!d_formulaAdapter.parse(
@@ -113,6 +147,9 @@ public class Prover {
 		return d_formulaAdapter.getFormula();
 	}
 
+	/**
+	 * Retreive the used Tableau instance.
+	 */
 	public Tableau getTableau() {
 		return d_tableau;
 	}

@@ -28,6 +28,11 @@ import org.jgrapht.EdgeFactory;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DirectedMultigraph;
 
+/**
+ * A Kripke Model. This is a set of Worlds, a set of Agents, for every Agent a
+ * set of Arrows between worlds and for every World a Valuation function from
+ * propositions to truth values.
+ */
 public class KripkeModel {
 	Set<AgentId> d_agents;
 	HashMap<AgentId, DefaultDirectedGraph<World, Arrow>> d_graphs;

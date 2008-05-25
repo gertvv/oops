@@ -22,6 +22,14 @@ package nl.rug.ai.mas.oops.tableau;
 import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 
+/**
+ * A (SAT-checking) modal tableau.
+ * Supports listeners through the Observer pattern.
+ * @see nl.rug.ai.mas.oops.tableau.TableauObserver
+ * @see nl.rug.ai.mas.oops.tableau.Rule
+ * @see nl.rug.ai.mas.oops.tableau.ModalRuleFactory
+ * @see nl.rug.ai.mas.oops.tableau.PropositionalRuleFactory
+ */
 public class Tableau {
 	public enum BranchState {
 		OPEN, CLOSED, ERROR;
@@ -36,12 +44,24 @@ public class Tableau {
 	private static final String s_errorNoMatch = 
 		" is not simple, and does not match any rules";
 
+	/**
+	 * Constructor.
+	 * @param rules A list of tableau rules for construction.
+	 */
 	public Tableau(Vector<Rule> rules) {
 		d_rules = rules;
 		d_error = null;
 		d_observers = new Vector<TableauObserver>();
 	}
 
+	/**
+	 * Construct the tableau for the formula given.
+	 * @param f A Formula
+	 * @return BranchState.OPEN iff the construction was successful and the
+	 * tableau contains an open branch. BranchState.CLOSED iff the construction
+	 * was successful and the tableau does not contain an open branch.
+	 * BranchState.ERROR otherwise.
+	 */
 	public BranchState tableau(Formula f) {
 		d_error = null;
 		notify(new TableauStartedEvent());
@@ -50,24 +70,41 @@ public class Tableau {
 		return result;
 	}
 
+	/**
+	 * Attach a TableauObserver to this instance.
+	 */
 	public void attachObserver(TableauObserver o) {
 		d_observers.add(o);
 	}
 
+	/**
+	 * Detach a TableauObserver from this instance.
+	 */
 	public void detachObserver(TableauObserver o) {
 		d_observers.remove(o);
 	}
 
+	/**
+	 * In case tableau() returned TableauState.ERROR, this function should
+	 * return a more detailed error message.
+	 */
+	public String getError() {
+		return d_error;
+	}
+
+	/**
+	 * Notify all attached TableauObserver objects of an event.
+	 */
 	private void notify(TableauEvent e) {
 		for (TableauObserver o : d_observers) {
 			o.update(this, e);
 		}
 	}
 
-	public String getError() {
-		return d_error;
-	}
-
+	/**
+	 * Implements the actual tableau construction. Copies itself upon any split
+	 * of the Branch.
+	 */
 	private class Worker { 
 		/**
 		 * Node that generates this branch.

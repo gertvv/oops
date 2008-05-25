@@ -21,6 +21,9 @@ package nl.rug.ai.mas.oops.model;
 
 import nl.rug.ai.mas.oops.formula.AgentId;
 
+/**
+ * Represents an accessibility relation between two Worlds, for a given Agent.
+ */
 public class Arrow {
 	private AgentId d_agent;
 	private World d_source;

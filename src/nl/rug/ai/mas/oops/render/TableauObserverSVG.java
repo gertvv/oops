@@ -39,12 +39,12 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 
-public class FormulaObserverSVG extends FormulaObserver {
+public class TableauObserverSVG extends TableauObserverBase {
 	private SVGGraphics2D d_generator;
 	private OutputStream d_os;
 	private JFrame d_frame; // root window
 
-	public FormulaObserverSVG(OutputStream os)
+	public TableauObserverSVG(OutputStream os)
 			throws IOException, FontFormatException {
 		super();
 		//d_frame = new JFrame("Tableau Observer");

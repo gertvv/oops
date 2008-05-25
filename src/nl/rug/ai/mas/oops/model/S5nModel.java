@@ -24,6 +24,11 @@ import java.util.Set;
 import java.util.List;
 import java.util.LinkedList;
 
+/**
+ * An S5n Model. This is a KripkeModel with the added restriction that the
+ * accessibility relation for every agent be reflexive, symmetric and
+ * transitive.
+ */
 public class S5nModel extends KripkeModel {
 	public S5nModel(Set<AgentId> agents) {
 		super(agents);
@@ -62,7 +67,18 @@ public class S5nModel extends KripkeModel {
 		return true;
 	}
 
-	public void transitiveClosure(Arrow r1, Arrow r2) {
+	/**
+	 * Convenience function for adding new arrows.
+	 */
+	public boolean addArrow(AgentId agent, World source, World target) {
+		return addArrow(new Arrow(agent, source, target));
+	}
+
+	/**
+	 * Incrementally close relations under transitivity, given two newly added
+	 * arrows to an otherwise transitively closed set.
+	 */
+	private void transitiveClosure(Arrow r1, Arrow r2) {
 		LinkedList<Arrow> fringe = new LinkedList<Arrow>();
 		fringe.add(r1);
 		fringe.add(r2);
@@ -89,9 +105,5 @@ public class S5nModel extends KripkeModel {
 				}
 			}
 		}
-	}
-
-	public boolean addArrow(AgentId agent, World source, World target) {
-		return addArrow(new Arrow(agent, source, target));
 	}
 }

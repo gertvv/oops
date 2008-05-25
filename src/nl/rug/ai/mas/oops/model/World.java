@@ -20,7 +20,8 @@
 package nl.rug.ai.mas.oops.model;
 
 /**
- * Represents a world in a Kripke model
+ * Represents a world in a Kripke model. This includes a Valuation from
+ * variables to booleans.
  */
 public class World {
 	private String d_label;

@@ -36,7 +36,11 @@ import java.awt.GridBagConstraints;
 
 import java.util.HashMap;
 
-public class FormulaObserver implements TableauObserver {
+/**
+ * Observe the Tableau process in order to visualize it.
+ * @see nl.rug.ai.mas.oops.tableau.Tableau
+ */
+public class TableauObserverBase implements TableauObserver {
 	private TidyTree d_tree; // tree display
 	private int d_count; // count lines
 	private Font d_font;
@@ -45,7 +49,7 @@ public class FormulaObserver implements TableauObserver {
 	private static final String s_font = "DejaVuSans.ttf";
 	private static final int s_fontSize = 12;
 
-	public FormulaObserver() throws IOException, FontFormatException {
+	public TableauObserverBase() throws IOException, FontFormatException {
 		d_tree = new TidyTree();
 		d_count = 0;
 

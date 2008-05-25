@@ -35,12 +35,15 @@ import java.text.AttributedString;
 import java.awt.Font;
 import java.awt.font.TextAttribute;
 
-class LabelAttrString extends FormulaAttrString implements LabelVisitor {
-	/*
-	public static String AGENT(Agent a) {
-	}
-	*/
-
+/**
+ * Visit a Label in order to generate an AttributedString from it.
+ * @see java.text.AttributedString
+ */
+public class LabelAttrString extends FormulaAttrString implements LabelVisitor {
+	/**
+	 * Constructor.
+	 * @param font The font this formula should be rendered in.
+	 */
 	public LabelAttrString(Font font) {
 		super(font);
 	}
@@ -57,7 +60,15 @@ class LabelAttrString extends FormulaAttrString implements LabelVisitor {
 		parent.addAll(codeWorld(l.getWorld()));
 		parent.addAll(codeAgent(l.getAgent()));
 	}
-	
+
+	public void visitLabelReference(LabelReference l) {
+		visitString(l.toString());
+	}
+
+	public void visitNullLabel(NullLabel l) {
+		visitString(String.valueOf(Constants.EMPTY));
+	}
+
 	private List<AttrChar> codeWorld(World w) {
 		List<AttrChar> world = null;
 		try {
@@ -75,13 +86,5 @@ class LabelAttrString extends FormulaAttrString implements LabelVisitor {
 			world = codeString(w.toString(), false);
 		}
 		return world;
-	}
-
-	public void visitLabelReference(LabelReference l) {
-		visitString(l.toString());
-	}
-
-	public void visitNullLabel(NullLabel l) {
-		visitString(String.valueOf(Constants.EMPTY));
 	}
 }

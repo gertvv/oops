@@ -22,8 +22,8 @@ package nl.rug.ai.mas.oops;
 import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
-import nl.rug.ai.mas.oops.render.FormulaObserverSwing;
-import nl.rug.ai.mas.oops.render.FormulaObserverSVG;
+import nl.rug.ai.mas.oops.render.TableauObserverSwing;
+import nl.rug.ai.mas.oops.render.TableauObserverSVG;
 import nl.rug.ai.mas.oops.model.S5nModel;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
 
@@ -36,6 +36,9 @@ import nl.rug.ai.mas.oops.model.Arrow;
 import org.jgraph.JGraph;
 import org.jgrapht.ext.JGraphModelAdapter;
 
+/**
+ * Test class for visual observation of the prover.
+ */
 public class ObserveProver {
 	public static void main(String [] args)
 	throws java.io.IOException, java.awt.FontFormatException {
@@ -60,9 +63,9 @@ public class ObserveProver {
 		}
 
 		//p.getTableau().attachObserver(new SystemOutObserver());
-		p.getTableau().attachObserver(new FormulaObserverSwing());
+		p.getTableau().attachObserver(new TableauObserverSwing());
 		//OutputStream os = new FileOutputStream("out.svg");
-		//p.getTableau().attachObserver(new FormulaObserverSVG(os));
+		//p.getTableau().attachObserver(new TableauObserverSVG(os));
 		
 		S5nModel model = new S5nModel(c.getAgentIdMap().getAgentSet());
 		p.getTableau().attachObserver(new ModelConstructingObserver(model));

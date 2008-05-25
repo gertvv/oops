@@ -34,12 +34,17 @@ import java.awt.font.TextAttribute;
 
 /**
  * Visit a Formula in order to generate an AttributedString from it.
+ * @see java.text.AttributedString
  */
 public class FormulaAttrString implements FormulaVisitor {
 	protected Stack<List<AttrChar>> d_stack;
 	private Font d_normal;
 	private Font d_subscript;
 
+	/**
+	 * Constructor.
+	 * @param font The font this formula should be rendered in.
+	 */
 	public FormulaAttrString(Font font) {
 		d_stack = new Stack<List<AttrChar>>();
 		d_normal = font;
@@ -51,6 +56,9 @@ public class FormulaAttrString implements FormulaVisitor {
 		Font d_subscript = font.deriveFont(atmap);
 	}
 
+	/**
+	 * Generate an AttributedString from the top of the stack.
+	 */
 	public AttributedString getAttributedString() {
 		List<AttrChar> l = d_stack.pop();
 
@@ -138,7 +146,7 @@ public class FormulaAttrString implements FormulaVisitor {
 		left.add(new AttrChar(')'));
 		d_stack.push(left);
 	}
-	
+
 	private void visitUnary(Collection<AttrChar> op) {
 		List<AttrChar> right = d_stack.pop();
 		right.addAll(0, op);
@@ -185,6 +193,9 @@ public class FormulaAttrString implements FormulaVisitor {
 		return l;
 	}
 
+	/**
+	 * Represents a char and the relevant attributes it should receive.
+	 */
 	protected class AttrChar {
 		private char d_c;
 		private boolean d_sub;
@@ -207,6 +218,9 @@ public class FormulaAttrString implements FormulaVisitor {
 		}
 	}
 
+	/**
+	 * Represent a range [begin, end]
+	 */
 	private class Range {
 		private int d_begin;
 		private int d_end;
