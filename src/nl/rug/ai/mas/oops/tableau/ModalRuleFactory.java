@@ -21,7 +21,6 @@ package nl.rug.ai.mas.oops.tableau;
 
 import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
-import java.math.BigInteger;
 
 public class ModalRuleFactory {
 	public static String LOZENGE = "&#9674;";

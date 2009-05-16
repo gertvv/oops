@@ -59,6 +59,7 @@ public class VariableReference<T> {
 	 * (the variable objects must be identical (.equals() equality is not
 	 * enough).
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean equals(Object o) {
 		try {
 			VariableReference<T> other = (VariableReference<T>)o;

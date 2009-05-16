@@ -20,20 +20,11 @@
 package nl.rug.ai.mas.oops.render;
 
 import nl.rug.ai.mas.oops.tableau.*;
-import nl.rug.ai.mas.oops.formula.Agent;
-import nl.rug.ai.mas.oops.formula.NullAgent;
 import nl.rug.ai.mas.oops.formula.Formula;
 
-import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.Collection;
-
-import java.text.AttributedString;
 import java.awt.Font;
-import java.awt.font.TextAttribute;
 
 /**
  * Visit a Label in order to generate an AttributedString from it.
@@ -53,8 +44,6 @@ public class LabelAttrString extends FormulaAttrString implements LabelVisitor {
 		if (!d_stack.empty()) {
 			parent = d_stack.pop();
 		}
-
-		World w = l.getWorld();
 
 		parent.add(new AttrChar('.'));
 		parent.addAll(codeWorld(l.getWorld()));

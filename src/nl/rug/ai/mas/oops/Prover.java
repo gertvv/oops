@@ -29,7 +29,7 @@ import nl.rug.ai.mas.oops.tableau.*;
  */
 public class Prover {
 	/**
-	 * Tableau mode (wether to PROVE a formula, or to do SAT checking).
+	 * Tableau mode (whether to PROVE a formula, or to do SAT checking).
 	 */
 	private enum Mode {
 		PROVE,

@@ -20,7 +20,6 @@
 package nl.rug.ai.mas.oops.tableau;
 
 import java.util.*;
-import nl.rug.ai.mas.oops.formula.*;
 
 public class CreateRule extends ModalRule {
 	public CreateRule(String name, String html, Node tpl, Node rwt,

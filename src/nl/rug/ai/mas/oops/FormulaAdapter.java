@@ -28,7 +28,6 @@ import nl.rug.ai.mas.oops.parser.analysis.*;
 import nl.rug.ai.mas.oops.parser.node.*;
 
 import nl.rug.ai.mas.oops.formula.*;
-import nl.rug.ai.mas.oops.tableau.*;
 
 /**
  * Class to transform a parse tree into a formula tree.
@@ -112,10 +111,6 @@ class FormulaAdapter extends DepthFirstAdapter {
 			v.add(r);
 			return r;
 		}
-	}
-
-	private class AgentVarMap extends CombinedVarMap<Agent> {
-		// FIXME: not used
 	}
 
 	private class StackEntry {

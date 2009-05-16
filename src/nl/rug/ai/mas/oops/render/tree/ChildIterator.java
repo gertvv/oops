@@ -25,7 +25,7 @@ public class ChildIterator<CellType extends Cell>
 implements Iterator<CellType> {
 	private Iterator<Edge<CellType>> d_it;
 
-	public ChildIterator(TreeStructure t, CellType c) {
+	public ChildIterator(TreeStructure<CellType> t, CellType c) {
 		d_it = t.edgeIterator(c);
 	}
 

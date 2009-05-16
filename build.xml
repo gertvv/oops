@@ -24,6 +24,7 @@
 	<property name="docs" location="docs"/>
 	<property name="test" location="test"/>
 	<property name="resource" location="resource"/>
+	<property name="parser" location="parser" />
 
 	<!-- location of local packages -->
 	<property name="local" location="lib" />
@@ -34,6 +35,8 @@
 	<property name="jgrapht" location="${local}/jgrapht-jdk1.6.jar" />
 	<property name="jgraph" location="${local}/jgraph.jar" />
 	<property name="sablecc" location="${local}/sablecc.jar" />
+	<property name="junit" location="${local}/junit-4.6.jar" />
+	<property name="parser-jar" location="${parser}/oops-parser.jar" />
 
 	<!-- global definition of the classpath -->
 	<path id="project.class.path">
@@ -41,8 +44,14 @@
 		<pathelement path="${batik}" />
 		<pathelement path="${jgrapht}" />
 		<pathelement path="${jgraph}" />
+		<pathelement path="${junit}" />
 
+		<pathelement location="${parser-jar}"/>
 		<pathelement location="${build}"/>
+		<pathelement path="${java.class.path}/"/>
+	</path>
+
+	<path id="parser.class.path">
 		<pathelement path="${java.class.path}/"/>
 	</path>
 
@@ -60,6 +69,8 @@
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${build}"/>
 		<mkdir dir="${test}"/>
+		<mkdir dir="${parser}/src"/>
+		<mkdir dir="${parser}/build"/>
 	</target>
 
 	<target name="all" depends="test">
@@ -86,14 +97,17 @@
 	</target>
 
 	<target name="oops-grammar" depends="resource,clean-oops-grammar">
-		<sablecc src="${src}/grammars/" includes="*.sablecc, *.grammar"
-         outputdirectory="${src}"></sablecc>
-		<copy todir="${build}">
-		  <fileset dir="${src}">
+		<sablecc src="${parser}/grammar/" includes="*.sablecc, *.grammar"
+         outputdirectory="${parser}/src/"></sablecc>
+		<copy todir="${parser}/build">
+		  <fileset dir="${parser}/src">
 			 <include name="**/*.dat"/>
 			 <include name="**/*.txt"/>
 		  </fileset>
 		</copy>
+		<javac srcdir="${parser}/src" destdir="${parser}/build" includes="nl/rug/ai/mas/oops/parser/**" debug="true" target="1.5" source="1.5" classpathref="parser.class.path">
+		</javac>
+		<jar jarfile="${parser-jar}" basedir="${parser}/build" />
 	</target>
 
 	<target name="resource" depends="init">
@@ -105,7 +119,7 @@
 	<!-- cleaning tasks in addition to removing ${build} -->
 	<target name="clean-oops" depends="clean-oops-grammar" />
 	<target name="clean-oops-grammar">
-		<delete dir="${src}/nl/rug/ai/mas/oops/parser/" />
+		<delete dir="${parser}/src/nl" />
 	</target>
 
 	<!-- create jar file -->

@@ -37,12 +37,11 @@ public class NullAgent implements Agent {
 	}
 
 	public boolean equals(Object o) {
-		try {
-			NullAgent other = (NullAgent)o;
+		if (o instanceof NullAgent) {
 			return true;
-		} catch (ClassCastException e) {
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	public String toString() {

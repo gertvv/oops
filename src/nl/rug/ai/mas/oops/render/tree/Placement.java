@@ -29,6 +29,7 @@ import java.util.Collections;
 
 public class Placement<CellType extends Cell> 
 extends HashMap<CellType, Point> {
+	@SuppressWarnings("unchecked")
 	public Placement<CellType> copy() {
 		return (Placement<CellType>)clone();
 	}

@@ -19,9 +19,6 @@
 
 package nl.rug.ai.mas.oops.tableau;
 
-import java.util.*;
-import nl.rug.ai.mas.oops.formula.*;
-
 /**
  * Tableau rule. Matches labels and formulas.
  */

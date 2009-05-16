@@ -24,7 +24,6 @@ import nl.rug.ai.mas.oops.formula.*;
 import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Collection;
 
@@ -53,7 +52,7 @@ public class FormulaAttrString implements FormulaVisitor {
 			new HashMap<TextAttribute, Object>();
 		atmap.put(TextAttribute.SUPERSCRIPT,
 			TextAttribute.SUPERSCRIPT_SUB);
-		Font d_subscript = font.deriveFont(atmap);
+		d_subscript = font.deriveFont(atmap);
 	}
 
 	/**
@@ -184,10 +183,9 @@ public class FormulaAttrString implements FormulaVisitor {
 
 	protected List<AttrChar> codeAgent(Agent a) {
 		List<AttrChar> l = new ArrayList<AttrChar>();
-		try {
-			NullAgent na = (NullAgent) a;
+		if (a instanceof NullAgent) {
 			l.add(new AttrChar(Constants.EMPTY, true));
-		} catch (ClassCastException e) {
+		} else {
 			l = codeString(a.toString(), true);
 		}
 		return l;

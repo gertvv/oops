@@ -23,12 +23,8 @@ import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
 import nl.rug.ai.mas.oops.render.TableauObserverSwing;
-import nl.rug.ai.mas.oops.render.TableauObserverSVG;
 import nl.rug.ai.mas.oops.model.S5nModel;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
-
-import java.io.OutputStream;
-import java.io.FileOutputStream;
 
 import javax.swing.JFrame;
 import nl.rug.ai.mas.oops.model.World;

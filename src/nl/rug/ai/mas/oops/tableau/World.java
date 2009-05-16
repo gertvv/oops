@@ -19,9 +19,6 @@
 
 package nl.rug.ai.mas.oops.tableau;
 
-import java.util.*;
-import nl.rug.ai.mas.oops.formula.*;
-
 public interface World {
 	/**
 	 * Match this World to another World, returning a substitution for the

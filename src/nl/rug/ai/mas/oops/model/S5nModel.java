@@ -21,7 +21,6 @@ package nl.rug.ai.mas.oops.model;
 
 import nl.rug.ai.mas.oops.formula.AgentId;
 import java.util.Set;
-import java.util.List;
 import java.util.LinkedList;
 
 /**

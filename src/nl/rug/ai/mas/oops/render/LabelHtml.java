@@ -24,8 +24,6 @@ import nl.rug.ai.mas.oops.formula.Agent;
 import nl.rug.ai.mas.oops.formula.NullAgent;
 import nl.rug.ai.mas.oops.formula.Formula;
 
-import java.util.Stack;
-
 /**
  * Visit a Formula in order to generate an HTML description from it.
  */
@@ -35,10 +33,8 @@ class LabelHtml implements LabelVisitor {
 	public static String LCEIL = "&lceil;";
 	public static String RCEIL = "&rceil;";
 	public static String AGENT(Agent a) {
-		try {
-			NullAgent na = (NullAgent) a;
+		if (a instanceof NullAgent) {
 			return "<sub>" + EMPTY + "</sub>";
-		} catch (ClassCastException e) {
 		}
 		return "<sub>" + a.toString() + "</sub>";
 	}

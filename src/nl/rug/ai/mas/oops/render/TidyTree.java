@@ -25,8 +25,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Point;
 import java.awt.Dimension;
-import java.awt.Rectangle;
-
 import nl.rug.ai.mas.oops.render.tree.Edge;
 
 public class TidyTree extends JComponent {

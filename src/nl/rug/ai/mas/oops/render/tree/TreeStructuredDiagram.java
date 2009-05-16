@@ -148,7 +148,7 @@ public class TreeStructuredDiagram<CellType extends Cell> implements Observer {
 	}
 
 	private int leftMovement(CellType q, Placement<CellType> placement) {
-		List uj = placement.getByY(placement.get(q).y);
+		List<CellType> uj = placement.getByY(placement.get(q).y);
 		int idx = uj.indexOf(q);
 		if (idx == 0) {
 			return placement.get(q).y;

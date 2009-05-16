@@ -28,7 +28,6 @@ import java.awt.Component;
 import java.awt.Container;
 
 import java.util.Map;
-import java.util.Iterator;
 import java.util.ArrayList;
 
 public class TidyTreeLayout implements LayoutManager {

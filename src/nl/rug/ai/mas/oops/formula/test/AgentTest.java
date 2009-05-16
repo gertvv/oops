@@ -56,7 +56,7 @@ public class AgentTest {
 		Variable<Agent> avar = new Variable<Agent>("A");
 		AgentReference aref = new AgentReference(avar, 1);
 		Agent a = new AgentId("1", 1);
-		Substitution s = aref.match(a);
+		Substitution<Agent> s = aref.match(a);
 		assertNotNull("AgentReference.match() should not return null", s);
 		assertEquals("AgentReference.match() should substitute for it's own" +
 				" variable", a, s.get(avar));

@@ -19,9 +19,6 @@
 
 package nl.rug.ai.mas.oops.tableau;
 
-import java.util.*;
-import nl.rug.ai.mas.oops.formula.*;
-
 /**
  * A null Label, used to terminate a label chain in a way that a Label variable
  * will match.
@@ -58,12 +55,11 @@ public class NullLabel implements Label {
 	 * A NullLabel equals() all other NullLabel instances.
 	 */
 	public boolean equals(Object o) {
-		try {
-			NullLabel other = (NullLabel)o;
+		if (o instanceof NullLabel) {
 			return true;
-		} catch (ClassCastException e) {
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	/**

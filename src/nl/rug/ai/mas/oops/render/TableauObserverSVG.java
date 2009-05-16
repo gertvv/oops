@@ -18,43 +18,32 @@
   */
 package nl.rug.ai.mas.oops.render;
 
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+
+import javax.swing.JPanel;
+
 import nl.rug.ai.mas.oops.tableau.Tableau;
 import nl.rug.ai.mas.oops.tableau.TableauEvent;
 import nl.rug.ai.mas.oops.tableau.TableauFinishedEvent;
 
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.awt.FontFormatException;
-
-import org.apache.batik.svggen.SVGGraphics2D;
-import org.apache.batik.svggen.SVGGeneratorContext;
 import org.apache.batik.dom.GenericDOMImplementation;
-import org.w3c.dom.Document;
+import org.apache.batik.svggen.SVGGeneratorContext;
+import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
-
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JPanel;
+import org.w3c.dom.Document;
 
 public class TableauObserverSVG extends TableauObserverBase {
 	private SVGGraphics2D d_generator;
 	private OutputStream d_os;
-	private JFrame d_frame; // root window
 
 	public TableauObserverSVG(OutputStream os)
-			throws IOException, FontFormatException {
+	throws IOException, FontFormatException {
 		super();
-		//d_frame = new JFrame("Tableau Observer");
-		//JScrollPane panel = new JScrollPane(getTree());
-		//d_frame.add(panel);
-		//d_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//d_frame.pack();
-		//d_frame.setSize(800, 600);
-		//d_frame.setVisible(true);
-
 		d_os = os;
 
 		// Get a DOMImplementation.

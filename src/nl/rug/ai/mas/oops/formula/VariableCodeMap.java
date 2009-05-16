@@ -20,7 +20,6 @@
 package nl.rug.ai.mas.oops.formula;
 
 import java.util.HashMap;
-import java.math.BigInteger;
 
 /**
  * A map from Variable to code numbers.

@@ -21,16 +21,13 @@ package nl.rug.ai.mas.oops.render;
 import nl.rug.ai.mas.oops.tableau.*;
 import nl.rug.ai.mas.oops.formula.Formula;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.awt.Font;
 import java.awt.FontFormatException;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
-import javax.swing.BoxLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
@@ -53,7 +50,7 @@ public class TableauObserverBase implements TableauObserver {
 		d_tree = new TidyTree();
 		d_count = 0;
 
-		Class self = this.getClass();
+		Class<? extends TableauObserverBase> self = this.getClass();
 		InputStream fs = self.getResourceAsStream(s_font);
 		//File ff = new File(s_font);
 		d_font = Font.createFont(Font.TRUETYPE_FONT, fs);

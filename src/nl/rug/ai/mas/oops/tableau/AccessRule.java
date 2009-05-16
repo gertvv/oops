@@ -19,9 +19,6 @@
 
 package nl.rug.ai.mas.oops.tableau;
 
-import java.util.*;
-import nl.rug.ai.mas.oops.formula.*;
-
 public class AccessRule extends ModalRule {
 	public AccessRule(String name, String html, Node tpl, Node rwt,
 			Constraint c) {

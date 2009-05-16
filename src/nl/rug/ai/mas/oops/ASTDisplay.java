@@ -17,6 +17,7 @@ import nl.rug.ai.mas.oops.parser.lexer.*;
 import nl.rug.ai.mas.oops.parser.analysis.*;
 import nl.rug.ai.mas.oops.parser.node.*;
 
+@SuppressWarnings("unchecked")
 public class ASTDisplay extends DepthFirstAdapter
 {
 	public static void main (String[] argv) {
