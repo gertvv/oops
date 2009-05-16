@@ -26,16 +26,18 @@
 	<property name="resource" location="resource"/>
 
 	<!-- location of local packages -->
-	<property name="local" location="/home/gert/local" />
+	<property name="local" location="lib" />
 
 	<!-- dependencies for zest -->
-	<property name="zest-layouts" location="${local}/org.eclipse.mylyn.zest.layouts_0.5.0.0.jar" />
-	<property name="batik" location="${local}/batik-1.7/batik.jar" />
-	<property name="jgrapht" location="${local}/jgrapht-0.7.3/jgrapht-jdk1.5.jar" />
-	<property name="jgraph" location="${local}/jgraph/lib/jgraph.jar" />
+	<property name="zest-layouts" location="${local}/org.eclipse.mylyn.zest.layouts_1.0.0.v20080226.jar" />
+	<property name="batik" location="${local}/batik-1.7/lib/*.jar" /> <!-- FIXME: include batik-1.7/lib/*.jar -->
+	<property name="jgrapht" location="${local}/jgrapht-jdk1.6.jar" />
+	<property name="jgraph" location="${local}/jgraph.jar" />
+	<property name="sablecc" location="${local}/sablecc.jar" />
 
 	<!-- global definition of the classpath -->
 	<path id="project.class.path">
+		<fileset dir="${local}/batik-1.7/lib/" />
 		<pathelement path="${batik}" />
 		<pathelement path="${jgrapht}" />
 		<pathelement path="${jgraph}" />
@@ -44,7 +46,12 @@
 		<pathelement path="${java.class.path}/"/>
 	</path>
 
-	<taskdef name="sablecc" classname="org.sablecc.ant.taskdef.Sablecc">
+	<path id="sablecc.class.path">
+		<pathelement path="${sablecc}"/>
+		<pathelement path="${java.class.path}"/>
+	</path>
+
+	<taskdef name="sablecc" classname="org.sablecc.ant.taskdef.Sablecc" classpathref="sablecc.class.path">
 	</taskdef>
 	
 	<target name="init">
@@ -69,16 +76,16 @@
 	</target>
 
 	<!-- PROVER build targets here -->
-	<!-- disabled because running sablecc ANNOYS ME 
 	<target name="oops" depends="oops-grammar">
-	-->
+	<!-- disabled because running sablecc ANNOYS ME 
 	<target name="oops" depends="init,resource">
+	-->
 		<javac srcdir="${src}" destdir="${build}" includes="nl/rug/ai/mas/oops/**" debug="true" target="1.5" source="1.5" classpathref="project.class.path">
 			<!-- <classpath path="${project.class.path}" /> -->
 		</javac>
 	</target>
 
-	<target name="oops-grammar" depends="init,clean-oops-grammar">
+	<target name="oops-grammar" depends="resource,clean-oops-grammar">
 		<sablecc src="${src}/grammars/" includes="*.sablecc, *.grammar"
          outputdirectory="${src}"></sablecc>
 		<copy todir="${build}">
