@@ -1,2 +1,3 @@
-Manifest-Version: 0.0.64
-Main-Class: nl.rug.ai.mas.oops.Prover
+Manifest-Version: 0.0.65
+Class-Path: ../lib/luaj-j2se-0.96.jar oops-parser.jar
+Main-Class: nl.rug.ai.mas.oops.LuaProver

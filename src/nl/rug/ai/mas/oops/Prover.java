@@ -51,13 +51,7 @@ public class Prover {
 			return;
 		}
 
-		Context c = new Context();
-
-		// build rules
-		Vector<Rule> rules = PropositionalRuleFactory.build(c);
-		rules.addAll(ModalRuleFactory.build(c));
-
-		Prover p = new Prover(rules, c);
+		Prover p = build();
 		try {
 			if (mode == Mode.PROVE) {
 				System.out.println(p.provable(formula));
@@ -68,6 +62,16 @@ public class Prover {
 			System.out.println(e);
 			System.exit(1);
 		}
+	}
+
+	public static Prover build() {
+		Context c = new Context();
+
+		// build rules
+		Vector<Rule> rules = PropositionalRuleFactory.build(c);
+		rules.addAll(ModalRuleFactory.build(c));
+
+		return new Prover(rules, c);
 	}
 
 	/**

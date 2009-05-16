@@ -37,6 +37,7 @@
 	<property name="sablecc" location="${local}/sablecc.jar" />
 	<property name="junit" location="${local}/junit-4.6.jar" />
 	<property name="parser-jar" location="${parser}/oops-parser.jar" />
+	<property name="luaj" location="${local}/luaj-j2se-0.96.jar" />
 
 	<!-- global definition of the classpath -->
 	<path id="project.class.path">
@@ -45,6 +46,7 @@
 		<pathelement path="${jgrapht}" />
 		<pathelement path="${jgraph}" />
 		<pathelement path="${junit}" />
+		<pathelement path="${luaj}" />
 
 		<pathelement location="${parser-jar}"/>
 		<pathelement location="${build}"/>
@@ -125,6 +127,7 @@
 	<!-- create jar file -->
 	<target name="dist" depends="oops">
 		<mkdir dir="${dist}"/>
+		<copy todir="${dist}" file="${parser-jar}" />
 		<jar jarfile="${dist}/oops.jar" basedir="${build}" manifest="${src}/MANIFEST.MF" />
 	</target>
 
