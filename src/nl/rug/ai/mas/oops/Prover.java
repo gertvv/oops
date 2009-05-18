@@ -23,6 +23,7 @@ import java.util.*;
 import java.io.ByteArrayInputStream;
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
+import nl.rug.ai.mas.oops.theory.Theory;
 
 /**
  * Proves formulas using a tableau.
@@ -97,7 +98,7 @@ public class Prover {
 	 * @return true if formula is provable.
 	 */
 	public boolean provable(String formula)
-			throws TableauErrorException {
+	throws TableauErrorException {
 		return provable(parse(formula));
 	}
 
@@ -107,7 +108,7 @@ public class Prover {
 	 * @return true if formula is provable.
 	 */
 	public boolean provable(Formula formula)
-			throws TableauErrorException {
+	throws TableauErrorException {
 		Tableau.BranchState result = d_tableau.tableau(
 			new Negation(formula));
 		if (result == Tableau.BranchState.ERROR) {
@@ -115,12 +116,47 @@ public class Prover {
 		}
 		return result == Tableau.BranchState.CLOSED;
 	}
-
+	
+	/**
+	 * Attempts to prove (theory -> formula)
+	 * @param theory The Theory from which to prove formula.
+	 * @param formula The Formula to prove.
+	 * @return true if (theory -> formula) is provable.
+	 * @throws TableauErrorException
+	 */
+	public boolean provable(Theory theory, Formula formula)
+	throws TableauErrorException {
+		return provable(new Implication(theory.asFormula(), formula));
+	}
+	
+	/**
+	 * Checks the satisfiability of (theory & formula)
+	 * @param theory The Theory in which to check SAT.
+	 * @param formula The Formula to check SAT of.
+	 * @return true if formula is satisfiable in the theory.
+	 * @throws TableauErrorException
+	 */
+	public boolean satisfiable(Theory theory, Formula formula)
+	throws TableauErrorException {
+		return satisfiable(new Conjunction(theory.asFormula(), formula));
+	}
+	
+	/**
+	 * Checks consistency of theory (i.e. theory is satisfiable)
+	 * @param theory The Theory to check.
+	 * @return true if the theory is consistent.
+	 * @throws TableauErrorException
+	 */
+	public boolean consistent(Theory theory)
+	throws TableauErrorException {
+		return satisfiable(theory.asFormula());
+	}
+	
 	/**
 	 * @return true if formula is satisfiable.
 	 */
 	public boolean satisfiable(String formula)
-			throws TableauErrorException {
+	throws TableauErrorException {
 		return satisfiable(parse(formula));
 	}
 	
