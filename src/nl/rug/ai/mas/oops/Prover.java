@@ -126,6 +126,9 @@ public class Prover {
 	 */
 	public boolean provable(Theory theory, Formula formula)
 	throws TableauErrorException {
+		if (theory == null || theory.asFormula() == null) {
+			return provable(formula);
+		}
 		return provable(new Implication(theory.asFormula(), formula));
 	}
 	
@@ -138,6 +141,9 @@ public class Prover {
 	 */
 	public boolean satisfiable(Theory theory, Formula formula)
 	throws TableauErrorException {
+		if (theory == null || theory.asFormula() == null) {
+			return satisfiable(formula);
+		}
 		return satisfiable(new Conjunction(theory.asFormula(), formula));
 	}
 	
@@ -149,6 +155,9 @@ public class Prover {
 	 */
 	public boolean consistent(Theory theory)
 	throws TableauErrorException {
+		if (theory == null || theory.asFormula() == null) {
+			return true;
+		}
 		return satisfiable(theory.asFormula());
 	}
 	

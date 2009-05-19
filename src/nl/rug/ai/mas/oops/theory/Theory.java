@@ -52,4 +52,8 @@ public class Theory {
 		}
 		return result;
 	}
+	
+	public String toString() {
+		return d_formulas.toString();
+	}
 }

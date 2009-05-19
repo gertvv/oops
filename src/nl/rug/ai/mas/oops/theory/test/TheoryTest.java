@@ -47,6 +47,11 @@ public class TheoryTest {
 	}
 	
 	@Test
+	public void emptyAsFormulaTest() {
+		assertEquals(null, d_th.asFormula());
+	}
+	
+	@Test
 	public void asFormulaTest() {
 		d_th.add(d_propMap.getOrCreate("p"));
 		d_th.add(d_propMap.getOrCreate("q"));
