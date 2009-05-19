@@ -1,5 +1,7 @@
-package nl.rug.ai.mas.oops;
+package nl.rug.ai.mas.oops.lua;
 
+import nl.rug.ai.mas.oops.Prover;
+import nl.rug.ai.mas.oops.TableauErrorException;
 import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.theory.Theory;
 

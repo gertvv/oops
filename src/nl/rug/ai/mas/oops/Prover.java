@@ -20,7 +20,6 @@
 package nl.rug.ai.mas.oops;
 
 import java.util.*;
-import java.io.ByteArrayInputStream;
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
 import nl.rug.ai.mas.oops.theory.Theory;
@@ -78,7 +77,7 @@ public class Prover {
 	/**
 	 * The parser instance.
 	 */
-	FormulaAdapter d_formulaAdapter;
+	FormulaParser d_formulaAdapter;
 	/**
 	 * The Tableau instance.
 	 */
@@ -90,7 +89,7 @@ public class Prover {
 	 * any number of formulas.
 	 */
 	public Prover(Vector<Rule> rules, Context c) {
-		d_formulaAdapter = new FormulaAdapter(c);
+		d_formulaAdapter = new FormulaParser(c);
 		d_tableau = new Tableau(rules);
 	}
 
@@ -183,14 +182,13 @@ public class Prover {
 
 	/**
 	 * Parse a string into a Formula object.
-	 * Note that calling this method seperately is useful, e.g. when using a
+	 * Note that calling this method separately is useful, e.g. when using a
 	 * Tableau Observer that expects a list of syntactic entities in advance.
 	 * @see nl.rug.ai.mas.oops.model.ModelConstructingObserver
 	 */
 	public Formula parse(String formula)
 			throws TableauErrorException {
-		if (!d_formulaAdapter.parse(
-				new ByteArrayInputStream(formula.getBytes()))) {
+		if (!d_formulaAdapter.parse(formula)) {
 			throw new TableauErrorException("Could not parse formula");
 		}
 		return d_formulaAdapter.getFormula();

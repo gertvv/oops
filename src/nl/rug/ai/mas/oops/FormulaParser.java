@@ -32,11 +32,15 @@ import nl.rug.ai.mas.oops.formula.*;
 /**
  * Class to transform a parse tree into a formula tree.
  */
-class FormulaAdapter extends DepthFirstAdapter {
+class FormulaParser extends DepthFirstAdapter {
 	private Context d_context;
 
-	public FormulaAdapter(Context c) {
+	public FormulaParser(Context c) {
 		d_context = c;
+	}
+	
+	public boolean parse(String s) {
+		return parse(new ByteArrayInputStream(s.getBytes()));
 	}
 
 	public boolean parse(InputStream is) {
