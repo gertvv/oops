@@ -32,14 +32,16 @@ public class Prover {
 	 * The Tableau instance.
 	 */
 	Tableau d_tableau;
+	FormulaValidator d_validator;
 
 	/**
 	 * Constructor.
 	 * Constructs a new prover object. May be used to parse, prove or sat-check
 	 * any number of formulas.
 	 */
-	public Prover(Vector<Rule> rules) {
+	public Prover(Vector<Rule> rules, FormulaValidator validator) {
 		d_tableau = new Tableau(rules);
+		d_validator = validator;
 	}
 
 	/**
@@ -49,6 +51,7 @@ public class Prover {
 	 */
 	public boolean provable(Formula formula)
 	throws TableauErrorException {
+		forceValid(formula);
 		Tableau.BranchState result = d_tableau.tableau(
 			new Negation(formula));
 		if (result == Tableau.BranchState.ERROR) {
@@ -62,6 +65,7 @@ public class Prover {
 	 */
 	public boolean satisfiable(Formula formula)
 			throws TableauErrorException {
+		forceValid(formula);
 		Tableau.BranchState result = d_tableau.tableau(formula);
 		if (result == Tableau.BranchState.ERROR) {
 			throw new TableauErrorException(d_tableau.getError());
@@ -74,5 +78,17 @@ public class Prover {
 	 */
 	public Tableau getTableau() {
 		return d_tableau;
+	}
+
+	public boolean validate(Formula f) {
+		return d_validator.validate(f);
+	}
+
+	private void forceValid(Formula f)
+	throws TableauErrorException {
+		if (!validate(f)) {
+			throw new TableauErrorException("Formula invalid: " +
+				d_validator.toString() + " failed");
+		}
 	}
 }

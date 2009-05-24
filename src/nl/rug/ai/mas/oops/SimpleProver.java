@@ -72,7 +72,9 @@ public class SimpleProver extends Prover {
 		Vector<Rule> rules = PropositionalRuleFactory.build(c);
 		rules.addAll(ModalRuleFactory.build(c));
 
-		return new SimpleProver(rules, c);
+		FormulaValidator validator = new MultiModalValidator();
+
+		return new SimpleProver(rules, validator, c);
 	}
 
 	/**
@@ -89,8 +91,8 @@ public class SimpleProver extends Prover {
 	 * Constructs a new prover object. May be used to parse, prove or sat-check
 	 * any number of formulas.
 	 */
-	public SimpleProver(Vector<Rule> rules, Context c) {
-		super(rules);
+	public SimpleProver(Vector<Rule> rules, FormulaValidator v, Context c) {
+		super(rules, v);
 		d_context = c;
 		d_formulaAdapter = new FormulaParser(c);
 	}

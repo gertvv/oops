@@ -156,9 +156,8 @@ public class FormulaParser extends DepthFirstAdapter {
 
 	public void outABoxFormula(ABoxFormula node) {
 		StackEntry e = d_stack.removeLast();
-		StackEntry a = d_stack.getLast();
-		if (a.d_agent != null) {
-			d_stack.removeLast();
+		if (!d_stack.isEmpty() && d_stack.getLast().d_agent != null) {
+			StackEntry a = d_stack.removeLast();
 			e.d_formula = new MultiBox(a.d_agent, e.d_formula);
 		} else {
 			e.d_formula = new UniBox(e.d_formula);
@@ -168,9 +167,8 @@ public class FormulaParser extends DepthFirstAdapter {
 
 	public void outADiamondFormula(ADiamondFormula node) {
 		StackEntry e = d_stack.removeLast();
-		StackEntry a = d_stack.getLast();
-		if (a.d_agent != null) {
-			d_stack.removeLast();
+		if (!d_stack.isEmpty() && d_stack.getLast().d_agent != null) {
+			StackEntry a = d_stack.removeLast();
 			e.d_formula = new MultiDiamond(a.d_agent, e.d_formula);
 		} else {
 			e.d_formula = new UniDiamond(e.d_formula);

@@ -10,6 +10,7 @@ import nl.rug.ai.mas.oops.SimpleProver;
 import nl.rug.ai.mas.oops.tableau.Rule;
 import nl.rug.ai.mas.oops.tableau.PropositionalRuleFactory;
 import nl.rug.ai.mas.oops.tableau.ModalRuleFactory;
+import nl.rug.ai.mas.oops.tableau.MultiModalValidator;
 
 import org.luaj.platform.J2sePlatform;
 import org.luaj.vm.LFunction;
@@ -44,7 +45,7 @@ public class LuaProver {
 		Vector<Rule> rules = PropositionalRuleFactory.build(d_context);
 		rules.addAll(ModalRuleFactory.build(d_context));
 
-		d_prover = new Prover(rules);
+		d_prover = new Prover(rules, new MultiModalValidator());
 		d_formulaAdapter = new FormulaParser(d_context);
 
 		Platform.setInstance(new J2sePlatform());
@@ -148,7 +149,12 @@ public class LuaProver {
 			L.error(d_formulaAdapter.getErrorCause().toString());
 		}
 
-		return d_formulaAdapter.getFormula();
+		Formula f = d_formulaAdapter.getFormula();
+		if (!d_prover.validate(f)) {
+			L.error("Formula failed to validate");
+		}
+
+		return f;
 	}
 
 	public static void main(String[] args) {
