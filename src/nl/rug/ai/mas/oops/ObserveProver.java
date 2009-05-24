@@ -43,13 +43,7 @@ public class ObserveProver {
 			return;
 		}
 
-		Context c = new Context();
-
-		// build rules
-		Vector<Rule> rules = PropositionalRuleFactory.build(c);
-		rules.addAll(ModalRuleFactory.build(c));
-
-		Prover p = new Prover(rules, c);
+		SimpleProver p = SimpleProver.build();
 		Formula f = null;
 		try {
 			f = p.parse(args[0]);
@@ -63,6 +57,7 @@ public class ObserveProver {
 		//OutputStream os = new FileOutputStream("out.svg");
 		//p.getTableau().attachObserver(new TableauObserverSVG(os));
 		
+		Context c = p.getContext();
 		S5nModel model = new S5nModel(c.getAgentIdMap().getAgentSet());
 		p.getTableau().attachObserver(new ModelConstructingObserver(model));
 

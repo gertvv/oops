@@ -31,13 +31,10 @@ import nl.rug.ai.mas.oops.*;
 import nl.rug.ai.mas.oops.formula.Context;
 
 public class ProverTest {
-	private static Prover s_prover;
+	private static SimpleProver s_prover;
 
 	@BeforeClass public static void initProver() {
-		Context c = new Context();
-		Vector<Rule> rules = PropositionalRuleFactory.build(c);
-		rules.addAll(ModalRuleFactory.build(c));
-		s_prover = new Prover(rules, c);
+		s_prover = SimpleProver.build();
 	}
 
 	/* 	#1  */

@@ -4,6 +4,7 @@ import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.TableauErrorException;
 import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.theory.Theory;
+import nl.rug.ai.mas.oops.SimpleProver;
 
 import org.luaj.platform.J2sePlatform;
 import org.luaj.vm.LFunction;
@@ -14,7 +15,7 @@ import org.luaj.vm.LuaState;
 import org.luaj.vm.Platform;
 
 public class LuaProver {
-	private Prover d_prover = Prover.build();
+	private SimpleProver d_prover = SimpleProver.build();
 	private LuaState d_vm;
 	private LTable d_theoryMeta;
 	
@@ -31,18 +32,10 @@ public class LuaProver {
 		d_theoryMeta.put("__index", d_theoryMeta);
 		d_theoryMeta.put("add", new LFunction() {
 			public int invoke(LuaState L) {
-				Object o = L.touserdata(1);
-				String s = L.tostring(2);
-				
-				if (!(o instanceof Theory)) {
-					L.error("Expected a Theory");
-				}
-				
-				try {
-					((Theory)o).add(d_prover.parse(s));
-				} catch (TableauErrorException e) {
-					L.error(e.toString());
-				}
+				Theory theory = checkTheory(L, 1);
+				Formula f = checkFormula(L, 2);
+
+				theory.add(f);
 				
 				return 0;
 			}
@@ -53,7 +46,7 @@ public class LuaProver {
 				Formula f = checkFormula(L, 2);
 			
 				try {
-					L.pushboolean(d_prover.provable(theory, f));
+					L.pushboolean(theory.provable(f));
 				} catch (TableauErrorException e) {
 					L.error(e.toString());
 				}
@@ -67,7 +60,7 @@ public class LuaProver {
 				Formula f = checkFormula(L, 2);
 			
 				try {
-					L.pushboolean(d_prover.satisfiable(theory, f));
+					L.pushboolean(theory.satisfiable(f));
 				} catch (TableauErrorException e) {
 					L.error(e.toString());
 				}
@@ -80,7 +73,7 @@ public class LuaProver {
 				Theory theory = checkTheory(L, 1);
 			
 				try {
-					L.pushboolean(d_prover.consistent(theory));
+					L.pushboolean(theory.consistent());
 				} catch (TableauErrorException e) {
 					L.error(e.toString());
 				}
@@ -92,7 +85,7 @@ public class LuaProver {
 		d_vm.pushlvalue(new LTable());
 		d_vm.pushfunction(new LFunction() {
 			public int invoke(LuaState L) {
-				L.pushlvalue(new LUserData(new Theory(), d_theoryMeta));
+				L.pushlvalue(new LUserData(new Theory(d_prover), d_theoryMeta));
 				return 1;
 			}
 		});

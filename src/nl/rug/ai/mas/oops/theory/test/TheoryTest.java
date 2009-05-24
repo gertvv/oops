@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import nl.rug.ai.mas.oops.SimpleProver;
 import nl.rug.ai.mas.oops.formula.Conjunction;
 import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.formula.Proposition;
@@ -21,7 +22,7 @@ public class TheoryTest {
 	
 	@Before
 	public void setUp() {
-		d_th = new Theory();
+		d_th = new Theory(SimpleProver.build());
 		d_propMap = new PropositionMap();
 	}
 	
