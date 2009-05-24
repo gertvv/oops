@@ -78,11 +78,11 @@ public class SimpleProver extends Prover {
 	/**
 	 * The parser instance.
 	 */
-	FormulaParser d_formulaAdapter;
+	private FormulaParser d_formulaAdapter;
 	/**
 	 * The (parser) context.
 	 */
-	Context d_context;
+	private Context d_context;
 
 	/**
 	 * Constructor.

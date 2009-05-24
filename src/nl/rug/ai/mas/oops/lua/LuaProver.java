@@ -1,10 +1,15 @@
 package nl.rug.ai.mas.oops.lua;
 
 import nl.rug.ai.mas.oops.Prover;
+import nl.rug.ai.mas.oops.FormulaParser;
 import nl.rug.ai.mas.oops.TableauErrorException;
 import nl.rug.ai.mas.oops.formula.Formula;
+import nl.rug.ai.mas.oops.formula.Context;
 import nl.rug.ai.mas.oops.theory.Theory;
 import nl.rug.ai.mas.oops.SimpleProver;
+import nl.rug.ai.mas.oops.tableau.Rule;
+import nl.rug.ai.mas.oops.tableau.PropositionalRuleFactory;
+import nl.rug.ai.mas.oops.tableau.ModalRuleFactory;
 
 import org.luaj.platform.J2sePlatform;
 import org.luaj.vm.LFunction;
@@ -14,12 +19,34 @@ import org.luaj.vm.LUserData;
 import org.luaj.vm.LuaState;
 import org.luaj.vm.Platform;
 
+import java.util.Vector;
+
 public class LuaProver {
-	private SimpleProver d_prover = SimpleProver.build();
+	/**
+	 * The parser instance.
+	 */
+	private FormulaParser d_formulaAdapter;
+	/**
+	 * The (parser) context.
+	 */
+	private Context d_context;
+	/**
+	 * The prover instance.
+	 */
+	private Prover d_prover;
 	private LuaState d_vm;
 	private LTable d_theoryMeta;
 	
 	public LuaProver() {
+		d_context = new Context();
+
+		// build rules
+		Vector<Rule> rules = PropositionalRuleFactory.build(d_context);
+		rules.addAll(ModalRuleFactory.build(d_context));
+
+		d_prover = new Prover(rules);
+		d_formulaAdapter = new FormulaParser(d_context);
+
 		Platform.setInstance(new J2sePlatform());
 		d_vm = Platform.newLuaState();
 		org.luaj.compiler.LuaC.install();
@@ -116,14 +143,12 @@ public class LuaProver {
 
 	private Formula checkFormula(LuaState L, int pos) {
 		String s = L.tostring(pos);
-		
-		Formula f = null;
-		try {
-			f = d_prover.parse(s);
-		} catch (TableauErrorException e) {
-			L.error(e.toString());
+
+		if (!d_formulaAdapter.parse(s)) {
+			L.error(d_formulaAdapter.getErrorCause().toString());
 		}
-		return f;
+
+		return d_formulaAdapter.getFormula();
 	}
 
 	public static void main(String[] args) {

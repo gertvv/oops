@@ -32,7 +32,7 @@ import nl.rug.ai.mas.oops.formula.*;
 /**
  * Class to transform a parse tree into a formula tree.
  */
-class FormulaParser extends DepthFirstAdapter {
+public class FormulaParser extends DepthFirstAdapter {
 	private Context d_context;
 
 	public FormulaParser(Context c) {
