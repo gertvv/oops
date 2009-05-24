@@ -71,6 +71,9 @@
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${build}"/>
 		<mkdir dir="${test}"/>
+	</target>
+
+	<target name="init-grammar">
 		<mkdir dir="${parser}/src"/>
 		<mkdir dir="${parser}/build"/>
 	</target>
@@ -98,17 +101,48 @@
 		</javac>
 	</target>
 
-	<target name="oops-grammar" depends="resource,clean-oops-grammar">
-		<sablecc src="${parser}/grammar/" includes="*.sablecc, *.grammar"
-         outputdirectory="${parser}/src/"></sablecc>
+	<target name="grammar-check">
+		<!-- check whether update is needed -->
+		<dependset>
+			<srcfileset
+				dir="${parser}/grammar" includes="*.sablecc" />
+			<targetfilelist
+				files="${parser-jar}" />
+		</dependset>
+
+		<condition property="rebuild-grammar">
+			<not><available file="${parser-jar}" /></not>
+		</condition>
+	</target>
+
+	<target name="oops-grammar"
+			depends="init-grammar,grammar-check"
+			if="rebuild-grammar">
+		<!-- clean up generated sources & binaries -->
+		<delete dir="${parser}/src/nl" />
+		<delete dir="${parser}/build/nl" />
+
+		<!-- generate parser source -->
+		<sablecc src="${parser}/grammar/"
+			includes="*.sablecc"
+         		outputdirectory="${parser}/src/" />
+
+		<!-- copy generated data files -->
 		<copy todir="${parser}/build">
-		  <fileset dir="${parser}/src">
-			 <include name="**/*.dat"/>
-			 <include name="**/*.txt"/>
-		  </fileset>
+			<fileset dir="${parser}/src">
+				<include name="**/*.dat"/>
+				<include name="**/*.txt"/>
+			</fileset>
 		</copy>
-		<javac srcdir="${parser}/src" destdir="${parser}/build" includes="nl/rug/ai/mas/oops/parser/**" debug="true" target="1.5" source="1.5" classpathref="parser.class.path">
-		</javac>
+
+		<!-- compile sources -->
+		<javac srcdir="${parser}/src" destdir="${parser}/build"
+			includes="nl/rug/ai/mas/oops/parser/**"
+			debug="true"
+			target="1.5" source="1.5"
+			classpathref="parser.class.path" />
+
+		<!-- create JAR -->
 		<jar jarfile="${parser-jar}" basedir="${parser}/build" />
 	</target>
 
@@ -141,10 +175,7 @@
 	<!-- run tests -->
 	<target name="test" depends="init, dist">
 		<junit showoutput="true">
-			<classpath>
-				<pathelement location="${dist}/oops.jar" />
-				<pathelement path="${java.class.path}" />
-			</classpath>
+			<classpath refid="project.class.path" />
 			<formatter type="plain" />
 			<batchtest todir="${test}">
 				<fileset dir="${src}">
