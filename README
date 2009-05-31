@@ -97,5 +97,8 @@ workspace):
 
 Then, in the OOPS sources folder, do
 
+	$ ant oops-grammar
 	$ mvn eclipse:eclipse
 
+Import the project into Eclipse. Finally, add the parser/oops-parser.jar to
+the project build path.

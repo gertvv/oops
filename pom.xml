@@ -5,6 +5,11 @@
 	<artifactId>oops</artifactId>
 	<version>0.5-SNAPSHOT</version>
 
+	<build>
+		<sourceDirectory>${basedir}/src</sourceDirectory>
+		<outputDirectory>${basedir}/build</outputDirectory>
+	</build>
+
 	<repositories>
 		<repository>
 			<id>nl.gertvv</id>
