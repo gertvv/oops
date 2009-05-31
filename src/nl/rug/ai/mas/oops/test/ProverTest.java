@@ -25,10 +25,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
-import java.util.Vector;
-import nl.rug.ai.mas.oops.tableau.*;
 import nl.rug.ai.mas.oops.*;
-import nl.rug.ai.mas.oops.formula.Context;
 
 public class ProverTest {
 	private static SimpleProver s_prover;

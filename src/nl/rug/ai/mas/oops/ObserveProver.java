@@ -19,9 +19,7 @@
 
 package nl.rug.ai.mas.oops;
 
-import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
-import nl.rug.ai.mas.oops.tableau.*;
 import nl.rug.ai.mas.oops.render.TableauObserverSwing;
 import nl.rug.ai.mas.oops.model.S5nModel;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;

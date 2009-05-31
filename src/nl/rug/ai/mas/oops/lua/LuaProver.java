@@ -6,7 +6,6 @@ import nl.rug.ai.mas.oops.TableauErrorException;
 import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.formula.Context;
 import nl.rug.ai.mas.oops.theory.Theory;
-import nl.rug.ai.mas.oops.SimpleProver;
 import nl.rug.ai.mas.oops.tableau.Rule;
 import nl.rug.ai.mas.oops.tableau.PropositionalRuleFactory;
 import nl.rug.ai.mas.oops.tableau.ModalRuleFactory;

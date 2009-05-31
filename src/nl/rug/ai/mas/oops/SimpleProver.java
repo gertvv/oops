@@ -22,7 +22,6 @@ package nl.rug.ai.mas.oops;
 import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.tableau.*;
-import nl.rug.ai.mas.oops.theory.Theory;
 
 /**
  * A simple wrapper for a Prover with default rules. Takes a formula as a
