@@ -1,14 +1,14 @@
 Introduction
 ==============================================================================
 
-This is OOPS, the Object Oriented Prover for S5n. OOPS was created by Elske
-van der Vaart (http://www.ai.rug.nl/~elskevdv/) and Gert van Valkenhoef
-(http://www.ai.rug.nl/~valkenhoef/) in the context of a Multi-Agent Systems
-project (http://www.ai.rug.nl/mas/).
+This is OOPS, the Object Oriented Prover for S5n. OOPS was created by [Elske
+van der Vaart](http://www.ai.rug.nl/~elskevdv/) and [Gert van
+Valkenhoef](http://www.gertvv.nl/) in the context of a [Multi-Agent
+Systems](http://www.ai.rug.nl/mas/) project.
 
 OOPS makes use of a tableau proof method in order to prove or disprove
-formulas in the S5n modal logic. More information can be found in the
-accompanying paper (http://www.ai.rug.nl/~valkenhoef/oops/).
+formulas in the S5n modal logic. More information can be found on the
+[OOPS wiki on GitHub](http://wiki.github.com/gertvv/oops).
 
 To encourage future work on OOPS, the source code is available under the GNU
 General Public License (GNU GPL). It is our hope that OOPS will be tested,
@@ -20,7 +20,7 @@ License
 ==============================================================================
 
     OOPS - Object Oriented Prover for S5n
-    Copyright (C) 2007  Elske van der Vaart and Gert van Valkenhoef
+    Copyright (C) 2007-2009  Elske van der Vaart and Gert van Valkenhoef
 
 	This program is free software; you can redistribute it and/or modify it
 	under the terms of the GNU General Public License version 2 as published
@@ -41,19 +41,11 @@ License
 Running OOPS
 ==============================================================================
 
-To run OOPS from the provided JAR file, you need to have the following
-installed (and have your classpath set up correctly):
-
- * Sun Java 1.5 or higher
-
-Run the prover by (assuming oops.jar is in the current working directory):
-	 $ java -cp oops.jar nl.rug.ai.mas.oops.Prover '<formula>'
-Where <formula> is a valid formula according to the OOPS syntax (see the
-accompanying paper).
+To run OOPS from the provided ZIP file, you need Java version 1.5 or higher.
 
 Example:
-	 $ java -cp oops.jar nl.rug.ai.mas.oops.Prover 'a | ~a'
-	true
+
+	$ java -jar dist/oops.jar script.lua
 
 
 Compiling from source
@@ -61,40 +53,49 @@ Compiling from source
 
 Requirements
 ------------------------------------------------------------------------------
+
 In order to build the sources in this directory you need:
 
-Sun Java 1.5 or higher (or any compatible implementation)
-http://java.sun.com/
+  - [Sun Java](http://java.sun.com/) 1.5 or higher (or any compatible
+implementation)
+  - [Apache Ant](http://ant.apache.org/)
+  - [Maven2](http://maven.apache.org/)
+  - [Maven2 ant-tasks](http://maven.apache.org/ant-tasks/).
+    These need to be in your Ant path (e.g. $HOME/.ant/lib).
 
-Apache Ant, 1.6.5 has been tested
-http://ant.apache.org/
-
-SableCC, version 3.2 (supporting generics) or higher
-SableCC ant task, version 1.0.1 or higher
-http://sablecc.org/
-
-Junit4, version 4.3.1 has been tested (although any 4.x should be sufficient)
-http://junit.org/
-
-Follow the installation instructions _carefully_ and make sure all the
-required JAR files are in your path.
+Any additional dependencies will be downloaded automatically via Maven.
 
 
 Building the JAR
 ------------------------------------------------------------------------------
 
 Use the following command:
+
 	 $ ant dist
 
-This will create the file 'oops.jar' under the directory 'dist'.
-
-Running plain 'ant' will build the class files, but not the JAR.
+This will create the file 'oops.jar' under the directory 'dist'. Running plain
+'ant' will build the class files, but not the JAR.
 
 
 Running the test suite
 ------------------------------------------------------------------------------
 
 Use the following command:
+
 	$ ant test
 
 This will create a series of test reports in the directory 'test'.
+
+
+Generating an Eclipse project
+------------------------------------------------------------------------------
+
+First, set up Eclipse to work with Maven (this sets some variables in your
+workspace):
+
+	$ mvn eclipse:configure-workspace -Declipse.workspace=$WORKSPACE
+
+Then, in the OOPS sources folder, do
+
+	$ mvn eclipse:eclipse
+
