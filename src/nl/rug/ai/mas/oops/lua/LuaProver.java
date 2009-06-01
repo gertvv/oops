@@ -1,5 +1,6 @@
 package nl.rug.ai.mas.oops.lua;
 
+import java.io.InputStream;
 import java.util.Vector;
 
 import nl.rug.ai.mas.oops.FormulaParser;
@@ -69,11 +70,15 @@ public class LuaProver {
 		d_vm.pushstring(file);
 		d_vm.call(1, 0);
 	}
+	
+	public void doStream(InputStream is, String name) {
+		if (d_vm.load(is, name) == 0) {
+			d_vm.call(0,0);
+		}
+	}
 
 	public void interactive() {
-		if (d_vm.load(System.in, "stdin") == 0) {
-			d_vm.call(0, 0);
-		}
+		doStream(System.in, "stdin");
 	}
 
 	public static void main(String[] args) {

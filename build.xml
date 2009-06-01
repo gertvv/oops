@@ -176,7 +176,7 @@
 		<jar jarfile="${dist}/oops.jar" basedir="${build}">
 			<manifest>
 				<attribute name="Main-Class"
-					value="nl.rug.ai.mas.oops.lua.LuaProver" />
+					value="nl.rug.ai.mas.oops.GUI" />
 				<attribute name="Class-Path"
 					value="${dist-classpath}" />
 			</manifest>
