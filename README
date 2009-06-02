@@ -65,6 +65,9 @@ implementation)
 
 Any additional dependencies will be downloaded automatically via Maven.
 
+Getting the latest version from GitHub
+------------------------------------------------------------------------------
+
 
 Building the JAR
 ------------------------------------------------------------------------------
