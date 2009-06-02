@@ -39,16 +39,16 @@ public class GUI extends JFrame {
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowListener() {
-			@Override public void windowClosing(WindowEvent e) {
+			public void windowClosing(WindowEvent e) {
 				quitApplication();
 			}
 			
-			@Override public void windowClosed(WindowEvent e) { }
-			@Override public void windowActivated(WindowEvent e) { }
-			@Override public void windowDeactivated(WindowEvent e) { }
-			@Override public void windowDeiconified(WindowEvent e) { }
-			@Override public void windowIconified(WindowEvent e) { }
-			@Override public void windowOpened(WindowEvent e) { }
+			public void windowClosed(WindowEvent e) { }
+			public void windowActivated(WindowEvent e) { }
+			public void windowDeactivated(WindowEvent e) { }
+			public void windowDeiconified(WindowEvent e) { }
+			public void windowIconified(WindowEvent e) { }
+			public void windowOpened(WindowEvent e) { }
 		});
 		
 		JPanel panel = new JPanel(new GridBagLayout());
@@ -126,7 +126,6 @@ public class GUI extends JFrame {
 		
 		JMenuItem runItem = buildMenuItem("Run", 'R', KeyEvent.VK_R, false);
 		runItem.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				runEditorContents();
 			}
@@ -134,7 +133,6 @@ public class GUI extends JFrame {
 		runMenu.add(runItem);
 		JMenuItem clearItem = buildMenuItem("Clear console", 'C');
 		clearItem.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				clearConsole();
 			}
