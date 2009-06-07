@@ -19,7 +19,10 @@
 
 package nl.rug.ai.mas.oops.parser;
 
+import java.util.Set;
+
 import nl.rug.ai.mas.oops.formula.Agent;
+import nl.rug.ai.mas.oops.formula.AgentId;
 import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.formula.VariableCodeMap;
 
@@ -65,5 +68,9 @@ public class Context {
 
 	public VariableCodeMap<Agent> getAgentCodeMap() {
 		return d_agentCodeMap;
+	}
+	
+	public Set<AgentId> getAgentIdView() {
+		return new AgentIdView(d_aidMap);
 	}
 }

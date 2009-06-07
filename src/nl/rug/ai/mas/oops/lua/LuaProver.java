@@ -79,7 +79,7 @@ public class LuaProver {
 	private final class FunctionAttachModelConstructor extends LFunction {
 		public int invoke(LuaState L) {
 			d_prover.getTableau().attachObserver(new ModelConstructingObserver(
-					new S5nModel(d_parser.getContext().getAgentIdMap().getAgentSet())));
+					new S5nModel(d_parser.getContext().getAgentIdView())));
 			return 0;
 		}
 	}
