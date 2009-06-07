@@ -17,29 +17,41 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.oops.formula;
+package nl.rug.ai.mas.oops.parser;
 
 import java.util.*;
 
+import nl.rug.ai.mas.oops.formula.AgentId;
+
 /**
- * A map from proposition symbols to a class implementing them. This enables
- * identification of different propositions.
+ * A map from agent symbols to a class implementing them. This enables
+ * identification of different agents.
  */
-public class PropositionMap extends HashMap<String, Proposition> {
+public class AgentIdMap extends HashMap<String, AgentId> {
 	private int d_code;
 
-	public PropositionMap() {
+	public AgentIdMap() {
 		super();
 		d_code = 0;
 	}
 
-	public Proposition getOrCreate(String name) {
-		Proposition p = get(name);
-		if (p != null)
-			return p;
+	/**
+	 * Get a reference to an AgentId, either an existing one having the supplied
+	 * name, or a new one if one doesn't exist.
+	 */
+	public AgentId getOrCreate(String name) {
+		AgentId id = get(name);
+		if (id != null)
+			return id;
 		d_code++;
-		p = new Proposition(name, d_code);
-		put(name, p);
-		return p;
+		id = new AgentId(name, d_code);
+		put(name, id);
+		return id;
+	}
+
+	public Set<AgentId> getAgentSet() {
+		HashSet<AgentId> set = new HashSet<AgentId>();
+		set.addAll(values());
+		return set;
 	}
 }

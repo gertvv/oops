@@ -17,7 +17,7 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.oops;
+package nl.rug.ai.mas.oops.parser;
 
 import java.io.*;
 import java.util.*;
@@ -66,105 +66,34 @@ public class FormulaParser extends DepthFirstAdapter {
 	}
 
 	public Context getContext() {
-		return new Context(d_propMap, d_aidMap, d_varMap.getCodeMap(),
-			new VariableCodeMap<Agent>());
+		return d_context;
 	}
 
 	public Exception getErrorCause() {
 		return d_errorCause;
 	}
 
-	private class CombinedVarMap<T> {
-		private VariableMap<T> d_varMap;
-		private VariableCodeMap<T> d_codeMap;
-
-		public CombinedVarMap() {
-			this(new VariableCodeMap<T>());
-		}
-
-		public CombinedVarMap(VariableCodeMap<T> codeMap) {
-			d_varMap = new VariableMap<T>();
-			d_codeMap = codeMap;
-		}
-
-		public VariableCodeMap<T> getCodeMap() {
-			return d_codeMap;
-		}
-
-		public Variable<T> getOrCreate(String name) {
-			return d_varMap.getOrCreate(name);
-		}
-
-		public int code(Variable<T> var) {
-			return d_codeMap.code(var);
-		}
-	}
-
-	private class FormulaVarMap extends CombinedVarMap<Formula> {
-		public FormulaVarMap() {
-			super();
-		}
-
-		public FormulaVarMap(VariableCodeMap<Formula> map) {
-			super(map);
-		}
-
-		public FormulaReference getOrCreateReference(String name) {
-			Variable<Formula> v = super.getOrCreate(name);
-			FormulaReference r = new FormulaReference(v, super.code(v));
-			v.add(r);
-			return r;
-		}
-	}
-	
-	private class AgentVarMap extends CombinedVarMap<Agent> {
-		public AgentVarMap() {
-			super();
-		}
-		
-		public AgentVarMap(VariableCodeMap<Agent> map) {
-			super(map);
-		}
-		
-		public AgentReference getOrCreateReference(String name) {
-			Variable<Agent> v = super.getOrCreate(name);
-			AgentReference r = new AgentReference(v, super.code(v));
-			v.add(r);
-			return r;
-		}
-	}
-
 	private class StackEntry {
 		public Formula d_formula = null;
 		public Agent d_agent = null;
-		// public VariableMap<Formula> d_variableMap = null;
-		// public VariableMap<Agent> d_agentMap = null; FIXME: not used
-
+		
 		public String toString() {
 			return d_formula.toString();
 		}
 	}
 
 	private LinkedList<StackEntry> d_stack;
-	private PropositionMap d_propMap;
-	private AgentIdMap d_aidMap;
-	private FormulaVarMap d_varMap;
-	private AgentVarMap d_avarMap;
 	private Exception d_errorCause;
 
 	private void reset() {
 		d_stack = new LinkedList<StackEntry>(); 
-		d_propMap = d_context.getPropositionMap();
-		d_aidMap = d_context.getAgentIdMap();
-		d_varMap = new FormulaVarMap(d_context.getFormulaCodeMap());
-		d_avarMap = new AgentVarMap(d_context.getAgentCodeMap());
 		d_errorCause = null;
 	}
 
 	@Override
 	public void outAPropositionFormula(APropositionFormula node) {
 		StackEntry entry = new StackEntry();
-		entry.d_formula = d_propMap.getOrCreate(node.getProp().getText());
+		entry.d_formula = getPropositionMap().getOrCreate(node.getProp().getText());
 		d_stack.addLast(entry);
 	}
 
@@ -194,7 +123,7 @@ public class FormulaParser extends DepthFirstAdapter {
 
 	@Override
 	public void outAVariableFormula(AVariableFormula node) {
-		FormulaReference r = d_varMap.getOrCreateReference(
+		FormulaReference r = getFormulaVarMap().getOrCreateReference(
 			node.getVar().getText());
 		StackEntry entry = new StackEntry();
 		entry.d_formula = r;
@@ -244,14 +173,30 @@ public class FormulaParser extends DepthFirstAdapter {
 	@Override
 	public void outAIdAgent(AIdAgent node) {
 		StackEntry entry = new StackEntry();
-		entry.d_agent = d_aidMap.getOrCreate(node.getId().getText());
+		entry.d_agent = getAgentIdMap().getOrCreate(node.getId().getText());
 		d_stack.addLast(entry);
 	}
 	
 	@Override
 	public void outAVariableAgent(AVariableAgent node) {
 		StackEntry entry = new StackEntry();
-		entry.d_agent = d_avarMap.getOrCreateReference(node.getVar().getText());
+		entry.d_agent = getAgentVarMap().getOrCreateReference(node.getVar().getText());
 		d_stack.addLast(entry);
+	}
+
+	private FormulaVarMap getFormulaVarMap() {
+		return d_context.getFormulaVarMap();
+	}
+
+	private AgentVarMap getAgentVarMap() {
+		return d_context.getAgentVarMap();
+	}
+
+	private PropositionMap getPropositionMap() {
+		return d_context.getPropositionMap();
+	}
+
+	private AgentIdMap getAgentIdMap() {
+		return d_context.getAgentIdMap();
 	}
 }

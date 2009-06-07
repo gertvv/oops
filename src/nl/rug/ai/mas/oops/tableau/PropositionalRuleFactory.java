@@ -21,6 +21,7 @@ package nl.rug.ai.mas.oops.tableau;
 
 import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
+import nl.rug.ai.mas.oops.parser.Context;
 
 public class PropositionalRuleFactory {
 	public static String CONJ = "&and;";

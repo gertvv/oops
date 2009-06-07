@@ -21,6 +21,8 @@ package nl.rug.ai.mas.oops;
 
 import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
+import nl.rug.ai.mas.oops.parser.Context;
+import nl.rug.ai.mas.oops.parser.FormulaParser;
 import nl.rug.ai.mas.oops.tableau.*;
 
 /**

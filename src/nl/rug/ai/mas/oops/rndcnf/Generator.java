@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 import nl.rug.ai.mas.oops.formula.*;
+import nl.rug.ai.mas.oops.parser.AgentIdMap;
+import nl.rug.ai.mas.oops.parser.PropositionMap;
 
 public class Generator {
 	private Random d_rnd;

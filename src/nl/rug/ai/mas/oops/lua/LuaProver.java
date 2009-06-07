@@ -3,9 +3,9 @@ package nl.rug.ai.mas.oops.lua;
 import java.io.InputStream;
 import java.util.Vector;
 
-import nl.rug.ai.mas.oops.FormulaParser;
 import nl.rug.ai.mas.oops.Prover;
-import nl.rug.ai.mas.oops.formula.Context;
+import nl.rug.ai.mas.oops.parser.Context;
+import nl.rug.ai.mas.oops.parser.FormulaParser;
 import nl.rug.ai.mas.oops.tableau.ModalRuleFactory;
 import nl.rug.ai.mas.oops.tableau.MultiModalValidator;
 import nl.rug.ai.mas.oops.tableau.PropositionalRuleFactory;

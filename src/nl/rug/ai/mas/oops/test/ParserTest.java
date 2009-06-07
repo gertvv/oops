@@ -1,15 +1,15 @@
 package nl.rug.ai.mas.oops.test;
 
 import static org.junit.Assert.*;
-import nl.rug.ai.mas.oops.FormulaParser;
 import nl.rug.ai.mas.oops.formula.BiImplication;
 import nl.rug.ai.mas.oops.formula.Conjunction;
-import nl.rug.ai.mas.oops.formula.Context;
 import nl.rug.ai.mas.oops.formula.Disjunction;
 import nl.rug.ai.mas.oops.formula.FormulaReference;
 import nl.rug.ai.mas.oops.formula.Implication;
 import nl.rug.ai.mas.oops.formula.Negation;
 import nl.rug.ai.mas.oops.formula.Proposition;
+import nl.rug.ai.mas.oops.parser.Context;
+import nl.rug.ai.mas.oops.parser.FormulaParser;
 
 import org.junit.Before;
 import org.junit.Test;

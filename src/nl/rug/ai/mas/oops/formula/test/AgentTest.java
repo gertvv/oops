@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 
 import nl.rug.ai.mas.oops.formula.*;
+import nl.rug.ai.mas.oops.parser.AgentIdMap;
 
 /**
  * Test functionality related to Agent.

@@ -1,8 +1,8 @@
 package nl.rug.ai.mas.oops.tableau.test;
 
 import nl.rug.ai.mas.oops.formula.Formula;
-import nl.rug.ai.mas.oops.formula.Context;
-import nl.rug.ai.mas.oops.FormulaParser;
+import nl.rug.ai.mas.oops.parser.Context;
+import nl.rug.ai.mas.oops.parser.FormulaParser;
 import nl.rug.ai.mas.oops.tableau.MultiModalValidator;
 import nl.rug.ai.mas.oops.tableau.FormulaValidator;
 

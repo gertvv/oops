@@ -17,7 +17,11 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
 
-package nl.rug.ai.mas.oops.formula;
+package nl.rug.ai.mas.oops.parser;
+
+import nl.rug.ai.mas.oops.formula.Agent;
+import nl.rug.ai.mas.oops.formula.Formula;
+import nl.rug.ai.mas.oops.formula.VariableCodeMap;
 
 /**
  * Context in which to interpret a formula.
@@ -25,6 +29,8 @@ package nl.rug.ai.mas.oops.formula;
 public class Context {
 	private PropositionMap d_propMap;
 	private AgentIdMap d_aidMap;
+	private FormulaVarMap d_fVarMap;
+	private AgentVarMap d_aVarMap;
 	private VariableCodeMap<Formula> d_formulaCodeMap;
 	private VariableCodeMap<Agent> d_agentCodeMap;
 
@@ -33,14 +39,8 @@ public class Context {
 		d_aidMap = new AgentIdMap();
 		d_formulaCodeMap = new VariableCodeMap<Formula>();
 		d_agentCodeMap = new VariableCodeMap<Agent>();
-	}
-
-	public Context(PropositionMap p, AgentIdMap a, VariableCodeMap<Formula> vf,
-			VariableCodeMap<Agent> va) {
-		d_propMap = p;
-		d_aidMap = a;
-		d_formulaCodeMap = vf;
-		d_agentCodeMap = va;
+		d_fVarMap = new FormulaVarMap(d_formulaCodeMap);
+		d_aVarMap = new AgentVarMap(d_agentCodeMap);
 	}
 
 	public PropositionMap getPropositionMap() {
@@ -49,6 +49,14 @@ public class Context {
 
 	public AgentIdMap getAgentIdMap() {
 		return d_aidMap;
+	}
+	
+	public FormulaVarMap getFormulaVarMap() {
+		return d_fVarMap;
+	}
+	
+	public AgentVarMap getAgentVarMap() {
+		return d_aVarMap;
 	}
 
 	public VariableCodeMap<Formula> getFormulaCodeMap() {

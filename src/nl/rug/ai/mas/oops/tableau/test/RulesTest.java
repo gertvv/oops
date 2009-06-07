@@ -23,6 +23,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import nl.rug.ai.mas.oops.formula.*;
+import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.tableau.*;
 
 /**

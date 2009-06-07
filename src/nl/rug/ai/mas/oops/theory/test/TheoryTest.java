@@ -13,7 +13,7 @@ import nl.rug.ai.mas.oops.SimpleProver;
 import nl.rug.ai.mas.oops.formula.Conjunction;
 import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.formula.Proposition;
-import nl.rug.ai.mas.oops.formula.PropositionMap;
+import nl.rug.ai.mas.oops.parser.PropositionMap;
 import nl.rug.ai.mas.oops.theory.Theory;
 
 public class TheoryTest {
