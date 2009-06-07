@@ -88,6 +88,8 @@ public class Prover {
 		if (!validate(f)) {
 			throw new TableauErrorException("Formula invalid: " +
 				d_validator.toString() + " failed");
+		} else if (!f.isConcrete()) {
+			throw new TableauErrorException("Formula " + f + " is not concrete.");
 		}
 	}
 }

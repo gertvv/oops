@@ -116,6 +116,23 @@ public class FormulaParser extends DepthFirstAdapter {
 			return r;
 		}
 	}
+	
+	private class AgentVarMap extends CombinedVarMap<Agent> {
+		public AgentVarMap() {
+			super();
+		}
+		
+		public AgentVarMap(VariableCodeMap<Agent> map) {
+			super(map);
+		}
+		
+		public AgentReference getOrCreateReference(String name) {
+			Variable<Agent> v = super.getOrCreate(name);
+			AgentReference r = new AgentReference(v, super.code(v));
+			v.add(r);
+			return r;
+		}
+	}
 
 	private class StackEntry {
 		public Formula d_formula = null;
@@ -132,6 +149,7 @@ public class FormulaParser extends DepthFirstAdapter {
 	private PropositionMap d_propMap;
 	private AgentIdMap d_aidMap;
 	private FormulaVarMap d_varMap;
+	private AgentVarMap d_avarMap;
 	private Exception d_errorCause;
 
 	private void reset() {
@@ -139,21 +157,18 @@ public class FormulaParser extends DepthFirstAdapter {
 		d_propMap = d_context.getPropositionMap();
 		d_aidMap = d_context.getAgentIdMap();
 		d_varMap = new FormulaVarMap(d_context.getFormulaCodeMap());
+		d_avarMap = new AgentVarMap(d_context.getAgentCodeMap());
 		d_errorCause = null;
 	}
 
+	@Override
 	public void outAPropositionFormula(APropositionFormula node) {
 		StackEntry entry = new StackEntry();
 		entry.d_formula = d_propMap.getOrCreate(node.getProp().getText());
 		d_stack.addLast(entry);
 	}
 
-	public void outAId(AId node) {
-		StackEntry entry = new StackEntry();
-		entry.d_agent = d_aidMap.getOrCreate(node.getId().getText());
-		d_stack.addLast(entry);
-	}
-
+	@Override
 	public void outABoxFormula(ABoxFormula node) {
 		StackEntry e = d_stack.removeLast();
 		if (!d_stack.isEmpty() && d_stack.getLast().d_agent != null) {
@@ -165,6 +180,7 @@ public class FormulaParser extends DepthFirstAdapter {
 		d_stack.addLast(e);
 	}
 
+	@Override
 	public void outADiamondFormula(ADiamondFormula node) {
 		StackEntry e = d_stack.removeLast();
 		if (!d_stack.isEmpty() && d_stack.getLast().d_agent != null) {
@@ -176,6 +192,7 @@ public class FormulaParser extends DepthFirstAdapter {
 		d_stack.addLast(e);
 	}
 
+	@Override
 	public void outAVariableFormula(AVariableFormula node) {
 		FormulaReference r = d_varMap.getOrCreateReference(
 			node.getVar().getText());
@@ -185,12 +202,14 @@ public class FormulaParser extends DepthFirstAdapter {
 		d_stack.addLast(entry);
 	}
 
+	@Override
 	public void outANegationFormula(ANegationFormula node) {
 		StackEntry e = d_stack.removeLast();
 		e.d_formula = new Negation(e.d_formula);
 		d_stack.addLast(e);
 	}
 
+	@Override
 	public void outAConjunctionFormula(AConjunctionFormula node) {
 		StackEntry right = d_stack.removeLast();
 		StackEntry left = d_stack.removeLast();
@@ -198,6 +217,7 @@ public class FormulaParser extends DepthFirstAdapter {
 		d_stack.addLast(left);
 	}
 
+	@Override
 	public void outADisjunctionFormula(ADisjunctionFormula node) {
 		StackEntry right = d_stack.removeLast();
 		StackEntry left = d_stack.removeLast();
@@ -205,6 +225,7 @@ public class FormulaParser extends DepthFirstAdapter {
 		d_stack.addLast(left);
 	}
 
+	@Override
 	public void outAImplicationFormula(AImplicationFormula node) {
 		StackEntry right = d_stack.removeLast();
 		StackEntry left = d_stack.removeLast();
@@ -212,10 +233,25 @@ public class FormulaParser extends DepthFirstAdapter {
 		d_stack.addLast(left);
 	}
 
+	@Override
 	public void outABiImplicationFormula(ABiImplicationFormula node) {
 		StackEntry right = d_stack.removeLast();
 		StackEntry left = d_stack.removeLast();
 		left.d_formula = new BiImplication(left.d_formula, right.d_formula);
 		d_stack.addLast(left);
+	}
+
+	@Override
+	public void outAIdAgent(AIdAgent node) {
+		StackEntry entry = new StackEntry();
+		entry.d_agent = d_aidMap.getOrCreate(node.getId().getText());
+		d_stack.addLast(entry);
+	}
+	
+	@Override
+	public void outAVariableAgent(AVariableAgent node) {
+		StackEntry entry = new StackEntry();
+		entry.d_agent = d_avarMap.getOrCreateReference(node.getVar().getText());
+		d_stack.addLast(entry);
 	}
 }

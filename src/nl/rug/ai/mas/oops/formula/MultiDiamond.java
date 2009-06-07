@@ -43,7 +43,7 @@ public class MultiDiamond implements MultiModalF {
 	}
 
 	public String toString() {
-		return "%_" + d_agent.toString() + d_right;
+		return "%_" + d_agent.toString() + " " + d_right;
 	}
 
 	public boolean equals(Object o) {

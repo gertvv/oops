@@ -57,20 +57,6 @@ Ignored Tokens
 	ignore, comment;
 
 Productions
-/*
-	command {->command} =
-		{formula} formula term
-			{ -> New command.formula(formula.formula) } | 
-		{list} [list]:enclosed_formula_list term 
-			{ -> New command.formula_list(list.formula_list) } |
-		{assign} assignment term
-			{ -> New command.assignment(assignment.assignment) };
-
-	assignment {->assignment} =
-		var assign [list]:enclosed_formula_list
-			{ -> New assignment(var, list.formula_list) };
-*/
-
 	formula {-> formula} =
 		{imp} [l]:disjunction impl [r]:formula
 			{ -> New formula.implication(l.formula, r.formula) } |
@@ -108,46 +94,21 @@ Productions
 	box {-> box} =
 		{single} box_single
 			{ -> New box.empty() } |
-		{multi} box_multi P.id
-			{ -> New box.id(id.id) } ;
+		{multi} box_multi agent
+			{ -> New box.agent(agent.agent) } ;
 	dia {-> diamond} = 
 		{single} dia_single 
 			{ -> New diamond.empty() } |
-		{multi} dia_multi P.id
-			{ -> New diamond.id(id.id) } ;
+		{multi} dia_multi agent
+			{ -> New diamond.agent(agent.agent) } ;
 
-	id {->P.id} =
-		T.id { -> New id(id) };
-/*
-	enclosed_formula_list {-> formula_list} =
-		lbrace formula_list rbrace
-			{ -> formula_list.formula_list } ;
+	agent {-> agent} =
+		{id} T.id
+			{ -> New agent.id(id) } |
+		{variable} var
+			{ -> New agent.variable(var) };
 
-	formula_list {->formula_list} =
-		{formula_list_nonempty} [list]:formula_list_nonempty 
-			{ -> New formula_list([list.formula]) } |
-		{fomula_list_empty} [list]:formula_list_empty
-			{ -> New formula_list([list.formula]) } ;
-
-	formula_list_empty {->formula*} = 
-		{empty} { -> [] };
-
-	formula_list_nonempty {-> formula*} = 
-		{base} formula
-			{ -> [formula.formula] } |
-		{ind} [list]:formula_list_nonempty comma formula
-			{ -> [list.formula, formula.formula] };
-*/
 Abstract Syntax Tree
-/*
-	command = {formula} formula |
-		{formula_list} formula_list |
-		{assignment} assignment;
-
-	assignment = [l]:var [r]:formula_list;
-
-	formula_list = formula*;
-*/
 
 	formula = 
 		{proposition} prop |
@@ -164,5 +125,7 @@ Abstract Syntax Tree
 	variable = variable;
 	id = T.id;
 
-	box = {empty} | {id} P.id;
-	diamond = {empty} | {id} P.id;
+	box = {empty} | {agent} agent;
+	diamond = {empty} | {agent} agent;
+
+	agent = {id} T.id | {variable} var;
