@@ -22,10 +22,13 @@ package nl.rug.ai.mas.oops;
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.render.TableauObserverSwing;
+import nl.rug.ai.mas.oops.model.KripkeModel;
 import nl.rug.ai.mas.oops.model.S5nModel;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import nl.rug.ai.mas.oops.model.World;
 import nl.rug.ai.mas.oops.model.Arrow;
 import org.jgraph.JGraph;
@@ -67,24 +70,27 @@ public class ObserveProver {
 		try {
 			System.out.println(p.provable(f));
 			//System.out.println(model);
-			JGraphModelAdapter<World, Arrow> graphModel =
-				new JGraphModelAdapter<World, Arrow>(
-					model.constructMultigraph());
-			JGraph jgraph = new JGraph(graphModel);
-			JFrame frame = new JFrame("Model Observer");
-			frame.add(jgraph);
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.pack();
-			frame.setSize(800, 600);
-			frame.setVisible(true);
-
-			System.out.println(model.constructMultigraph());
-			for (nl.rug.ai.mas.oops.model.World w : model.getWorlds()) {
-				System.out.println(w + ": " + w.getValuation());
-			}
+			showModel(model);
 		} catch (TableauErrorException e) {
 			System.out.println(e);
 			System.exit(1);
 		}
+	}
+
+	public static void showModel(KripkeModel model) {
+		if (model.getWorlds().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "No model was constructed");
+			return;
+		}
+		JGraphModelAdapter<World, Arrow> graphModel =
+			new JGraphModelAdapter<World, Arrow>(
+				model.constructMultigraph());
+		JGraph jgraph = new JGraph(graphModel);
+		JFrame frame = new JFrame("Model Observer");
+		frame.add(jgraph);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.pack();
+		frame.setSize(800, 600);
+		frame.setVisible(true);
 	}
 }

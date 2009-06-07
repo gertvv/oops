@@ -31,12 +31,16 @@ public class World {
 		d_label = label;
 		d_valuation = v;
 	}
+	
+	public String getLabel() {
+		return d_label;
+	}
 
 	public Valuation getValuation() {
 		return d_valuation;
 	}
 
 	public String toString() {
-		return d_label;
+		return d_valuation.toString();
 	}
 }

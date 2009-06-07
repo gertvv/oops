@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 
+import nl.rug.ai.mas.oops.ObserveProver;
 import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
 import nl.rug.ai.mas.oops.model.S5nModel;
@@ -20,6 +21,7 @@ import org.luaj.platform.J2sePlatform;
 import org.luaj.vm.LFunction;
 import org.luaj.vm.LString;
 import org.luaj.vm.LTable;
+import org.luaj.vm.LUserData;
 import org.luaj.vm.LuaState;
 import org.luaj.vm.Platform;
 
@@ -37,6 +39,7 @@ public class LuaProver {
 	 */
 	private Prover d_prover;
 	private LuaState d_vm;
+	private ModelConstructingObserver d_modelConstructor;
 	
 	public LuaProver() {
 		d_context = new Context();
@@ -51,6 +54,9 @@ public class LuaProver {
 		Platform.setInstance(new J2sePlatform());
 		d_vm = Platform.newLuaState();
 		org.luaj.compiler.LuaC.install();
+		
+		d_modelConstructor = new ModelConstructingObserver(
+				new S5nModel(d_parser.getContext().getAgentIdView()));
 		
 		registerNameSpace();
 	}
@@ -67,6 +73,12 @@ public class LuaProver {
 		d_vm.pushlvalue(new FunctionAttachModelConstructor());
 		d_vm.setfield(-2, new LString("attachModelConstructor"));
 		
+		d_vm.pushlvalue(new FunctionGetModel());
+		d_vm.setfield(-2, new LString("getModel"));
+		
+		d_vm.pushlvalue(new FunctionShowModel());
+		d_vm.setfield(-2, new LString("showModel"));
+		
 		formula.register(d_vm);
 		d_vm.setfield(-2, new LString("Formula")); // Give the constructor a name
 		
@@ -76,10 +88,23 @@ public class LuaProver {
 		d_vm.setglobal("oops");
 	}
 	
+	private final class FunctionGetModel extends LFunction {
+		public int invoke(LuaState L) {
+			L.pushlvalue(new LUserData(d_modelConstructor.getModel()));
+			return 1;
+		}
+	}
+	
+	private final class FunctionShowModel extends LFunction {
+		public int invoke(LuaState L) {
+			ObserveProver.showModel(d_modelConstructor.getModel());
+			return 0;
+		}
+	}
+	
 	private final class FunctionAttachModelConstructor extends LFunction {
 		public int invoke(LuaState L) {
-			d_prover.getTableau().attachObserver(new ModelConstructingObserver(
-					new S5nModel(d_parser.getContext().getAgentIdView())));
+			d_prover.getTableau().attachObserver(d_modelConstructor);
 			return 0;
 		}
 	}

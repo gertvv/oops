@@ -152,7 +152,6 @@ public class GUI extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		prover.getProver().getTableau().clearObservers();
 		System.err.println("\n  ============================= Run completed =============================\n");
 	}
 	

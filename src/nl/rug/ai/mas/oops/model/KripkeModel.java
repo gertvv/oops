@@ -38,7 +38,6 @@ public class KripkeModel {
 	HashMap<AgentId, DefaultDirectedGraph<World, Arrow>> d_graphs;
 
 	public KripkeModel(Set<AgentId> agents) {
-		System.out.println("Agents: " + agents);
 		d_agents = agents;
 		d_graphs = new HashMap<AgentId, DefaultDirectedGraph<World, Arrow>>();
 		for (AgentId a : d_agents) {
@@ -64,8 +63,6 @@ public class KripkeModel {
 	 * @return true if the Arrow was not already in the model.
 	 */
 	public boolean addArrow(Arrow r) {
-		System.out.println("Adding " + r.getAgent() + "=(" + r.getSource() +
-			"," + r.getTarget() + ")");
 		DefaultDirectedGraph<World, Arrow> g = d_graphs.get(r.getAgent());
 		return g.addEdge(r.getSource(), r.getTarget(), r);
 	}
@@ -95,6 +92,9 @@ public class KripkeModel {
 	}
 
 	public Set<World> getWorlds() {
+		if (d_agents.isEmpty()) {
+			return new HashSet<World>();
+		}
 		return d_graphs.get(d_agents.iterator().next()).vertexSet();
 	}
 

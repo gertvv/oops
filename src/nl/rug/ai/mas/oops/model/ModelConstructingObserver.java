@@ -29,6 +29,7 @@ import nl.rug.ai.mas.oops.tableau.BranchOpenEvent;
 import nl.rug.ai.mas.oops.tableau.Branch;
 import nl.rug.ai.mas.oops.tableau.Label;
 import nl.rug.ai.mas.oops.tableau.LabelInstance;
+import nl.rug.ai.mas.oops.tableau.TableauStartedEvent;
 import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.formula.AgentId;
 import nl.rug.ai.mas.oops.formula.Proposition;
@@ -40,15 +41,19 @@ public class ModelConstructingObserver implements TableauObserver {
 	public ModelConstructingObserver(KripkeModel m) {
 		d_model = m;
 	}
+	
+	public KripkeModel getModel() {
+		return d_model;
+	}
 
 	public void update(Tableau t, TableauEvent e) {
-		if (e instanceof BranchOpenEvent) {
+		if (e instanceof TableauStartedEvent) {
 			d_model = d_model.newModel();
+		} else if (e instanceof BranchOpenEvent) {
 			BranchOpenEvent event = (BranchOpenEvent)e;
 			Branch branch = event.getBranch();
 			
 			Set<Label> labels = branch.getLabels();
-			System.out.println("Labels: " + labels);
 			HashMap<Label, World> labelMap = new HashMap<Label, World>();
 
 			// create a world for each label
