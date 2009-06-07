@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.util.Vector;
 
 import nl.rug.ai.mas.oops.Prover;
+import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
+import nl.rug.ai.mas.oops.model.S5nModel;
 import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.parser.FormulaParser;
 import nl.rug.ai.mas.oops.render.TableauObserverSwing;
@@ -25,7 +27,7 @@ public class LuaProver {
 	/**
 	 * The parser instance.
 	 */
-	private FormulaParser d_formulaAdapter;
+	private FormulaParser d_parser;
 	/**
 	 * The (parser) context.
 	 */
@@ -44,7 +46,7 @@ public class LuaProver {
 		rules.addAll(ModalRuleFactory.build(d_context));
 
 		d_prover = new Prover(rules, new MultiModalValidator());
-		d_formulaAdapter = new FormulaParser(d_context);
+		d_parser = new FormulaParser(d_context);
 
 		Platform.setInstance(new J2sePlatform());
 		d_vm = Platform.newLuaState();
@@ -54,13 +56,16 @@ public class LuaProver {
 	}
 	
 	private void registerNameSpace() {
-		LuaFormula formula = new LuaFormula(d_formulaAdapter, d_prover);
+		LuaFormula formula = new LuaFormula(d_parser, d_prover);
 		LuaTheory theory = new LuaTheory(formula, d_prover);
 		
 		d_vm.pushlvalue(new LTable());
 		
 		d_vm.pushlvalue(new FunctionAttachTableauVisualizer());
 		d_vm.setfield(-2, new LString("attachTableauVisualizer"));
+		
+		d_vm.pushlvalue(new FunctionAttachModelConstructor());
+		d_vm.setfield(-2, new LString("attachModelConstructor"));
 		
 		formula.register(d_vm);
 		d_vm.setfield(-2, new LString("Formula")); // Give the constructor a name
@@ -69,6 +74,14 @@ public class LuaProver {
 		d_vm.setfield(-2, new LString("Theory")); // Give the constructor a name
 		
 		d_vm.setglobal("oops");
+	}
+	
+	private final class FunctionAttachModelConstructor extends LFunction {
+		public int invoke(LuaState L) {
+			d_prover.getTableau().attachObserver(new ModelConstructingObserver(
+					new S5nModel(d_parser.getContext().getAgentIdMap().getAgentSet())));
+			return 0;
+		}
 	}
 
 	private final class FunctionAttachTableauVisualizer extends LFunction {

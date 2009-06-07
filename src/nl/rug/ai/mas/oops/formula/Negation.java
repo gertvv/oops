@@ -77,10 +77,15 @@ public class Negation implements PropositionalF {
 	}
 
 	public boolean isSimple() {
+		/*
 		if (d_right.match(
 					new Negation(new FormulaReference(new Variable<Formula>("F"), 1))
 					) == null && d_right.isSimple())
 			return true;
+			*/
+		if (!(d_right instanceof Negation) && d_right.isSimple()) {
+			return true;
+		}
 		return false;
 	}
 

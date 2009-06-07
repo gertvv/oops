@@ -32,6 +32,11 @@ public class S5nModel extends KripkeModel {
 	public S5nModel(Set<AgentId> agents) {
 		super(agents);
 	}
+	
+	@Override
+	public S5nModel newModel() {
+		return new S5nModel(d_agents);
+	}
 
 	/**
 	 * Add a world to the model. This includes adding reflexive arrows for all

@@ -43,6 +43,7 @@ public class ModelConstructingObserver implements TableauObserver {
 
 	public void update(Tableau t, TableauEvent e) {
 		if (e instanceof BranchOpenEvent) {
+			d_model = d_model.newModel();
 			BranchOpenEvent event = (BranchOpenEvent)e;
 			Branch branch = event.getBranch();
 			
