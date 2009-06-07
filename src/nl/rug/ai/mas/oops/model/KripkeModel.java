@@ -115,6 +115,16 @@ public class KripkeModel {
 		return graph;
 	}
 
+	
+	/**
+	 * Construct an empty Kripke Model having a set of agents. In effect, the
+	 * current model is used as a prototype.
+	 * @return A new (empty) model of the same type.
+	 */
+	public KripkeModel newModel() {
+		return new KripkeModel(d_agents);
+	}
+	
 	public String toString() {
 		String str = this.getClass().getSimpleName() + ":\n";
 		for (Map.Entry<AgentId, DefaultDirectedGraph<World, Arrow>> e :

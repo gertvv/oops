@@ -47,14 +47,18 @@ public class TableauObserverBase implements TableauObserver {
 	private static final int s_fontSize = 12;
 
 	public TableauObserverBase() throws IOException, FontFormatException {
-		d_tree = new TidyTree();
-		d_count = 0;
-
 		Class<? extends TableauObserverBase> self = this.getClass();
 		InputStream fs = self.getResourceAsStream(s_font);
 		//File ff = new File(s_font);
 		d_font = Font.createFont(Font.TRUETYPE_FONT, fs);
 		d_font = d_font.deriveFont((float)s_fontSize);
+		
+		reset();
+	}
+	
+	private void reset() {
+		d_tree = new TidyTree();
+		d_count = 0;
 
 		d_branchMap = new HashMap<Branch, ComponentCell>();
 		d_lineMap = new NestedMap<Branch, Node, Integer>();
@@ -158,6 +162,7 @@ public class TableauObserverBase implements TableauObserver {
 		} else if (e instanceof TableauFinishedEvent) {
 			d_tree.revalidate();
 			d_tree.repaint();
+			reset();
 		} else if (e instanceof BranchDoneEvent) {
 			BranchDoneEvent event = (BranchDoneEvent)e;
 			d_lineMap.removeMap(event.getBranch());

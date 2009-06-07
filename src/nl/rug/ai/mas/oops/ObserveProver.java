@@ -52,6 +52,8 @@ public class ObserveProver {
 		}
 
 		//p.getTableau().attachObserver(new SystemOutObserver());
+		TableauObserverSwing observer = new TableauObserverSwing();
+		observer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		p.getTableau().attachObserver(new TableauObserverSwing());
 		//OutputStream os = new FileOutputStream("out.svg");
 		//p.getTableau().attachObserver(new TableauObserverSVG(os));

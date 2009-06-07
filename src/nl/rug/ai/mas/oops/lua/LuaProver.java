@@ -1,17 +1,21 @@
 package nl.rug.ai.mas.oops.lua;
 
+import java.awt.FontFormatException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 
 import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.parser.FormulaParser;
+import nl.rug.ai.mas.oops.render.TableauObserverSwing;
 import nl.rug.ai.mas.oops.tableau.ModalRuleFactory;
 import nl.rug.ai.mas.oops.tableau.MultiModalValidator;
 import nl.rug.ai.mas.oops.tableau.PropositionalRuleFactory;
 import nl.rug.ai.mas.oops.tableau.Rule;
 
 import org.luaj.platform.J2sePlatform;
+import org.luaj.vm.LFunction;
 import org.luaj.vm.LString;
 import org.luaj.vm.LTable;
 import org.luaj.vm.LuaState;
@@ -55,6 +59,9 @@ public class LuaProver {
 		
 		d_vm.pushlvalue(new LTable());
 		
+		d_vm.pushlvalue(new FunctionAttachTableauVisualizer());
+		d_vm.setfield(-2, new LString("attachTableauVisualizer"));
+		
 		formula.register(d_vm);
 		d_vm.setfield(-2, new LString("Formula")); // Give the constructor a name
 		
@@ -64,7 +71,19 @@ public class LuaProver {
 		d_vm.setglobal("oops");
 	}
 
-	
+	private final class FunctionAttachTableauVisualizer extends LFunction {
+		public int invoke(LuaState L) {
+			try {
+				d_prover.getTableau().attachObserver(new TableauObserverSwing());
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			} catch (FontFormatException e) {
+				throw new RuntimeException(e);
+			}
+			return 0;
+		}
+	}
+
 	public void doFile(String file) {
 		d_vm.getglobal("dofile");
 		d_vm.pushstring(file);
@@ -88,5 +107,9 @@ public class LuaProver {
 		} else {
 			prover.doFile(args[0]);
 		}
+	}
+
+	public Prover getProver() {
+		return d_prover;
 	}
 }

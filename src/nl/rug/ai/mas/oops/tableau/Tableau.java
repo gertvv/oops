@@ -277,4 +277,8 @@ public class Tableau {
 			return result;
 		}
 	}
+
+	public void clearObservers() {
+		d_observers.clear();
+	}
 }

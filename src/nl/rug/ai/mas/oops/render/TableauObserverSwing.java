@@ -21,20 +21,47 @@ package nl.rug.ai.mas.oops.render;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
+import nl.rug.ai.mas.oops.tableau.Tableau;
+import nl.rug.ai.mas.oops.tableau.TableauEvent;
+import nl.rug.ai.mas.oops.tableau.TableauFinishedEvent;
+import nl.rug.ai.mas.oops.tableau.TableauStartedEvent;
+
 import java.io.IOException;
 import java.awt.FontFormatException;
 
 public class TableauObserverSwing extends TableauObserverBase {
 	private JFrame d_frame; // root window
+	private int d_defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE;
 
 	public TableauObserverSwing() throws IOException, FontFormatException {
 		super();
+	}
+
+	private void initFrame() {
 		d_frame = new JFrame("Tableau Observer");
 		JScrollPane panel = new JScrollPane(getTree());
 		d_frame.add(panel);
-		d_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		d_frame.pack();
 		d_frame.setSize(800, 600);
 		d_frame.setVisible(true);
+		d_frame.setDefaultCloseOperation(d_defaultCloseOperation);
+	}
+
+	public void setDefaultCloseOperation(int action) {
+		d_defaultCloseOperation = action;
+		if (d_frame != null) {
+			d_frame.setDefaultCloseOperation(d_defaultCloseOperation);
+		}
+	}
+	
+	@Override
+	public void update(Tableau t, TableauEvent e) {
+		if (e instanceof TableauStartedEvent) {
+			initFrame();
+		} else if (e instanceof TableauFinishedEvent) {
+			d_frame = null;
+		}
+		
+		super.update(t, e);
 	}
 }
