@@ -1,0 +1,47 @@
+\documentclass{elsart}
+%Use [reviewcopy] for double spacing:
+%\documentclass[reviewcopy]{elsart}
+
+\usepackage[english]{babel}
+\usepackage[sort]{natbib}
+\bibliographystyle{elsart-harv}
+
+\begin{document}
+
+\begin{frontmatter}
+\title{OOPS: Title Here}
+
+\author[gert]{Gert van Valkenhoef\corauthref{cor}}
+\corauth[cor]{Corresponding author.}
+\ead{g.h.m.van.valkenhoef@rug.nl}
+\author[ai]{Elske van der Vaart}
+\ead{elskevdv@ai.rug.nl}
+\author[ai]{Rineke Verbrugge}
+\ead{rineke@ai.rug.nl}
+
+\address[gert]{Department of X}
+
+\address[ai]{Department of Artificial Intelligence, University of Groningen,
+P.O. Box 407, 9700 AK, Groningen, The Netherlands}
+
+\begin{abstract}
+abstract
+\end{abstract}
+
+\begin{keyword}
+keyword1 \sep $\dots$ \sep keywordN
+\end{keyword}
+
+\end{frontmatter}
+
+\input{introduction}
+
+\input{technical}
+
+\input{features}
+
+\input{examples}
+
+\input{discussion}
+
+\end{document}
