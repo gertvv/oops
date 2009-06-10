@@ -170,6 +170,7 @@
 		</path>
 		<pathconvert property="dist-classpath" pathsep=" ">
 			<path refid="dist.classpath" />
+			<map from="${dist}" to="." />
 		</pathconvert>
 		
 		<!-- build jar -->
