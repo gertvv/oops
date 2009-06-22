@@ -84,7 +84,7 @@
 	</target>
 
 	<!-- PROVER build targets here -->
-	<target name="oops" depends="init,oops-grammar">
+	<target name="oops" depends="init,resource,oops-grammar">
 	<!-- disabled because running sablecc ANNOYS ME 
 	<target name="oops" depends="init,resource">
 	-->
