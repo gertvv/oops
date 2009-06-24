@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -22,15 +23,16 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 
 import nl.rug.ai.mas.oops.lua.LuaProver;
 
 public class GUI extends JFrame {
-	private JTextArea d_editorArea;
+	private ScriptEditor d_editorArea;
 	private Console d_console;
+	private JMenuItem d_saveItem;
+	private JMenuItem d_refreshItem;
 
 	public GUI() {
 		super("OOPS Graphical Environment");
@@ -71,13 +73,8 @@ public class GUI extends JFrame {
 		c.fill = GridBagConstraints.BOTH;
 		JScrollPane editorPane = new JScrollPane();
 		editorPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		d_editorArea = new JTextArea();
-		d_editorArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
-		d_editorArea.setColumns(80);
-		d_editorArea.setRows(25);
-		d_editorArea.setLineWrap(true);
-		d_editorArea.setWrapStyleWord(true);
-		editorPane.setViewportView(d_editorArea);
+		d_editorArea = new ScriptEditor();
+		editorPane.setViewportView(d_editorArea.getComponent());
 		panel.add(editorPane, c);
 		
 		c.gridy = 3;
@@ -102,11 +99,15 @@ public class GUI extends JFrame {
 			System.setOut(new PrintStream(d_console.getOutputStream()));
 			System.setErr(new PrintStream(d_console.getErrorStream()));
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(this, "Error Initializing Console: \n" + e.getMessage(),
-					"Error Initializing Console", JOptionPane.ERROR_MESSAGE);
+			showError(e, "Error Initializing Console");
 		}
 		
 		add(panel, BorderLayout.CENTER);
+	}
+
+	private void showError(IOException e, String title) {
+		JOptionPane.showMessageDialog(this, title + " \n" + e.getMessage(),
+				title, JOptionPane.ERROR_MESSAGE);
 	}
 
 	protected void quitApplication() {
@@ -131,7 +132,7 @@ public class GUI extends JFrame {
 			}
 		});
 		runMenu.add(runItem);
-		JMenuItem clearItem = buildMenuItem("Clear console", 'C');
+		JMenuItem clearItem = buildMenuItem("Clear console", 'C', KeyEvent.VK_R, true);
 		clearItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				clearConsole();
@@ -164,23 +165,44 @@ public class GUI extends JFrame {
 		
 		// New file
 		JMenuItem newItem = buildMenuItem("New", 'N', KeyEvent.VK_N, false);
-		newItem.setEnabled(false);
+		newItem.setEnabled(true);
+		newItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				newFile();
+			}
+		});
 		fileMenu.add(newItem);
 		
 		// Open file
 		JMenuItem openItem = buildMenuItem("Open", 'O', KeyEvent.VK_O, false);
-		openItem.setEnabled(false);
+		openItem.setEnabled(true);
+		openItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				openFile();
+			}
+		});
 		fileMenu.add(openItem);
 		fileMenu.addSeparator();
 		
 		// Save file
 		JMenuItem saveItem = buildMenuItem("Save", 'S', KeyEvent.VK_S, false);
 		saveItem.setEnabled(false);
+		saveItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveFile();
+			}
+		});
 		fileMenu.add(saveItem);
+		d_saveItem = saveItem;
 		
 		// Save file as
 		JMenuItem saveAsItem = buildMenuItem("Save As", 'A', KeyEvent.VK_S, true);
-		saveAsItem.setEnabled(false);
+		saveAsItem.setEnabled(true);
+		saveAsItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveFileAs();
+			}
+		});
 		fileMenu.add(saveAsItem);
 		
 		fileMenu.addSeparator();
@@ -188,7 +210,13 @@ public class GUI extends JFrame {
 		// Refresh file (reload from file system)
 		JMenuItem refreshItem = buildMenuItem("Refresh", 'R', KeyEvent.VK_F5, false);
 		refreshItem.setEnabled(false);
+		refreshItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				refreshFile();
+			}
+		});
 		fileMenu.add(refreshItem);
+		d_refreshItem = refreshItem;
 		
 		fileMenu.addSeparator();
 		
@@ -204,6 +232,68 @@ public class GUI extends JFrame {
 		return fileMenu;
 	}
 	
+	private void refreshFile() {
+		try {
+			d_editorArea.load();
+		} catch (IOException e) {
+			showError(e);
+		}
+		updateEnabledMenuItems();
+	}
+
+	private void saveFileAs() {
+		JFileChooser fc = new JFileChooser();
+		int result = fc.showSaveDialog(this);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			d_editorArea.setFile(fc.getSelectedFile());
+			try {
+				d_editorArea.write();
+			} catch (IOException e) {
+				showError(e);
+			}
+		}
+		updateEnabledMenuItems();
+	}
+
+	private void saveFile() {
+		try {
+			d_editorArea.write();
+		} catch (IOException e) {
+			showError(e);
+		}
+		updateEnabledMenuItems();
+	}
+
+	private void openFile() {
+		JFileChooser fc = new JFileChooser();
+		int result = fc.showOpenDialog(this);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			d_editorArea.setFile(fc.getSelectedFile());
+			try {
+				d_editorArea.load();
+			} catch (IOException e) {
+				showError(e);
+			}
+		}
+		updateEnabledMenuItems();
+	}
+
+	private void showError(IOException e) {
+		showError(e, "Error");
+	}
+
+	private void newFile() {
+		d_editorArea.setFile(null);
+		d_editorArea.clear();
+		updateEnabledMenuItems();
+	}
+
+	private void updateEnabledMenuItems() {
+		boolean enabled = d_editorArea.getFile() != null;
+		d_saveItem.setEnabled(enabled);
+		d_refreshItem.setEnabled(enabled);
+	}
+
 	/**
 	 * Build a menu item without key accelerator.
 	 * @param title
