@@ -68,6 +68,14 @@ public class Console extends JTextArea {
 	public OutputStream getErrorStream() throws IOException {
 		return new PipedOutputStream(d_err);
 	}
+	
+	public boolean streamsFlushed() {
+		try {
+			return d_out.available() == 0 && d_err.available() == 0;
+		} catch (IOException e) {
+			return false;
+		}
+	}
 
 	public void clear() {
 		setText("");

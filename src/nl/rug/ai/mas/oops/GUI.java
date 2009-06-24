@@ -1,6 +1,6 @@
 package nl.rug.ai.mas.oops;
 
-import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,7 +21,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
@@ -38,7 +37,6 @@ public class GUI extends JFrame {
 		super("OOPS Graphical Environment");
 		
 		setJMenuBar(buildMenuBar());
-		setLayout(new BorderLayout());
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowListener() {
 			public void windowClosing(WindowEvent e) {
@@ -53,7 +51,8 @@ public class GUI extends JFrame {
 			public void windowOpened(WindowEvent e) { }
 		});
 		
-		JPanel panel = new JPanel(new GridBagLayout());
+		JFrame panel = this;
+		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.gridx = 1;
@@ -70,6 +69,8 @@ public class GUI extends JFrame {
 		c.gridy = 2;
 		c.gridx = 1;
 		c.gridwidth = 2;
+		c.weighty = 0.7;
+		c.weightx = 1.0;
 		c.fill = GridBagConstraints.BOTH;
 		JScrollPane editorPane = new JScrollPane();
 		editorPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -80,16 +81,18 @@ public class GUI extends JFrame {
 		c.gridy = 3;
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0.0;
+		c.weightx = 0.0;
 		panel.add(new JLabel("Console Output"), c);
 		
 		c.gridy = 4;
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0.3;
+		c.weightx = 1.0;
 		JScrollPane consolePane = new JScrollPane();
 		d_console = new Console();
 		d_console.setFont(new Font("Monospaced", Font.PLAIN, 11));
-		d_console.setColumns(80);
-		d_console.setRows(15);
 		d_console.setEditable(false);
 		consolePane.setViewportView(d_console);
 		panel.add(consolePane, c);
@@ -101,11 +104,9 @@ public class GUI extends JFrame {
 		} catch (IOException e) {
 			showError(e, "Error Initializing Console");
 		}
-		
-		add(panel, BorderLayout.CENTER);
 	}
 
-	private void showError(IOException e, String title) {
+	private void showError(Exception e, String title) {
 		JOptionPane.showMessageDialog(this, title + " \n" + e.getMessage(),
 				title, JOptionPane.ERROR_MESSAGE);
 	}
@@ -147,11 +148,12 @@ public class GUI extends JFrame {
 		String text = d_editorArea.getText();
 		LuaProver prover = new LuaProver();
 		prover.doStream(new ByteArrayInputStream(text.getBytes()), "EditorContents");
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while (!d_console.streamsFlushed()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				showError(e);
+			}
 		}
 		System.err.println("\n  ============================= Run completed =============================\n");
 	}
@@ -278,7 +280,7 @@ public class GUI extends JFrame {
 		updateEnabledMenuItems();
 	}
 
-	private void showError(IOException e) {
+	private void showError(Exception e) {
 		showError(e, "Error");
 	}
 
@@ -329,7 +331,8 @@ public class GUI extends JFrame {
 		JFrame window = new GUI();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.pack();
-		//window.setMinimumSize(new Dimension(200, 300));
+		window.setMinimumSize(new Dimension(200, 300));
+		window.setSize(new Dimension(550, 700));
 		window.setVisible(true);
 	}
 }

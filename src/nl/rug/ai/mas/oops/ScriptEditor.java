@@ -67,8 +67,8 @@ public class ScriptEditor {
 	private static JTextArea createEditor() {
 		JTextArea editorArea = new JTextArea();
 		editorArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
-		editorArea.setColumns(80);
-		editorArea.setRows(25);
+		//editorArea.setColumns(80);
+		//editorArea.setRows(25);
 		editorArea.setLineWrap(true);
 		editorArea.setWrapStyleWord(true);
 		return editorArea;
