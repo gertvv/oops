@@ -1,7 +1,32 @@
 \section{Technical description}
 
-\begin{itemize}
-\item{Proof system used + sound/complete + complexity}
-\item{Implementation}
-\item{Parser / language}
-\end{itemize}
+In this section, we will first give a brief description of the tableaux method
+used in \oops\ and summarize the formal properties (soundness, completeness,
+complexity) of the system. This is followed by a description of how the
+tableaux system is implemented in Java. Finally, we describe the input language
+for modal formulas that is provided by \oops.
+
+\subsection{\oops\ tableaux}
+
+The \oops\ tableaux system for $S5_n$ is a Java \citep{gosling2005}
+implementation of the proof system {\bf ELtap} \citep{deboer2006}.  {\bf
+ELtap}, in turn, draws on \citet{fitting1999} and \citet{beckert1997}.
+\citet{halpern1992} provide a good review of tableaux methods for modal logics.
+
+FIXME: description/explanation of tableaux, specific rules used by \oops.
+
+The proof system used by \oops\ has been shown to be both sound and complete
+\citep{valkenhoef2008}.  Furthermore, in the same work, the implementation was
+shown to correspond to the formal description of the proof method.
+Unfortunately, this work also shows that the algorithm used by \oops\ is in
+{\sc EXPTIME}, whereas satisfiability for $S5_n$ is known to be {\sc PSPACE}
+complete \citep{halpern1992}.
+However, we believe that for educational purposes the functionality  offered
+by \oops\ (see Section~\ref{sec:features}) easily makes up for this
+shortcoming. Moreover, the implementation of these features does not depend on
+the specific proof rules used. Thus, as future work, the current algorithm may
+be replaced by one that is in {\sc PSPACE}.
+
+\subsection{Implementation}
+
+\subsection{Input language}

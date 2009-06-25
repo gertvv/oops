@@ -6,10 +6,12 @@
 \usepackage[sort]{natbib}
 \bibliographystyle{elsart-harv}
 
+\newcommand{\oops}{\texttt{OOPS}}
+
 \begin{document}
 
 \begin{frontmatter}
-\title{OOPS: Title Here}
+\title{\oops: Title Here}
 
 \author[gert]{Gert van Valkenhoef\corauthref{cor}}
 \corauth[cor]{Corresponding author.}
@@ -43,5 +45,7 @@ keyword1 \sep $\dots$ \sep keywordN
 \input{examples}
 
 \input{discussion}
+
+\bibliography{ref}
 
 \end{document}
