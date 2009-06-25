@@ -126,14 +126,14 @@ public class GUI extends JFrame {
 	private JMenu buildRunMenu() {
 		JMenu runMenu = new JMenu("Run");
 		
-		JMenuItem runItem = buildMenuItem("Run", 'R', KeyEvent.VK_R, false);
+		JMenuItem runItem = buildMenuItem("Execute", 'E', KeyEvent.VK_E, false);
 		runItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				runEditorContents();
 			}
 		});
 		runMenu.add(runItem);
-		JMenuItem clearItem = buildMenuItem("Clear console", 'C', KeyEvent.VK_R, true);
+		JMenuItem clearItem = buildMenuItem("Clear console", 'C', KeyEvent.VK_E, true);
 		clearItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				clearConsole();
@@ -210,7 +210,7 @@ public class GUI extends JFrame {
 		fileMenu.addSeparator();
 		
 		// Refresh file (reload from file system)
-		JMenuItem refreshItem = buildMenuItem("Refresh", 'R', KeyEvent.VK_F5, false);
+		JMenuItem refreshItem = buildMenuItem("Refresh", 'R', KeyEvent.VK_R, false);
 		refreshItem.setEnabled(false);
 		refreshItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
