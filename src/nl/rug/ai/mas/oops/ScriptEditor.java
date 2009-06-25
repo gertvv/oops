@@ -42,8 +42,9 @@ public class ScriptEditor {
 		BufferedReader r = new BufferedReader(new FileReader(d_file));
 		StringBuffer sb = new StringBuffer(1024);
 		char[] chars = new char[1024];
-		while (r.read(chars) > -1) {
-			sb.append(String.valueOf(chars));
+		int read = 0;
+		while ((read = r.read(chars)) > -1) {
+			sb.append(String.valueOf(chars, 0, read));
 		}
 		r.close();
 		
@@ -60,7 +61,7 @@ public class ScriptEditor {
 		}
 		
 		BufferedWriter w = new BufferedWriter(new FileWriter(d_file));
-		w.write(d_area.getText().replace("\0", ""));
+		w.write(d_area.getText());
 		w.close();
 	}
 	
