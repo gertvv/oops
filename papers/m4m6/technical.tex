@@ -12,8 +12,44 @@ The \oops\ tableaux system for $S5_n$ is a Java \citep{gosling2005}
 implementation of the proof system {\bf ELtap} \citep{deboer2006}.  {\bf
 ELtap}, in turn, draws on \citet{fitting1999} and \citet{beckert1997}.
 \citet{halpern1992} provide a good review of tableaux methods for modal logics.
+Here, we summarize how tableaux are formalized in \oops. For a complete
+description, see \citet{valkenhoef2008}.
+
+When we construct a tableau, we do so with the aim of creating a Kripke model
+in which a formula $\varphi$ is satisfied. This is done by assuming $\varphi$
+is true and then systematically working out the implications of this
+assumption. Specifically, \oops\ generates a collection of branches that each
+represent alternative ways of working out these implications. A {\em branch}
+$B$ consists of a number of nodes. A {\em node} $\gamma$ is a combination of a
+{\em formula} $\psi$ and a {\em label} $\sigma$. A label is systematically
+chosen name for a world in the Kripke model that is being constructed. Branches
+are created and expanded by the application of {\em rules} to existing nodes on
+a branch. 
+
+FIXME: explain rules?
+
+A branch $B$ is {\em closed} if there is a label $\sigma$ and a formula
+$\psi$, such that both $(\sigma, \psi) \in B$ and $(\sigma, \neg \psi)
+\in B$. A branch $B$ is {\em open} if it is not closed and no more rules can be
+applied to it. Thus, an open branch corresponds to a successful attempt to
+satisfy $\varphi$, whereas a closed branch corresponds to a failed attempt to
+satisfy $\varphi$. A tableau for $\varphi$ is closed if all branches are
+closed, otherwise it is open. The appropriateness of a tableau system is
+determined by the following properties:
+\begin{description}
+\item[Soundness] If the tableau for $\varphi$ is open, $\varphi$ is satisfiable.
+\item[Completeness] If the tableau for $\varphi$ is closed, $\varphi$ is not
+satisfiable.
+\end{description}
+
+For an open branch $B$, the labels determine the set of worlds and the
+accessibility relations in the corresponding Kripke model. For each label, the
+set of formulas given for that label determines the valuation in the
+corresponding world in the Kripke model.
 
 FIXME: description/explanation of tableaux, specific rules used by \oops.
+
+\input{rules.tex}
 
 The proof system used by \oops\ has been shown to be both sound and complete
 \citep{valkenhoef2008}.  Furthermore, in the same work, the implementation was
