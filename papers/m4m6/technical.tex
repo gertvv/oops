@@ -26,14 +26,35 @@ chosen name for a world in the Kripke model that is being constructed. Branches
 are created and expanded by the application of {\em rules} to existing nodes on
 a branch. 
 
-FIXME: explain rules?
+A {\em rule} $R$ consists of
+\begin{itemize}
+\item A precondition $\mathrm{pre}(R)$, written above a horizontal bar, which
+is a node containing variables;
+\item A postcondition $\mathrm{post}(R)$, written below the horizontal bar,
+which is a list of nodes containing variables. There are two types of
+postconditions:
+\begin{itemize}
+\item Linear: add nodes to the current branch, written top-to-bottom;
+\item Branching: create a number of new branches, written left-to-right, separated by a vertical bar.
+\end{itemize}
+\item Zero or more constraints, which restrict the values variables may take.
+\end{itemize}
+The rules employed by \oops\ are given in Table~\ref{tab:rules}. A rule $R$ is
+applicable to a branch $B$, if there is a node $\gamma \in B$ that matches
+$\mathrm{pre}(R)$, such that no constraints are violated and $R$ has not
+previously been applied to $\gamma$.
 
 A branch $B$ is {\em closed} if there is a label $\sigma$ and a formula
 $\psi$, such that both $(\sigma, \psi) \in B$ and $(\sigma, \neg \psi)
 \in B$. A branch $B$ is {\em open} if it is not closed and no more rules can be
 applied to it. Thus, an open branch corresponds to a successful attempt to
 satisfy $\varphi$, whereas a closed branch corresponds to a failed attempt to
-satisfy $\varphi$. A tableau for $\varphi$ is closed if all branches are
+satisfy $\varphi$. 
+Specifically, for an open branch $B$, the labels determine the set of worlds
+and the accessibility relations in the corresponding Kripke model. For each
+label, the set of formulas given for that label determines the valuation in the
+corresponding world in the Kripke model.
+A tableau for $\varphi$ is closed if all branches are
 closed, otherwise it is open. The appropriateness of a tableau system is
 determined by the following properties:
 \begin{description}
@@ -42,12 +63,6 @@ determined by the following properties:
 satisfiable.
 \end{description}
 
-For an open branch $B$, the labels determine the set of worlds and the
-accessibility relations in the corresponding Kripke model. For each label, the
-set of formulas given for that label determines the valuation in the
-corresponding world in the Kripke model.
-
-FIXME: description/explanation of tableaux, specific rules used by \oops.
 
 \input{rules.tex}
 
