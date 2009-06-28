@@ -26,6 +26,8 @@ chosen name for a world in the Kripke model that is being constructed. Branches
 are created and expanded by the application of {\em rules} to existing nodes on
 a branch. 
 
+\input{rules.tex}
+
 A {\em rule} $R$ consists of
 \begin{itemize}
 \item A precondition $\mathrm{pre}(R)$, written above a horizontal bar, which
@@ -64,8 +66,6 @@ satisfiable.
 \end{description}
 
 
-\input{rules.tex}
-
 The proof system used by \oops\ has been shown to be both sound and complete
 \citep{valkenhoef2008}.  Furthermore, in the same work, the implementation was
 shown to correspond to the formal description of the proof method.
@@ -80,4 +80,63 @@ be replaced by one that is in {\sc PSPACE}.
 
 \subsection{Implementation}
 
+Above, we have defined what constitutes a tableau and how a tableau can be used
+to determine the satisfiability of a formula. In Table~\ref{tab:rules}, the
+rules that are used to generate the tableau are given. Now, in order to
+generate tableaux, we also need an algorithm that correctly and exhaustively
+applies the rules.
+
+In order to ensure the exhaustive, but non-redundant application of rules,
+\oops\ employs two data structures: the {\em match queue} and the {\em
+necessities list}.
+Whenever a node is added to the branch, we attempt to match every possible
+rule to that node. The resulting matches are placed on the match queue. Now,
+the Basic Necessity rules (Table~\ref{tab:rules}) pose a specific problem:
+the postcondition may apply to labels that have not been generated yet. To
+address this, partially matched postconditions of these rules are stored in
+the necessities list. Whenever a new label is generated, any matches from this
+list to the new label are added to the match queue.
+These data structures are specific to a branch, i.e., when
+a new branch is created, it receives a copy of the current match queue and
+necessities list.
+
+In fact, the match queue is a priority queue and rules can be given a numeric
+priority value, that specifies the order in which matches are applied to the
+tableau. In this way, we may define a strategy to close branches as soon as
+possible. For example, it is preferable to execute any non-branching purely
+propositional rules before attempting to execute any other rules.
+
+The rules are implemented in such a way that they are easily replaceable by a
+different ruleset. Moreover, the tableau generator has been instrumented with
+a number of hooks that allow the generation process to be monitored. This
+allows the decoupled implementation of such features as tableau visualization
+and counter-model construction (see Section~\ref{sec:features}).
+
 \subsection{Input language}
+
+\oops\ employs an input language for formulas implemented using the SableCC
+\citep{gagnon1998} compiler generator for Java. Propositions are input as
+strings of characters and digits, starting with a lower case character.  Agent
+identities are represented by natural numbers. \oops\ uses the widely
+understood infix notation for logical formulas, where the different
+connectives are input as shown in Table~\ref{tab:input}.
+
+\begin{table}
+\label{tab:input}
+\begin{tabular}{cc}
+Logical Operator & OOPS Symbol \\
+$\neg$ & \tt{$\sim$} \\ 
+$\wedge$ & \tt{\&} \\
+$\vee$ & \tt{|} \\
+$\rightarrow$ & \tt{>} \\
+$\leftrightarrow$ & \tt{=} \\
+$\Box_i$ & \tt{\#\_i}  \\
+$\Diamond_i$ & \tt{\%\_i}  \\
+\end{tabular}
+\caption{\oops\ Connectives}
+\end{table}
+
+In addition to this, the language also allows the input of variables as
+placeholders for either (sub-)formulas or agent identities. This is useful in
+the definition of rules and allows one to create template formulas that can
+be instantiated in different ways, by substitution.
