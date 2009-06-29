@@ -19,6 +19,10 @@
 
 package nl.rug.ai.mas.oops;
 
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
+
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.render.TableauObserverSwing;
@@ -32,6 +36,9 @@ import javax.swing.JOptionPane;
 import nl.rug.ai.mas.oops.model.World;
 import nl.rug.ai.mas.oops.model.Arrow;
 import org.jgraph.JGraph;
+import org.jgraph.graph.CellView;
+import org.jgraph.graph.GraphCell;
+import org.jgraph.graph.GraphConstants;
 import org.jgrapht.ext.JGraphModelAdapter;
 
 /**
@@ -82,15 +89,33 @@ public class ObserveProver {
 			JOptionPane.showMessageDialog(null, "No model was constructed");
 			return;
 		}
+		
 		JGraphModelAdapter<World, Arrow> graphModel =
 			new JGraphModelAdapter<World, Arrow>(
 				model.constructMultigraph());
 		JGraph jgraph = new JGraph(graphModel);
+		
+		highlightMainWorld(model, graphModel, jgraph);
+		
 		JFrame frame = new JFrame("Model Observer");
 		frame.add(jgraph);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.pack();
 		frame.setSize(800, 600);
 		frame.setVisible(true);
+	}
+
+	private static void highlightMainWorld(KripkeModel model,
+			JGraphModelAdapter<World, Arrow> graphModel, JGraph jgraph) {
+		if (model.getMainWorld() != null) {
+			Map<GraphCell, Map<Object, Object>> nested =
+				new HashMap<GraphCell, Map<Object, Object>>();
+			Map<Object, Object> attributeMap = new HashMap<Object, Object>();
+			GraphConstants.setBackground(attributeMap, Color.BLUE);
+			nested.put(
+					graphModel.getVertexCell(model.getMainWorld()),
+					attributeMap);
+			jgraph.getGraphLayoutCache().edit(nested);
+		}
 	}
 }

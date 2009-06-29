@@ -133,10 +133,7 @@ public class Tableau {
 
 		public Worker(Formula f) {
 			d_node  = new Node(
-				new LabelInstance(
-					new NullLabel(),
-					new WorldInstance(null),
-					new NullAgent()),
+				createTopLabel(),
 				f);
 			d_branch = new Branch(null);
 			d_origin = null;
@@ -280,5 +277,12 @@ public class Tableau {
 
 	public void clearObservers() {
 		d_observers.clear();
+	}
+
+	public static Label createTopLabel() {
+		return new LabelInstance(
+			new NullLabel(),
+			new WorldInstance(null),
+			new NullAgent());
 	}
 }

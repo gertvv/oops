@@ -19,21 +19,21 @@
 
 package nl.rug.ai.mas.oops.model;
 
-import java.util.Set;
 import java.util.HashMap;
+import java.util.Set;
 
-import nl.rug.ai.mas.oops.tableau.Tableau;
-import nl.rug.ai.mas.oops.tableau.TableauObserver;
-import nl.rug.ai.mas.oops.tableau.TableauEvent;
-import nl.rug.ai.mas.oops.tableau.BranchOpenEvent;
+import nl.rug.ai.mas.oops.formula.AgentId;
+import nl.rug.ai.mas.oops.formula.Formula;
+import nl.rug.ai.mas.oops.formula.Negation;
+import nl.rug.ai.mas.oops.formula.Proposition;
 import nl.rug.ai.mas.oops.tableau.Branch;
+import nl.rug.ai.mas.oops.tableau.BranchOpenEvent;
 import nl.rug.ai.mas.oops.tableau.Label;
 import nl.rug.ai.mas.oops.tableau.LabelInstance;
+import nl.rug.ai.mas.oops.tableau.Tableau;
+import nl.rug.ai.mas.oops.tableau.TableauEvent;
+import nl.rug.ai.mas.oops.tableau.TableauObserver;
 import nl.rug.ai.mas.oops.tableau.TableauStartedEvent;
-import nl.rug.ai.mas.oops.formula.Formula;
-import nl.rug.ai.mas.oops.formula.AgentId;
-import nl.rug.ai.mas.oops.formula.Proposition;
-import nl.rug.ai.mas.oops.formula.Negation;
 
 public class ModelConstructingObserver implements TableauObserver {
 	private KripkeModel d_model;
@@ -74,6 +74,9 @@ public class ModelConstructingObserver implements TableauObserver {
 				World w = new World(n, v);
 				labelMap.put(l, w);
 				d_model.addWorld(w);
+				if (l.match(Tableau.createTopLabel()) != null) {
+					d_model.setMainWorld(w);
+				}
 				++i;
 			}
 
