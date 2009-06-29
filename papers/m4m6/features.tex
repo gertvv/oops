@@ -1,38 +1,41 @@
 \section{Functionality}
 \label{sec:features}
 
-For each feature:
-\begin{itemize}
-\item{Description}
-\item{Implementation}
-\item{Why is it useful?}
-\item{Minimal example}
-\end{itemize}
+In this section, we highlight a number of features of \oops\ that we believe
+are important in an educational setting. Even though other systems may share
+some of \oops' features, there is no other system that possesses all of them.
 
 \subsection{Integrated Scripting}
 
 In order for a theorem prover to be truly useful, it is not sufficient to be
-able to answer 'true' or 'false' given an input formula. Rather, our
+able to answer `true' or `false' given an input formula. Rather, our
 experience has shown that students will need to formulate and extend theories.
 Doing this by hand by editing a single large formula quickly becomes
 unmanageable.
 Moreover, we want to have a powerful toolbox to assist us in the formulation
-of larger theories, often including general programming constructs such as
+of larger theories.
+This toolbox should include general programming constructs such as
 loops and conditionals. Some other tools, such as the LWB, provide custom
 scripting languages for this purpose. The advantage of this approach is that
 the language can be tailored specifically to common usage of the prover. The
 disadvantage, however, is that developing a custom language is costly.
 Therefore, that the resulting language is likely to be lacking in expressive
-power. Furthermore, the user has to learn a language that has no application
-outside of the prover and for which support may be limited.
+power.
+Furthermore, the user has to learn a language that has no application outside
+of the prover and for which support (i.e., documentation, user community and
+bug fixes) may be limited.
 
 To address these concerns, \oops\ integrates the
 luaj\footnote{http://luaj.sourceforge.net/} pure Java implementation of the
 Lua\footnote{http://www.lua.org/} general-purpose scripting language. Lua has
 been designed specifically to be an embeddable language and is widely used
 both as an extension language and as a front-end for libraries written in
-other languages. Currently, most of \oops' functionality is available from
-Lua and more extensive support is being worked on.
+other languages.
+Thus, Lua enables us to define an environment that is tailored to the needs of
+theorem proving, while avoiding the concerns associated with implementing a
+custom language.
+Currently, most of \oops' functionality is available from Lua and more
+extensive support is being worked on.
 
 FIXME: explain specifics, give example
 
@@ -57,8 +60,8 @@ output.
 Though minimal, the GUI greatly enhances the convenience with which \oops\ can
 be used. Firstly, script and output are shown in one place, allowing for easy
 cross-referencing. Second, scripts are run through a single key combination
-(or invocation from the menu). Finally, load, save and refresh functionality
-gives the user the freedom to use the integrated editor or an external editor
+(or invocation from the menu). Finally, load, save and refresh functionalities
+give the user the freedom to use the integrated editor or an external editor
 of choice with equal convenience.
 
 \subsection{Free and Convenient Distribution}
@@ -66,20 +69,25 @@ of choice with equal convenience.
 As we noted in Section~\ref{sec:introduction}, most current proof tools have
 problems related to either platform dependence, aging dependencies, lack of
 maintenance or difficult installation procedures. \oops\ addresses these
-problems in several ways. First, \oops\ is implemented in pure Java, which
-means that \oops\ will run on any operating system for which a Java virtual
-machine is available. This is true for most operating systems. Second, \oops\
-is distributed as a ZIP file that includes all dependencies. No installation
-is needed, one simply extracts the ZIP file and double-clicks the resulting
-{\texttt oops.jar} file. Hence, \oops\ is platform independent and easy to
-run, having no dependencies apart from the Java VM and what is provided in the
-\oops\ distribution.
+problems in several ways.
+First, \oops\ is implemented in pure Java, which means that \oops\ will run on
+any operating system for which a Java virtual machine is available. This is
+true for most operating systems available today.
+Second, \oops\ is distributed as a ZIP file that includes all dependencies.
+No installation is needed, one simply extracts the ZIP file and double-clicks
+the resulting {\texttt oops.jar} file.
+Hence, \oops\ is platform independent and easy to run, having no dependencies
+apart from the Java VM and what is provided in the \oops\ distribution.
 
 The concern of continued maintenance is harder to address. To ensure that
 \oops\ can be used and extended in the future, by anyone who wishes to do so,
 we provide the full source code\footnote{http://github.com/gertvv/oops} under
 the GNU General Public License (GPL). It is our hope that others will
 contribute extensions to \oops.
+
+FIXME: how does the open source policy adopted by us compare to other projects
+in the field?
+
 
 \subsection{Visualization of Tableaux}
 
@@ -90,8 +98,10 @@ process. Moreover, inspecting generated tableaux may enhance understanding of
 tableau methods and the semantics of modal logics in general.
 To support this, oops includes a visualization module for labeled tableaux.
 Figure~\ref{fig:tableauVis} shows an example of such a visualization. 
-The tableau is drawn as a tree. In the tree, nodes are numbered (left-most on
-each line) in the order in which they are added. After the node number, the
+The tableau is drawn as a tree.
+In the tree, nodes are numbered  in the order in which they are added
+(left-most on each line).
+After the node number, the
 label is shown, followed by the formula. Finally, the rule that resulted in
 the creation of the specific node and the node number to which the rule
 matched are given.
@@ -109,7 +119,8 @@ numbers at which two contradicting formulas are found.}
 \end{figure}
 
 The visualization is implemented as an observer on the tableau generator,
-using the provided hooks (Section~FIXME). The Lua code to generate
+using the provided hooks (Section~\ref{sec:implementation}).
+The Lua code to generate
 Figure~\ref{fig:tableauVis} is as follows (note that the command-line output
 will be \lstinline!true!):
 \begin{lstlisting}
@@ -121,11 +132,11 @@ print(oops.Theory():provable(
 \subsection{Visualization of Counter Models}
 
 In addition to being able to view the tableau, it may be helpful to be able to
-inspect the model that corresponds to a tableau. In case the tableau is open,
-the generated counter model will generally be more insightful, as it does not
-contain any redundant information. As is the case for tableau visualization,
-visualization of counter models may enhance understanding of the semantics of
-modal logics.
+inspect the model that the tableau corresponds to.
+In case the tableau is open, the generated model will generally be more
+insightful, as it does not contain any redundant information.
+As is the case for tableau visualization, visualization of (counter-)models may
+enhance understanding of the semantics of modal logics.
 
 \begin{figure}
 \centering
@@ -142,9 +153,12 @@ print(oops.Theory():provable("#_1 p | #_1 ~p"))
 oops.showModel() 
 \end{lstlisting}
 As the reader will notice, the invocation of the model visualization is done
-differently from the tableau visualization. This is done because we treat
-models as entities in their own right. In fact, the call
-\lstinline!oops.getModel()!  can be used to retreive the most recently
-constructed model, if the last invocation of the tableau generator resulted in
-an open tableau. However, further programmatic manipulation and inspection of
-models is future work.
+differently from the tableau visualization.
+This is because we treat models as entities in their own right.
+In fact, the call \lstinline!oops.getModel()!  can be used to retreive the most
+recently constructed model, if the last invocation of the tableau generator
+resulted in an open tableau.
+The Lua \lstinline!print! function will output a textual representation of the
+model.
+However, further programmatic manipulation and inspection of models is future
+work.

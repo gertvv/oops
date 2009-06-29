@@ -2,7 +2,7 @@
 
 In this section, we will first give a brief description of the tableaux method
 used in \oops\ and summarize the formal properties (soundness, completeness,
-complexity) of the system. This is followed by a description of how the
+complexity) of the system. Then, we explain how the
 tableaux system is implemented in Java. Finally, we describe the input language
 for modal formulas that is provided by \oops.
 
@@ -46,6 +46,8 @@ applicable to a branch $B$, if there is a node $\gamma \in B$ that matches
 $\mathrm{pre}(R)$, such that no constraints are violated and $R$ has not
 previously been applied to $\gamma$.
 
+FIXME: say something about creating labels/matching the post-condition.
+
 A branch $B$ is {\em closed} if there is a label $\sigma$ and a formula
 $\psi$, such that both $(\sigma, \psi) \in B$ and $(\sigma, \neg \psi)
 \in B$. A branch $B$ is {\em open} if it is not closed and no more rules can be
@@ -64,10 +66,9 @@ determined by the following properties:
 \item[Completeness] If the tableau for $\varphi$ is closed, $\varphi$ is not
 satisfiable.
 \end{description}
-
-
 The proof system used by \oops\ has been shown to be both sound and complete
-\citep{valkenhoef2008}.  Furthermore, in the same work, the implementation was
+\citep{valkenhoef2008}.  Furthermore, in the same work, the implementation
+(Section~\ref{sec:implementation}) was
 shown to correspond to the formal description of the proof method.
 Unfortunately, this work also shows that the algorithm used by \oops\ is in
 {\sc exptime}, whereas satisfiability for $S5_n$ is known to be {\sc pspace}
@@ -89,7 +90,8 @@ applies the rules.
 In order to ensure the exhaustive, but non-redundant application of rules,
 \oops\ employs two data structures: the {\em match queue} and the {\em
 necessities list}.
-Whenever a node is added to the branch, we attempt to match every possible
+Whenever a node is added to the current branch, we attempt to match every
+possible
 rule to that node. The resulting matches are placed on the match queue. Now,
 the Basic Necessity rules (Table~\ref{tab:rules}) pose a specific problem:
 the postcondition may apply to labels that have not been generated yet. To
@@ -100,11 +102,12 @@ These data structures are specific to a branch, i.e., when
 a new branch is created, it receives a copy of the current match queue and
 necessities list.
 
-In fact, the match queue is a priority queue and rules can be given a numeric
+For reasons of efficiency,
+the match queue is a priority queue and rules can be given a numeric
 priority value, that specifies the order in which matches are applied to the
 tableau. In this way, we may define a strategy to close branches as soon as
-possible. For example, it is preferable to execute any non-branching purely
-propositional rules before attempting to execute any other rules.
+possible. For example, it is preferable to execute all possible non-branching
+purely propositional rules before attempting to execute any other rules.
 
 The rules are implemented in such a way that they are easily replaceable by a
 different ruleset. Moreover, the tableau generator has been instrumented with
@@ -122,21 +125,20 @@ understood infix notation for logical formulas, where the different
 connectives are input as shown in Table~\ref{tab:input}.
 
 \begin{table}
-\label{tab:input}
-\begin{tabular}{cc}
-Logical Operator & OOPS Symbol \\
-$\neg$ & \tt{$\sim$} \\ 
-$\wedge$ & \tt{\&} \\
-$\vee$ & \tt{|} \\
-$\rightarrow$ & \tt{>} \\
-$\leftrightarrow$ & \tt{=} \\
-$\Box_i$ & \tt{\#\_i}  \\
-$\Diamond_i$ & \tt{\%\_i}  \\
+\centering
+\begin{tabular}{lccccccc}
+Connective & $\neg$ & $\wedge$ & $\vee$ & $\rightarrow$ &
+$\leftrightarrow$ & $\Box_i$ & $\Diamond_i$ \\
+\oops\ Symbol & \lstinline!~! & \lstinline!&! & \lstinline!|! & \lstinline!>!
+& \lstinline!=! & \lstinline!#_i! & \lstinline!%_i! \\
 \end{tabular}
 \caption{\oops\ Connectives}
+\label{tab:input}
 \end{table}
 
-In addition to this, the language also allows the input of variables as
+In addition to this, the language allows the input of variables as
 placeholders for either (sub-)formulas or agent identities. This is useful in
 the definition of rules and allows one to create template formulas that can
 be instantiated in different ways, by substitution.
+Variables are strings of characters and digits that start with an upper-case
+character.
