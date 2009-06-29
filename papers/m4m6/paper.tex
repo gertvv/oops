@@ -2,11 +2,14 @@
 %Use [reviewcopy] for double spacing:
 %\documentclass[reviewcopy]{elsart}
 
+\usepackage{amsmath,amssymb}
 \usepackage[english]{babel}
 \usepackage[sort]{natbib}
-\bibliographystyle{elsart-harv}
+\usepackage[pdftex]{graphicx}
+\bibliographystyle{../styles/elsart-harv}
 
 \newcommand{\oops}{\texttt{OOPS}}
+\newcommand{\code}[1]{\ensuremath{\ulcorner#1\urcorner}}
 
 \begin{document}
 
@@ -21,7 +24,7 @@
 \author[ai]{Rineke Verbrugge}
 \ead{rineke@ai.rug.nl}
 
-\address[gert]{Department of X}
+\address[gert]{Department of Business and ICT, University of Groningen, FIXME}
 
 \address[ai]{Department of Artificial Intelligence, University of Groningen,
 P.O. Box 407, 9700 AK, Groningen, The Netherlands}
