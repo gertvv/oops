@@ -112,9 +112,6 @@ The visualization is implemented as an observer on the tableau generator,
 using the provided hooks (Section~FIXME). The Lua code to generate
 Figure~\ref{fig:tableauVis} is as follows (note that the command-line output
 will be \lstinline!true!):
-
-\lstset{language=lua, basicstyle=\small, stringstyle=\upshape,
-stringstyle=\ttfamily, showstringspaces=false, tabsize=4}
 \begin{lstlisting}
 oops.attachTableauVisualizer()
 print(oops.Theory():provable(
