@@ -1,14 +1,14 @@
-\documentclass{elsart}
+\documentclass{elsarticle}
 %Use [reviewcopy] for double spacing:
 %\documentclass[reviewcopy]{elsart}
 
 \usepackage{amsmath,amssymb}
 \usepackage[english]{babel}
-\usepackage[sort]{natbib}
+%\usepackage[sort]{natbib}
 \usepackage{listings}
-\usepackage[pdftex]{graphicx}
+%\usepackage[pdftex]{graphicx}
 \usepackage{color}
-\bibliographystyle{../styles/elsart-harv}
+\bibliographystyle{../styles/elsarticle-harv}
 
 \newcommand{\oops}{\texttt{OOPS}}
 \newcommand{\code}[1]{\ensuremath{\ulcorner#1\urcorner}}
@@ -23,18 +23,18 @@ stringstyle=\ttfamily, showstringspaces=false, tabsize=4}
 \begin{frontmatter}
 \title{\oops: Title Here}
 
-\author[gert]{Gert van Valkenhoef\corauthref{cor}}
-\corauth[cor]{Corresponding author.}
+\author[gert]{Gert van Valkenhoef\corref{cor}}
+\cortext[cor]{Corresponding author.}
 \ead{g.h.m.van.valkenhoef@rug.nl}
 \author[ai]{Elske van der Vaart}
 \ead{elskevdv@ai.rug.nl}
 \author[ai]{Rineke Verbrugge}
 \ead{rineke@ai.rug.nl}
 
-\address[gert]{Department of Business and ICT, University of Groningen,
+\address[gert]{Department of Business and ICT, University of Groningen,\\
 P.O. Box 800, 9700 AV, Groningen, The Netherlands}
 
-\address[ai]{Department of Artificial Intelligence, University of Groningen,
+\address[ai]{Department of Artificial Intelligence, University of Groningen,\\
 P.O. Box 407, 9700 AK, Groningen, The Netherlands}
 
 \begin{abstract}
