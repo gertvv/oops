@@ -34,13 +34,59 @@ other languages.
 Thus, Lua enables us to define an environment that is tailored to the needs of
 theorem proving, while avoiding the concerns associated with implementing a
 custom language.
+See \citet{ierusalimschy2006} for a good overview of the Lua programming
+language.
 Currently, most of \oops' functionality is available from Lua and more
 extensive support is being worked on.
 
-FIXME: explain specifics, give example
+The above outlines our reasons for choosing to integrate \oops\ with Lua. Now,
+we briefly outline how \oops\ can be used through its Lua interface.
+All \oops\ methods are encapsulated in the \lstinline!oops! namespace.
+The basis for interaction with \oops\ through Lua is the {\em theory} concept.
+A theory is, simply put, a collection of formulas. The following example code
+creates a theory and adds a formula to that theory:
+\begin{lstlisting}
+th = oops.Theory()
+th:add("#_1 p")
+\end{lstlisting}
+We define a number of operations on theories: checking of consistency,
+provability of a formula within a theory and satisfiability of a formula
+within a theory:
+\begin{lstlisting}
+print(th:consistent())           -- true
+print(th:provable("#_2 #_1 p"))  -- false
+print(th:satisfiable("~#_2 p"))  -- true
+\end{lstlisting}
+where \lstinline!--! starts a comment, here used to indicate the output
+produced by the \lstinline!print! statement. 
+Now, to aid in the construction of theories, we allow the explicit creation of
+formulas, on which we have defined the operation of substitution. For example:
+\begin{lstlisting}
+th = oops.Theory()
+f = oops.Formula("#_A V")
+for i=1,4,1 do
+        th:add(f:substitute({V = "p | q"}, {A = i}))
+end
+print(th)
+\end{lstlisting}
+which expresses that each of the agents $1, 2, 3$ and $4$ `knows' $(p \vee
+q)$. The resulting output is:
+\begin{lstlisting}
+[#_4 (p | q), #_3 (p | q), #_1 (p | q), #_2 (p | q)]
+\end{lstlisting}
+
+This completes our description of how \oops\ is called from Lua. It must be
+noted that Lua is a very powerful and complete language and as a matter of
+course, much more can be achieved than is suggested by the above examples. For
+example, command-line interaction with the user is readily available through
+Lua.
 
 \subsection{Graphical User Interface}
 
+As is discussed above, Lua provides a convenient scripting interface to \oops.
+However, modern computer users do not expect to run applications from the
+command-line. Even if they are used to this concept, it is not always the most
+convenient method of interaction. Therefore,
 \oops\ includes a very simple Graphical User Interface (GUI), in which scripts
 can be displayed, edited and executed (Figure~\ref{fig:gui}). In addition,
 scripts can be loaded from and saved to a file. For those who prefer to use an

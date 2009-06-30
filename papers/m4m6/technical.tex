@@ -1,4 +1,5 @@
 \section{Technical description}
+\label{sec:technical}
 
 In this section, we will first give a brief description of the tableaux method
 used in \oops\ and summarize the formal properties (soundness, completeness,
@@ -7,6 +8,7 @@ tableaux system is implemented in Java. Finally, we describe the input language
 for modal formulas that is provided by \oops.
 
 \subsection{\oops\ tableaux}
+\label{sec:tableaux}
 
 The \oops\ tableaux system for $S5_n$ is a Java \citep{gosling2005}
 implementation of the proof system {\bf ELtap} \citep{deboer2006}.  {\bf
@@ -80,6 +82,7 @@ the specific proof rules used. Thus, as future work, the current algorithm may
 be replaced by one that is in {\sc pspace}.
 
 \subsection{Implementation}
+\label{sec:implementation}
 
 Above, we have defined what constitutes a tableau and how a tableau can be used
 to determine the satisfiability of a formula. In Table~\ref{tab:rules}, the
@@ -116,6 +119,7 @@ allows the decoupled implementation of such features as tableau visualization
 and counter-model construction (see Section~\ref{sec:features}).
 
 \subsection{Input language}
+\label{sec:language}
 
 \oops\ employs an input language for formulas implemented using the SableCC
 \citep{gagnon1998} compiler generator for Java. Propositions are input as
