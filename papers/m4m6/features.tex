@@ -50,7 +50,7 @@ file system. The application consists of two panels: the top panel shows the
 script that is currently being worked on and the bottom panel shows the
 output.
 
-\begin{figure}
+\begin{figure}[p]
 \centering
 \includegraphics[scale=.55]{images/gui}
 \caption{The \oops\ Graphical User Interface.}
@@ -106,12 +106,12 @@ label is shown, followed by the formula. Finally, the rule that resulted in
 the creation of the specific node and the node number to which the rule
 matched are given.
 
-\begin{figure}
+\begin{figure}[p]
 \centering
 \includegraphics[scale=.55]{images/tableauVis}
 \caption{Visualization of the tableau that checks provability of $\varphi$, by
 attempting to satisfy $\neg \varphi$, where
-$\varphi = (\square_1 p \vee \square_1 \neg p) \to \square_1(p \vee \neg p)$.
+$\varphi = ((\square_1 p \vee \square_1 \neg p) \to \square_1(p \vee \neg p))$.
 In this case, the tableau is closed (i.e. $\varphi$ is provable), as indicated
 by the $= (m, n)$ under each branch, where $m$ and $n$ indicate the line
 numbers at which two contradicting formulas are found.}
@@ -138,10 +138,11 @@ insightful, as it does not contain any redundant information.
 As is the case for tableau visualization, visualization of (counter-)models may
 enhance understanding of the semantics of modal logics.
 
-\begin{figure}
+\begin{figure}[p]
 \centering
-FIXME
-\caption{FIXME}
+\includegraphics[scale=.55]{images/modelVis}
+\caption{Visualization of a counter-model for $\varphi = (\Box_1 p \vee \Box_1
+\neg p)$. The `main' world is indicated in blue.}
 \label{fig:modelVis}
 \end{figure}
 
