@@ -20,23 +20,23 @@
 package nl.rug.ai.mas.oops;
 
 import java.awt.Color;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
-
-import nl.rug.ai.mas.oops.formula.*;
-import nl.rug.ai.mas.oops.parser.Context;
-import nl.rug.ai.mas.oops.render.TableauObserverSwing;
-import nl.rug.ai.mas.oops.model.KripkeModel;
-import nl.rug.ai.mas.oops.model.S5nModel;
-import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import nl.rug.ai.mas.oops.model.World;
+import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.model.Arrow;
+import nl.rug.ai.mas.oops.model.KripkeModel;
+import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
+import nl.rug.ai.mas.oops.model.S5nModel;
+import nl.rug.ai.mas.oops.model.World;
+import nl.rug.ai.mas.oops.parser.Context;
+import nl.rug.ai.mas.oops.render.TableauObserverSwing;
+
 import org.jgraph.JGraph;
-import org.jgraph.graph.CellView;
 import org.jgraph.graph.GraphCell;
 import org.jgraph.graph.GraphConstants;
 import org.jgrapht.ext.JGraphModelAdapter;
@@ -96,6 +96,7 @@ public class ObserveProver {
 		JGraph jgraph = new JGraph(graphModel);
 		
 		highlightMainWorld(model, graphModel, jgraph);
+		layout(model, graphModel, jgraph);
 		
 		JFrame frame = new JFrame("Model Observer");
 		frame.add(jgraph);
@@ -117,5 +118,38 @@ public class ObserveProver {
 					attributeMap);
 			jgraph.getGraphLayoutCache().edit(nested);
 		}
+	}
+	
+	public static void layout(KripkeModel model,
+			JGraphModelAdapter<World, Arrow> graphModel,
+			JGraph graph) {
+		// Maximum width or height
+		double max = 0;
+		
+		for (World w : model.getWorlds()) {
+			Rectangle2D b = graph.getCellBounds(graphModel.getVertexCell(w));
+			max = Math.max(Math.max(b.getWidth(), b.getHeight()), max);
+		}
+		
+		// Compute Radius
+		int r = (int) Math.max(model.getWorlds().size()*max/Math.PI, 100);
+		// Compute Radial Step
+		double phi = 2*Math.PI/model.getWorlds().size();
+		
+		Map<GraphCell, Map<Object, Object>> nested =
+			new HashMap<GraphCell, Map<Object, Object>>();
+		int i = 0;
+		for (World w : model.getWorlds()) {
+			Rectangle2D b = graph.getCellBounds(graphModel.getVertexCell(w));
+			Rectangle2D bounds = (Rectangle2D)b.clone();
+			bounds.setRect(r+(int) (r*Math.sin(i*phi)),
+						r+(int) (r*Math.cos(i*phi)),
+						b.getWidth(), b.getHeight());
+			Map<Object, Object> attributeMap = new HashMap<Object, Object>();
+			GraphConstants.setBounds(attributeMap, bounds);
+			nested.put(graphModel.getVertexCell(w), attributeMap);
+			++i;
+		}
+		graph.getGraphLayoutCache().edit(nested);
 	}
 }
