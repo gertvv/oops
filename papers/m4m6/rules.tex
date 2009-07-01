@@ -1,201 +1,241 @@
 \begin{table}
 \begin{center}
-\begin{tabular}{cccc}
-&&$\neg\neg$ = & \\ 
-&&\begin{tabular} {lc}
-$\sigma$&$\neg\neg\varphi$\\
-\hline
-$\sigma$&$\varphi$
-\end{tabular} & 
+\begin{tabular}{ccc}
 
-\begin{tabular} {c}
-{\it Double Negation}\\{\it Rule}
-\end{tabular} \\  [14pt]
+%% Double Negation Rule
+\multirow{2}{*}{
+	\begin{tabular} {c}
+	{\it Double Negation}\\{\it Rule}
+	\end{tabular}
+}
+&
+	$\neg\neg$ =
+&
+	%Third cell empty
+\\ 
+	% First cell empty
+&
+	\begin{tabular} {lc}
+	$\sigma$&$\neg\neg\varphi$\\
+	\hline
+	$\sigma$&$\varphi$
+	\end{tabular}
+&
+	%Third cell empty
+\\[20pt]
 
-$\wedge_\wedge$ = & $\wedge_\vee$ = & $\wedge_\rightarrow$ = & \\
+%% Conjunctive Rules
+\multirow{2}{*}{
+	\begin{tabular} {c}
+	{\it Conjunctive}\\{\it Rules}
+	\end{tabular}
+}
+&
+	$\wedge_\wedge$ =
+&
+	$\wedge_\vee$ =
+\\
+	% First cell empty
+&
+	\begin{tabular} {lc}
+	$\sigma$&$\varphi\wedge\psi$\\
+	\hline
+	$\sigma$&$\varphi$\\
+	$\sigma$&$\psi$
+	\end{tabular}
+&
+	\begin{tabular} {lc}
+	$\sigma$&$\neg(\varphi\vee\psi)$\\
+	\hline
+	$\sigma$&$\neg\varphi$\\
+	$\sigma$&$\neg\psi$
+	\end{tabular}
+\\[20pt]
 
-\begin{tabular} {lc}
-$\sigma$&$\varphi\wedge\psi$\\
-\hline
-$\sigma$&$\varphi$\\
-$\sigma$&$\psi$
-\end{tabular} &
+%% Disjunctive rules
+\multirow{2}{*}{
+	\begin{tabular} {c}
+	{\it Disjunctive}\\{\it Rules}
+	\end{tabular}
+}
+&
+	$\vee_\wedge$ =
+&
+	$\vee_\vee$ = 
+\\
+	% First cell empty
+&
+	\begin{tabular} {lrlr}
+	\multicolumn{4}{c}{$\sigma\;\;\;\;\neg(\varphi\wedge\psi)$}\\
+	\hline
+	$\sigma$&$\neg\varphi$&\multicolumn{1}{|r}{$\sigma$}&$\neg\psi$
+	\end{tabular}
+&
+	\begin{tabular} {lrlr}
+	\multicolumn{4}{c}{$\sigma\;\;\;\;\varphi\vee\psi$}\\
+	\hline
+	$\sigma$&$\varphi$&\multicolumn{1}{|r}{$\sigma$}&$\psi$
+	\end{tabular}
+\\[20pt]
 
-\begin{tabular} {lc}
-$\sigma$&$\neg(\varphi\vee\psi)$\\
-\hline
-$\sigma$&$\neg\varphi$\\
-$\sigma$&$\neg\psi$
-\end{tabular} &
+%% Possibility Rules
+\multirow{2}{*}{
+	\begin{tabular} {c}
+	{\it Possibility}\\{\it Rules}\\
+	(where $i \neq j$)
+	\end{tabular}
+}
+&
+	$M_\Box$ =
+&
+	$M_\Diamond$ =
+\\
+	% First cell empty
+&
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\neg \Box_j\varphi$\\
+	\hline
+	$\sigma.k_i.\code{\neg\varphi}_j$&$\neg\varphi$
+	\end{tabular}
+& 
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\Diamond_j\varphi$\\
+	\hline
+	$\sigma.k_i.\code{\varphi}_j$&$\varphi$
+	\end{tabular}
+\\[20pt]
 
-\begin{tabular} {lc}
-$\sigma$&$\neg(\varphi\rightarrow\psi)$\\
-\hline
-$\sigma$&$\varphi$\\
-$\sigma$&$\neg\psi$
-\end{tabular} &
+%% Possibility Rules*
+\multirow{2}{*}{
+	\begin{tabular} {c}
+	{\it Possibility} \\ {\it Rules$*$}
+	\end{tabular}
+}
+&
+	$M_\Box*$ =
+&
+	$M_\Diamond*$ =
+\\
+	% First cell empty
+&
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\neg \Box_i\varphi$\\
+	\hline
+	$\sigma.\code{\neg\varphi}_i$&$\neg\varphi$
+	\end{tabular}
+&
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\Diamond_i\varphi$\\
+	\hline
+	$\sigma.\code{\varphi}_i$&$\varphi$
+	\end{tabular}
+\\[20pt]
 
-\begin{tabular} {c}
-{\it Conjunctive}\\{\it Rules}
-\end{tabular} \\ [24pt]
+% Basic Necessity Rules
+\multirow{2}{*}{
+	\begin{tabular} {c}
+	{\it Basic Necessity}\\{\it Rules}\\
+	(where $i \neq j$)
+	\end{tabular}
+}
+&
+	$K_\Box$ =
+&
+	$K_\Diamond$ =
+\\
+	% First cell empty
+&
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\Box_j\varphi$\\
+	\hline
+	$\sigma.k_i.h_j$&$\varphi$
+	\end{tabular}
+& 
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\neg \Diamond_j\varphi$\\
+	\hline
+	$\sigma.k_i.h_j$&$\neg\varphi$
+	\end{tabular}
+\\[20pt]
 
-$\vee_\wedge$ = & $\vee_\vee$ = & $\vee_\rightarrow$ = & \\
+% Basic Necessity Rules*
+\multirow{2}{*}{
+	\begin{tabular} {c}
+	{\it Basic Necessity} \\ {\it Rules$*$}
+	\end{tabular}
+}
+&
+	$K_\Box*$ =
+&
+	$K_\Diamond*$ =
+\\
+	% First cell empty
+& 
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\Box_i\varphi$\\
+	\hline
+	$\sigma.h_i$&$\varphi$
+	\end{tabular}
+&
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\neg \Diamond_i\varphi$\\
+	\hline
+	$\sigma.h_i$&$\neg\varphi$
+	\end{tabular}
+\\[20pt]
 
-\begin{tabular} {lrlr}
-\multicolumn{4}{c}{$\sigma\;\;\;\;\neg(\varphi\wedge\psi)$}\\
-\hline
-$\sigma$&$\neg\varphi$&\multicolumn{1}{|r}{$\sigma$}&$\neg\psi$
-\end{tabular} &
+% Special Necessity Rules
+\multirow{2}{*}{
+	\begin{tabular} {c}
+	{\it Special Necessity}\\{\it Rules}\\
+	(where $i \neq j$)
+	\end{tabular}
+}
+&
+	$T_\Box$ =
+&
+	$T_\Diamond$ = 
+\\
+	% First cell empty
+& 
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\Box_j\varphi$\\
+	\hline
+	$\sigma.k_i$&$\varphi$
+	\end{tabular}
+& 
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\neg\Diamond_j\varphi$\\
+	\hline
+	$\sigma.k_i$&$\neg\varphi$
+	\end{tabular}
+\\[20pt]
 
-\begin{tabular} {lrlr}
-\multicolumn{4}{c}{$\sigma\;\;\;\;\varphi\vee\psi$}\\
-\hline
-$\sigma$&$\varphi$&\multicolumn{1}{|r}{$\sigma$}&$\psi$
-\end{tabular} &
-
-\begin{tabular} {lrlr}
-\multicolumn{4}{c}{$\sigma\;\;\;\;\varphi\rightarrow\psi$}\\
-\hline
-$\sigma$&$\neg\varphi$&\multicolumn{1}{|r}{$\sigma$}&$\psi$
-\end{tabular} & 
-
-\begin{tabular} {c}
-{\it Disjunctive}\\{\it Rules}
-\end{tabular} \\ [18pt] \\
-\end{tabular}
-
-\begin{tabular} {cccc}
-&  $M_\Box$ = & $M_\Diamond$ =& \\
- \begin{tabular} {c}
-where $i \neq j$ \end{tabular} &
-
-\begin{tabular} {lc}
-$\sigma.k_i$&$\neg \Box_j\varphi$\\
-\hline
-$\sigma.k_i.\code{\neg\varphi}_j$&$\neg\varphi$
-\end{tabular} &
- 
-\begin{tabular} {lc}
-$\sigma.k_i$&$\Diamond_j\varphi$\\
-\hline
-$\sigma.k_i.\code{\varphi}_j$&$\varphi$
-\end{tabular} & 
-
-\begin{tabular} {c}
-{\it Possibility}\\{\it Rules}
-\end{tabular} \\ [18pt]
-
-& $M_\Box*$ = & $M_\Diamond*$ = & \\
-
- \begin{tabular} {c}
-\end{tabular} &
-
-\begin{tabular} {lc}
-$\sigma.k_i$&$\neg \Box_i\varphi$\\
-\hline
-$\sigma.\code{\neg\varphi}_i$&$\neg\varphi$
-\end{tabular} &
-
-\begin{tabular} {lc}
-$\sigma.k_i$&$\Diamond_i\varphi$\\
-\hline
-$\sigma.\code{\varphi}_i$&$\varphi$
-\end{tabular} & 
-
-\begin{tabular} {c}
-{\it Possibility} \\ {\it Rules$*$}
-\end{tabular} \\ [18pt]
-
-\end{tabular}
-
-\begin{tabular}{cccc}
-
-& $K_\Box$ = & $K_\Diamond$ = & \\
-
- \begin{tabular} {c}
-where $i \neq j$
-\end{tabular} &
- 
-\begin{tabular} {lc}
-$\sigma.k_i$&$\Box_j\varphi$\\
-\hline
-$\sigma.k_i.h_j$&$\varphi$
-\end{tabular} & 
-
-\begin{tabular} {lc}
-$\sigma.k_i$&$\neg \Diamond_j\varphi$\\
-\hline
-$\sigma.k_i.h_j$&$\neg\varphi$
-\end{tabular} &
-
-\begin{tabular} {c}
-{\it Basic Necessity}\\{\it Rules}
-\end{tabular} \\ [18pt]
-
-& $K_\Box*$ = & $K_\Diamond*$ = & \\
-
- \begin{tabular} {c}
-\end{tabular} &
- 
-\begin{tabular} {lc}
-$\sigma.k_i$&$\Box_i\varphi$\\
-\hline
-$\sigma.h_i$&$\varphi$
-\end{tabular} & 
-
-\begin{tabular} {lc}
-$\sigma.k_i$&$\neg \Diamond_i\varphi$\\
-\hline
-$\sigma.h_i$&$\neg\varphi$
-\end{tabular} &
-
-\begin{tabular} {c}
-{\it Basic Necessity} \\ {\it Rules$*$}
-\end{tabular} \\ [18pt]
-
-& $T_\Box$ = & $T_\Diamond$ = & \\
-
- \begin{tabular} {c}
-where $i \neq j$
-\end{tabular} &
- 
-\begin{tabular} {lc}
-$\sigma.k_i$&$\Box_j\varphi$\\
-\hline
-$\sigma.k_i$&$\varphi$
-\end{tabular} & 
-
-\begin{tabular} {lc}
-$\sigma.k_i$&$\neg\Diamond_j\varphi$\\
-\hline
-$\sigma.k_i$&$\neg\varphi$
-\end{tabular} & 
-
-\begin{tabular} {c}
-{\it Special Necessity}\\{\it Rules}
-\end{tabular} \\ [18pt]
-
-& $R_\Box*$ = & $R_\Diamond*$ = & \\
-
- \begin{tabular} {c}
-\end{tabular} &
-
-\begin{tabular} {lc}
-$\sigma.k_i$&$\Box_i\varphi$\\
-\hline
-$\sigma$&$\varphi$
-\end{tabular} &
-
-\begin{tabular} {lc}
-$\sigma.k_i$&$\neg\Diamond_i\varphi$\\
-\hline
-$\sigma$&$\neg\varphi$
-\end{tabular} &
-
-\begin{tabular} {c}
-{\it Special Necessity}\\{\it Rules$*$}
-\end{tabular} \\ [20pt]
-
+% Special Necessity Rules*
+\multirow{2}{*}{
+	\begin{tabular} {c}
+	{\it Special Necessity}\\{\it Rules$*$}
+	\end{tabular}
+}
+&
+	$R_\Box*$ =
+&
+	$R_\Diamond*$ =
+\\
+	% First cell empty
+&
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\Box_i\varphi$\\
+	\hline
+	$\sigma$&$\varphi$
+	\end{tabular}
+&
+	\begin{tabular} {lc}
+	$\sigma.k_i$&$\neg\Diamond_i\varphi$\\
+	\hline
+	$\sigma$&$\neg\varphi$
+	\end{tabular}
+\\
 \end{tabular}
 \end{center}
 \caption{Tableau Extension Rules}
