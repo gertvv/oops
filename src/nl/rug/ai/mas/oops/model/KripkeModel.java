@@ -36,6 +36,7 @@ import org.jgrapht.graph.DirectedMultigraph;
 public class KripkeModel {
 	Set<AgentId> d_agents;
 	HashMap<AgentId, DefaultDirectedGraph<World, Arrow>> d_graphs;
+	World d_mainWorld;
 
 	public KripkeModel(Set<AgentId> agents) {
 		d_agents = agents;
@@ -44,6 +45,7 @@ public class KripkeModel {
 			d_graphs.put(a,
 				new DefaultDirectedGraph<World, Arrow>(new DummyEdgeFactory()));
 		}
+		d_mainWorld = null;
 	}
 
 	/**
@@ -96,6 +98,14 @@ public class KripkeModel {
 			return new HashSet<World>();
 		}
 		return d_graphs.get(d_agents.iterator().next()).vertexSet();
+	}
+	
+	public World getMainWorld() {
+		return d_mainWorld;
+	}
+	
+	public void setMainWorld(World w) {
+		d_mainWorld = w;
 	}
 
 	public DirectedMultigraph<World, Arrow> constructMultigraph() {

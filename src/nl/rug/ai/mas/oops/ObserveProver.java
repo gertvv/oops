@@ -19,20 +19,31 @@
 
 package nl.rug.ai.mas.oops;
 
-import nl.rug.ai.mas.oops.formula.*;
-import nl.rug.ai.mas.oops.parser.Context;
-import nl.rug.ai.mas.oops.render.TableauObserverSwing;
-import nl.rug.ai.mas.oops.model.KripkeModel;
-import nl.rug.ai.mas.oops.model.S5nModel;
-import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
+import java.awt.Color;
+import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import nl.rug.ai.mas.oops.model.World;
+import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.model.Arrow;
+import nl.rug.ai.mas.oops.model.KripkeModel;
+import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
+import nl.rug.ai.mas.oops.model.S5nModel;
+import nl.rug.ai.mas.oops.model.World;
+import nl.rug.ai.mas.oops.parser.Context;
+import nl.rug.ai.mas.oops.render.TableauObserverSwing;
+
 import org.jgraph.JGraph;
+import org.jgraph.graph.GraphCell;
+import org.jgraph.graph.GraphConstants;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.EdgeFactory;
 import org.jgrapht.ext.JGraphModelAdapter;
+import org.jgrapht.graph.DirectedMultigraph;
 
 /**
  * Test class for visual observation of the prover.
@@ -76,21 +87,109 @@ public class ObserveProver {
 			System.exit(1);
 		}
 	}
+	
+	private static class DummyEdgeFactory implements EdgeFactory<World, Edge> {
+		public Edge createEdge(World s, World t) {
+			return null;
+		}
+	}
+	
+	private static class Edge {
+		private Set<Arrow> d_arrows;
+		public Edge(Set<Arrow> arrows) {
+			d_arrows = arrows;
+		}
+		
+		public String toString() {
+			return d_arrows.toString();
+		}
+	}
 
 	public static void showModel(KripkeModel model) {
 		if (model.getWorlds().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No model was constructed");
 			return;
 		}
-		JGraphModelAdapter<World, Arrow> graphModel =
-			new JGraphModelAdapter<World, Arrow>(
-				model.constructMultigraph());
+		
+		DirectedGraph<World, Edge> dg = buildGraph(model);
+		
+		JGraphModelAdapter<World, Edge> graphModel =
+			new JGraphModelAdapter<World, Edge>(dg);
 		JGraph jgraph = new JGraph(graphModel);
+		
+		highlightMainWorld(model, graphModel, jgraph);
+		layout(model, graphModel, jgraph);
+		
 		JFrame frame = new JFrame("Model Observer");
 		frame.add(jgraph);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.pack();
 		frame.setSize(800, 600);
 		frame.setVisible(true);
+	}
+
+	private static DirectedGraph<World, Edge> buildGraph(KripkeModel model) {
+		DirectedMultigraph<World, Arrow> dmg = model.constructMultigraph();
+		DirectedGraph<World, Edge> dg = new DirectedMultigraph<World, Edge>(
+				new DummyEdgeFactory());
+		for (World w : dmg.vertexSet()) {
+			dg.addVertex(w);
+		}
+		for (World w1 : dmg.vertexSet()) {
+			for (World w2 : dmg.vertexSet()) {
+				Set<Arrow> edges = dmg.getAllEdges(w1, w2);
+				if (edges.size() > 0) {
+					dg.addEdge(w1, w2, new Edge(edges));
+				}
+			}
+		}
+		return dg;
+	}
+
+	private static void highlightMainWorld(KripkeModel model,
+			JGraphModelAdapter<World, Edge> graphModel, JGraph jgraph) {
+		if (model.getMainWorld() != null) {
+			Map<GraphCell, Map<Object, Object>> nested =
+				new HashMap<GraphCell, Map<Object, Object>>();
+			Map<Object, Object> attributeMap = new HashMap<Object, Object>();
+			GraphConstants.setBackground(attributeMap, Color.BLUE);
+			nested.put(
+					graphModel.getVertexCell(model.getMainWorld()),
+					attributeMap);
+			jgraph.getGraphLayoutCache().edit(nested);
+		}
+	}
+	
+	public static void layout(KripkeModel model,
+			JGraphModelAdapter<World, Edge> graphModel,
+			JGraph graph) {
+		// Maximum width or height
+		double max = 0;
+		
+		for (World w : model.getWorlds()) {
+			Rectangle2D b = graph.getCellBounds(graphModel.getVertexCell(w));
+			max = Math.max(Math.max(b.getWidth(), b.getHeight()), max);
+		}
+		
+		// Compute Radius
+		int r = (int) Math.max(model.getWorlds().size()*max/Math.PI, 100);
+		// Compute Radial Step
+		double phi = 2*Math.PI/model.getWorlds().size();
+		
+		Map<GraphCell, Map<Object, Object>> nested =
+			new HashMap<GraphCell, Map<Object, Object>>();
+		int i = 0;
+		for (World w : model.getWorlds()) {
+			Rectangle2D b = graph.getCellBounds(graphModel.getVertexCell(w));
+			Rectangle2D bounds = (Rectangle2D)b.clone();
+			bounds.setRect(r+(int) (r*Math.sin(i*phi)),
+						r+(int) (r*Math.cos(i*phi)),
+						b.getWidth(), b.getHeight());
+			Map<Object, Object> attributeMap = new HashMap<Object, Object>();
+			GraphConstants.setBounds(attributeMap, bounds);
+			nested.put(graphModel.getVertexCell(w), attributeMap);
+			++i;
+		}
+		graph.getGraphLayoutCache().edit(nested);
 	}
 }
