@@ -1,7 +1,50 @@
-\section{Examples}
+\section{Example}
 \label{sec:example}
 
-\begin{itemize}
-\item{Hoeden/Cluedo}
-\item{Som/Product}
-\end{itemize}
+To illustrate the educational potential of \oops\/, we present a worked-out example, that we have assigned to students of multi-agent systems in the past. The example concerns a variant of the Wise Men's Riddle, and the students' task is to check the riddle's solution, after formalizing it with \oops\/. This is the variant in question, of unknown origins:
+
+\begin{quote}
+
+There once was a wise queen, who was a perfect logician. For advice, she relied on three wise men, who were likewise perfect logicians. This was common knowledge among the four of them, as was the fact that none of them would ever lie or cheat.
+
+One day, the queen wanted to demonstrate to her people just how wise her wise men were. She announced that she would place a hat on each of their heads, and that each of the wise men would be able to see the hats of the other two, but not his own.
+
+The queen then announced that she had three red hats and two blue hats total, and that each wise man was to determine the color of his own hat. The queen then placed the hats, and said: \textquotedblleft Each wise man who knows the color of his hat, must now step forward.\textquotedblright
+
+After this statement, no wise man stepped forward. So the queen repeated it, and still no wise man stepped forward. Yet, after she made her announcement a third time, all wise men stepped forward at once. What were the colors of the wise men's hats?
+
+\end{quote}
+
+When we present this assignment to students, we ask them to model the riddle in steps, and to check the epistemic consequences of different hat color distributions. Eventually, this leads to an \oops\  script that models the situation with three red hats. By taking the perspective of one of the wise men, a very minimal script is enough to prove that he can derive the color of his hat after observing the consequences of two announcements by the queen.
+
+This minimal  \oops\  script is reproduced below, with informal explanations in the comments. The relevant propositions are defined as follows: Let {\tt r1} mean that wise man 1 has a red hat, {\tt r2} that wise man 2 has a red hat, and {\tt r3} that wise man has a red hat.  Let {\tt b1, b2, b3} express the same relationships between wise men and hats, but for blue ones.
+
+\begin{lstlisting}
+th = oops.Theory()
+
+-- there are only two blue hats:
+th:add("#_1 #_2 #_3 (((b1 & b2) > ~b3) & ((b1 & b3) > ~b2))")
+
+-- a wise man has exactly one hat:
+th:add("#_1 #_2 #_3 ((b1 = ~r1) & (b2 = ~r2) & (b3 = ~r3))")
+
+-- a wise man sees the hats of the other two:
+th:add("#_1 (#_2 b1 | #_2 r1)")
+th:add("#_1 #_2 (#_3 b1 | #_3 r1)")
+th:add("#_1 #_2 (#_3 b2 | #_3 r2)")
+
+-- wise man 1 sees two red hats:
+th:add("#_1 (r2 & r3)")
+
+-- after the first announcement:
+th:add("#_1 ~#_2 r2")
+
+-- after the second announcement:
+th:add("#_1 #_2 ~#_3 r3")
+
+-- wise man 1 knows his hat is red:
+print(th:provable("#_1 r1"))
+
+\end{lstlisting}
+
+This example demonstrates the kind of assignment that can be designed with  \oops\/. It gives students the experience of using a theorem prover, and lets them experiment with different assumptions, providing insight into the formal logic that underlies a familiar riddle. This can all be done quickly and easily to due to \oops's integrated scripting facility, and intuitive GUI.
