@@ -88,14 +88,7 @@ be replaced by one that is in {\sc pspace}.
 
 \subsection{Implementation}
 \label{sec:implementation}
-
-Above, we have defined what constitutes a tableau and how a tableau can be used
-to determine the satisfiability of a formula. In Table~\ref{tab:rules}, the
-rules that are used to generate the tableau are given. Now, in order to
-generate tableaux, we also need an algorithm that correctly and exhaustively
-applies the rules.
-
-In order to ensure the exhaustive, but non-redundant application of rules,
+In order to ensure the exhaustive, but non-redundant application of Table~\ref{tab:rules}'s rules,
 \oops\ employs two data structures: the {\em match queue} and the {\em
 necessities list}.
 Whenever a node is added to the current branch, we attempt to match every
@@ -115,7 +108,7 @@ the match queue is a priority queue and rules can be given a numeric
 priority value, which specifies the order in which matches are applied to the
 tableau. In this way, we may define a strategy to close branches as soon as
 possible. For example, it is preferable to execute all possible non-branching
-purely propositional rules before attempting to execute any other rules.
+propositional rules before attempting to execute any other rules.
 
 The rules are implemented in such a way that they are easily replaceable by a
 different ruleset.

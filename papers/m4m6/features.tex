@@ -33,17 +33,16 @@ other languages.
 Thus, Lua enables us to define an environment that is tailored to the needs of
 theorem proving, while avoiding the concerns associated with implementing a
 custom language.
-See \citet{ierusalimschy2006} for a good overview of the Lua programming
-language.
+See \citet{ierusalimschy2006} for a good introduction to programming in Lua.
 Currently, most of \oops' functionality is available from Lua and more
 extensive support is being worked on.
 
-The above outlines our reasons for choosing to integrate \oops\ with Lua. Now,
+The above outlines our reasons for integrating \oops\ with Lua. Now
 we briefly outline how \oops\ can be used through its Lua interface.
 All \oops\ methods are encapsulated in the \lstinline!oops! namespace.
 The basis for interaction with \oops\ through Lua is the {\em theory} concept.
 A theory is, simply put, a collection of formulas. The following example code
-creates a theory and adds a formula to that theory:
+creates a theory and adds a formula to it:
 \begin{lstlisting}
 th = oops.Theory()
 th:add("#_1 p")
@@ -75,8 +74,7 @@ q)$. The resulting output is:
 \end{lstlisting}
 
 This completes our description of how \oops\ is called from Lua. It must be
-noted that Lua is a very powerful and complete language and as a matter of
-course, much more can be achieved than is suggested by the above examples. For
+noted that Lua is a very powerful and complete language and that much more can be achieved than is suggested by the above examples. For
 example, command-line interaction with the user is readily available through
 Lua.
 
@@ -92,7 +90,7 @@ scripts can be loaded from and saved to a file. For those who prefer to use an
 external editor (e.g., there are many editors that offer syntax highlighting
 for Lua), a single key combination reloads a modified file from the
 file system. The application consists of two panels: the top panel shows the
-script that is currently being worked on and the bottom panel shows the
+current script and the bottom panel shows the
 output.
 
 \begin{figure}[p]
