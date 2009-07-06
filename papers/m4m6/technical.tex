@@ -1,23 +1,21 @@
 \section{Technical description}
 \label{sec:technical}
 
-In this section, we will first give a brief description of the tableaux method
+In this section, we will first give a brief description of the tableau method
 used in \oops\ and summarize the formal properties (soundness, completeness,
 complexity) of the system. Then, we explain how the
-tableaux system is implemented in Java. Finally, we describe the input language
+tableau system is implemented in Java. Finally, we describe the input language
 for modal formulas that is provided by \oops.
 
 \subsection{\oops\ tableaux}
-\label{sec:tableaux}
+\label{sec:}
 
-The \oops\ tableaux system for $S5_n$ is a Java \citep{gosling2005}
+The \oops\ tableau system for $S5_n$ is a Java \citep{gosling2005}
 implementation of the proof system {\bf ELtap} \citep{deboer2006}.  {\bf
 ELtap}, in turn, draws on \citet{fitting1999} and \citet{beckert1997}.
-\citet{halpern1992} provide a good review of tableaux methods for modal logics.
+\citet{halpern1992} provide a good review of tableau methods for modal logics.
 Here, we summarize how tableaux are formalized in \oops. For a complete
-description, see \citet{valkenhoef2008}.
-
-\input{rules.tex}
+description, see Van Valkenhoef \citep{valkenhoef2008}.
 
 When we construct a tableau, we do so with the aim of creating a Kripke model
 in which a formula $\varphi$ is satisfied. This is done by assuming $\varphi$
@@ -73,6 +71,9 @@ determined by the following properties:
 \item[Completeness] If the tableau for $\varphi$ is closed, $\varphi$ is not
 satisfiable.
 \end{description}
+
+\input{rules.tex}
+
 The proof system used by \oops\ has been shown to be both sound and complete
 \citep{valkenhoef2008}.  Furthermore, in the same work, the implementation
 (Section~\ref{sec:implementation}) was
@@ -85,6 +86,8 @@ by \oops\ (see Section~\ref{sec:features}) easily makes up for this
 shortcoming. Moreover, the implementation of these features does not depend on
 the specific proof rules used. Thus, as future work, the current algorithm may
 be replaced by one that is in {\sc pspace}.
+
+
 
 \subsection{Implementation}
 \label{sec:implementation}
@@ -112,7 +115,7 @@ necessities list.
 
 For reasons of efficiency,
 the match queue is a priority queue and rules can be given a numeric
-priority value, that specifies the order in which matches are applied to the
+priority value, which specifies the order in which matches are applied to the
 tableau. In this way, we may define a strategy to close branches as soon as
 possible. For example, it is preferable to execute all possible non-branching
 purely propositional rules before attempting to execute any other rules.
