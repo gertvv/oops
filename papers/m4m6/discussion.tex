@@ -1,14 +1,25 @@
-\section{Discussion}
+\section{Conclusions and Further Work}
 \label{sec:discussion}
 
-Discussion!
+In this paper, we have presented \oops, a cross-platform, easy to install and
+open source tableau prover for $S5_n$.
+\oops\ provides users with a graphical user interface, an integrated scripting
+language, tableau visualization and counter-model generation. 
+We believe these features make \oops\ more suited for educational use than
+other similar systems.
 
-Future extensions:
-\begin{itemize}
-\item Rulesets in Lua
-\item Simplification of theory/formula
-\item Model checking, manipulation
-\item stdin from GUI
-\item {\sc pspace} prover
-\item Comparison to/discussion of DEMO?
-\end{itemize}
+Given this, we now identify several directions for further work on \oops.
+First of all, although the implementation currently allows new rule sets to be
+implemented easily, this requires extending the Java source code and
+recompiling \oops. To remedy this, we would like to implement rule sets as Lua
+modules and provide such modules for several logics. We would also like to
+implement a set of rules that allows the $S5_n$ tableau to be generated in
+{\sc pspace}, as our current implementation is {\sc exptime}.
+
+Furthermore, we would like to have a more complete set of tools to interact
+with theories, formulas and Kripke models. For example, it should be possible
+to simplify formulas and theories. In the case of Kripke models, we would like
+to be able to construct and alter models ourselves and to perform operations
+such as model checking and bisimulation. Finally, the GUI should allow users
+to provide keyboard input to Lua scripts (through `standard in') so that one
+can develop interactive \oops\ scripts.
