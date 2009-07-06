@@ -46,9 +46,8 @@ $\mathrm{pre}(R)$, such that no constraints are violated and $R$ has not
 previously been applied to $\gamma$.
 
 In the case of modal rules, after the precondition $pre(R)$ has matched, we
-may either need to create a new world (add a label part) or we may need to
-match existing worlds (labels).
-In the first case, we create a label part that is uniquely
+may either need to create a new world (add a label part) or to match existing
+worlds (labels). In the first case, we create a label part that is uniquely
 identified, through a function $\code{\cdot}$ that encodes formulas as valid
 label parts. In the latter case, the postcondition will contain a variable as
 a placeholder for one of the label parts. Such a postcondition must be applied
@@ -77,8 +76,7 @@ Furthermore, in the same work, the implementation
 (Section~\ref{sec:implementation}) was
 shown to correspond to the formal description of the proof method.
 Unfortunately, this work also shows that the algorithm used by \oops\ is in
-{\sc exptime}, whereas satisfiability for $S5_n$ is known to be {\sc pspace}
-complete \citep{halpern1992}.
+{\sc exptime}, whereas satisfiability for $S5_n$ is known to be {\sc pspace}-complete \citep{halpern1992}.
 However, we believe that for educational purposes the functionality  offered
 by \oops\ (see Section~\ref{sec:features}) easily makes up for this
 shortcoming. Moreover, the implementation of these features does not depend on
@@ -120,10 +118,11 @@ visualization and counter-model construction (see Section~\ref{sec:features}).
 \subsection{Input language}
 \label{sec:language}
 
-\oops\ employs an input language for formulas implemented using the SableCC~\citep{gagnon1998} compiler generator for Java. Propositions are input as
+\oops\ employs an input language for formulas implemented using the SableCC
+\citep{gagnon1998} compiler generator for Java. Propositions are input as
 strings of characters and digits, starting with a lowercase character.  Agent
 identities are represented by natural numbers. \oops\ uses the widely
-understood infix notation for logical formulas. Table~\ref{tab:input} shows \oops\ {\sc ascii} equivalents for different logical operators, as well as their precedences; lower numbers indicate stronger binding.
+understood infix notation for logical formulas. Table~\ref{tab:input} shows \oops\ ascii equivalents for different logical operators, as well as their precedences; lower numbers indicate stronger bindings.
 
 \begin{table}
 \centering
