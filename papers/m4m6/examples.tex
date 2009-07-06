@@ -1,7 +1,7 @@
 \section{Example}
 \label{sec:example}
 
-To illustrate the educational potential of \oops\/, we present a worked-out example, that we have assigned to students of multi-agent systems in the past. The example concerns a variant of the Wise Men's Riddle, and the students' task is to check the riddle's solution, after formalizing it with \oops\/. This is the variant in question, of unknown origins:
+To illustrate the educational potential of \oops\/, we present a worked-out example that we have assigned to students of multi-agent systems in the past, at the Department of Artificial Intelligence at the University of Groningen.  It is inspired by Hans van Ditmarsch' Cluedo exercises, designed to be  solved with the Logic Workbench \citep{lwbcluedo}. Our example concerns a variant of the Wise Men's Riddle, and the students' task is to check the riddle's solution, after formalizing it with \oops\/. This is the variant in question, of unknown origins:
 
 \begin{quote}
 
@@ -15,7 +15,7 @@ After this statement, no wise man stepped forward. So the queen repeated it, and
 
 \end{quote}
 
-When we present this assignment to students, we ask them to model the riddle in steps, and to check the epistemic consequences of different hat color distributions. Eventually, this leads to an \oops\  script that models the situation with three red hats. By taking the perspective of one of the wise men, a very minimal script is enough to prove that he can derive the color of his hat after observing the consequences of two announcements by the queen.
+When we present this assignment to students, we ask them to model the riddle in steps, and to check the epistemic consequences of different hat color distributions. Eventually, this leads to an \oops\  script that models the situation with three red hats. By taking the perspective of one of the wise men, a very minimal script is sufficient to prove that he can derive the color of his hat after observing the consequences of two announcements by the queen.
 
 This minimal  \oops\  script is reproduced below, with informal explanations in the comments. The relevant propositions are defined as follows: Let {\tt r1} mean that wise man 1 has a red hat, {\tt r2} that wise man 2 has a red hat, and {\tt r3} that wise man has a red hat.  Let {\tt b1, b2, b3} express the same relationships between wise men and hats, but for blue ones.
 
@@ -47,4 +47,4 @@ print(th:provable("#_1 r1"))
 
 \end{lstlisting}
 
-This example demonstrates the kind of assignment that can be designed with  \oops\/. It gives students the experience of using a theorem prover, and lets them experiment with different assumptions, providing insight into the formal logic that underlies a familiar riddle. This can all be done quickly and easily to due to \oops's integrated scripting facility, and intuitive GUI.
+This example demonstrates the kind of assignment that can be designed with  \oops\/. It gives students the experience of using a theorem prover, and lets them experiment with different assumptions, providing insight into the formal logic that underlies a familiar riddle. This can all be done quickly and easily due to \oops's integrated scripting facility and intuitive GUI.

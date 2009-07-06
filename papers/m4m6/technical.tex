@@ -11,7 +11,7 @@ for modal formulas that is provided by \oops.
 \label{sec:}
 
 The \oops\ tableau system for $S5_n$ is a Java \citep{gosling2005}
-implementation of the proof system {\bf ELtap} \citep{deboer2006}.  {\bf
+implementation of the proof system {\bf ELtap} \citep{deboer2007, deboer2006}.  {\bf
 ELtap}, in turn, draws on \citet{fitting1999} and \citet{beckert1997}.
 \citet{halpern1992} provide a good review of tableau methods for modal logics.
 Here, we summarize how tableaux are formalized in \oops. For a complete
@@ -133,8 +133,7 @@ visualization and counter-model construction (see Section~\ref{sec:features}).
 \citep{gagnon1998} compiler generator for Java. Propositions are input as
 strings of characters and digits, starting with a lowercase character.  Agent
 identities are represented by natural numbers. \oops\ uses the widely
-understood infix notation for logical formulas, where the different
-connectives are input as shown in Table~\ref{tab:input}.
+understood infix notation for logical formulas. Table~\ref{tab:input} shows \oops\ ascii equivalents for different logical operators, as well as their precedences; lower numbers indicate stronger bindings.
 
 \begin{table}
 \centering
@@ -145,7 +144,7 @@ $\leftrightarrow$ & $\Box_i$ & $\Diamond_i$ \\
 & \lstinline!=! & \lstinline!#_i! & \lstinline!%_i! \\
 Precedence & 1 & 2 & 3 & 4 & 4 & 1 & 1 \\
 \end{tabular}
-\caption{\oops\ Connectives}
+\caption{\oops\ Connectives.}
 \label{tab:input}
 \end{table}
 
