@@ -64,18 +64,15 @@ and the accessibility relations in the corresponding Kripke model. For each
 label, the set of formulas given for that label determines the valuation in the
 corresponding world in the Kripke model.
 A tableau for $\varphi$ is closed if all branches are
-closed, otherwise it is open. The appropriateness of a tableau system is
-determined by the following properties:
-\begin{description}
-\item[Soundness] If the tableau for $\varphi$ is open, $\varphi$ is satisfiable.
-\item[Completeness] If the tableau for $\varphi$ is closed, $\varphi$ is not
-satisfiable.
-\end{description}
+closed, otherwise it is open. 
 
 \input{rules.tex}
 
+Now, for any proof system, it is important that its proofs correspond exactly
+to the semantics of the logic.
 The proof system used by \oops\ has been shown to be both sound and complete
-\citep{valkenhoef2008}.  Furthermore, in the same work, the implementation
+for $S5_n$ \citep{valkenhoef2008}. 
+Furthermore, in the same work, the implementation
 (Section~\ref{sec:implementation}) was
 shown to correspond to the formal description of the proof method.
 Unfortunately, this work also shows that the algorithm used by \oops\ is in
