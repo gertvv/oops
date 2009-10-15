@@ -3,7 +3,7 @@
 
 In this paper, we describe \oops\footnote{http://wiki.github.com/gertvv/oops},
 an {\it O}bject {\it O}riented {\it P}rover for $S5_n$.
-It is a tableau-based theorem prover, specifically designed for use in a
+It is a tableau-based theorem prover, aimed at satisfiability checking, that is specifically designed for use in a
 classroom setting.
 Although not as efficient as highly optimized provers like MSPASS
 \citep{mspass2000} and FaCT \citep{fact1998}, or as flexible as highly
@@ -16,7 +16,7 @@ human reasoning processes.
 As far as we are aware, there are currently no other theorem provers which do
 this.
 Furthermore, \oops\ is capable of visualizing its tableau proofs, and of
-generating counterexamples to formulas that are false.
+generating counter-models to formulas that are false.
 These two properties are very useful for educational proof tools, and they are
 shared by at least two other systems: LoTReC can display its tableau trees,
 and the Logics Workbench \citep{heuerding1996} can print its derivations in
@@ -51,7 +51,7 @@ language.
 To summarize, our contribution is a proof system, \oops, designed to support
 education in logics, specifically in multi-agent reasoning. For this purpose,
 \oops\ features a tableau prover for $S5_n$ that is capable of visualizing its
-tableau proofs and counterexamples for formulas that are false. Furthermore,
+tableau proofs and counter-models for formulas that are false. Furthermore,
 \oops\ is platform independent and easy to install. Finally, \oops\ offers a
 Graphical User Interface (GUI) and an integrated scripting language (Lua) that
 enables easy but powerful interactions with the prover.
