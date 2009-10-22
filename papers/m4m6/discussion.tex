@@ -13,8 +13,8 @@ First of all, although the implementation currently allows new rule sets to be
 implemented relatively easily, this requires extending the Java source code and
 recompiling \oops. To remedy this, we would like to implement rule sets as Lua
 modules and provide such modules for several logics. We would also like to
-implement a set of rules that allows the $S5_n$ tableau to be generated in
-{\sc pspace}, as our current implementation is {\sc exptime}.
+implement an algorithm that allows the $S5_n$ tableau to be generated in
+{\sc pspace}, as our current implementation may require an exponential amount of space.
 
 Furthermore, we would like to have a more complete set of tools to interact
 with theories, formulas and Kripke models. For example, it should be possible

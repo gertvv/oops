@@ -1,11 +1,20 @@
-\documentclass[preprint]{elsarticle}
+\documentclass{entcs}
+\usepackage{entcsmacro}
+\def\lastname{van Valkenhoef, van der Vaart \and Verbrugge}
+\newcommand{\email}[1]{Email: \href{mailto:#1} {\texttt{\normalshape #1}}}
+
+\usepackage{graphicx}
+\usepackage{float}
 
 \usepackage{amsmath,amssymb}
 \usepackage[english]{babel}
 \usepackage{listings}
 \usepackage{multirow}
 \usepackage[center]{caption}
-\bibliographystyle{../styles/elsarticle-harv}
+\bibliographystyle{entcs}
+
+\newcommand{\citep}[1]{\cite{#1}}
+\newcommand{\citet}[1]{\cite{#1}}
 
 \newcommand{\oops}{\texttt{OOPS}}
 \newcommand{\code}[1]{\ensuremath{\ulcorner#1\urcorner}}
@@ -20,22 +29,23 @@ stringstyle=\ttfamily, showstringspaces=false, tabsize=4}
 \begin{frontmatter}
 \title{\oops: An $S5_n$ Prover for Educational Settings}
 
-\author[gert]{Gert van Valkenhoef\corref{cor}}
-\cortext[cor]{Corresponding author.}
-\ead{g.h.m.van.valkenhoef@rug.nl}
-\author[ai,tb]{Elske van der Vaart}
-\ead{elskevdv@ai.rug.nl}
-\author[ai]{Rineke Verbrugge}
-\ead{rineke@ai.rug.nl}
-
-\address[gert]{Department of Business and ICT, University of Groningen,\\
+\author{Gert van Valkenhoef\thanksref{cor}\thanksref{gert}}
+\address{Department of Business and ICT, University of Groningen,\\
 P.O. Box 800, 9700 AV, Groningen, The Netherlands}
-
-\address[ai]{Department of Artificial Intelligence, University of Groningen,\\
+\author{Elske van der Vaart\thanksref{elske}}
+\address{Department of Artificial Intelligence, University of Groningen,\\
+P.O. Box 407, 9700 AK, Groningen, The Netherlands}
+\address{Theoretical Biology Group, University of Groningen,\\
+P.O. Box 14, 9750 AA, Haren, The Netherlands}
+\author{Rineke Verbrugge\thanksref{rineke}}
+\address{Department of Artificial Intelligence, University of Groningen,\\
 P.O. Box 407, 9700 AK, Groningen, The Netherlands}
 
-\address[tb]{Theoretical Biology Group, University of Groningen,\\
-P.O. Box 14, 9750 AA, Haren, The Netherlands}
+\thanks[cor]{Corresponding author.}
+
+\thanks[gert]{\email{g.h.m.van.valkenhoef@rug.nl}}
+\thanks[elske]{\email{elskevdv@ai.rug.nl}}
+\thanks[rineke]{\email{rineke@ai.rug.nl}}
 
 \input{abstract}
 
