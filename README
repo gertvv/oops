@@ -60,10 +60,7 @@ In order to build the sources in this directory you need:
 
   - [Sun Java](http://java.sun.com/) 1.5 or higher (or any compatible
 implementation)
-  - [Apache Ant](http://ant.apache.org/)
   - [Maven2](http://maven.apache.org/)
-  - [Maven2 ant-tasks](http://maven.apache.org/ant-tasks/).
-    These need to be in your Ant path (e.g. $HOME/.ant/lib).
 
 Any additional dependencies will be downloaded automatically via Maven.
 
@@ -82,23 +79,29 @@ OOPS.
 Building the JAR
 ------------------------------------------------------------------------------
 
-Use the following command:
+Do the following:
 
-	 $ ant
+	$ cd parser
+	$ mvn install
 
-This will create the file 'oops.jar' under the directory 'dist' and also
-download any necessary dependencies.
+This will install the parser library to your local Maven2 repository. Then:
+
+	$ cd application
+	$ mvn package
+
+This will create application/target/oops-$VERSION-jar-with-dependencies.jar,
+which you can use to run OOPS.
+
+Alternatively, the following will install OOPS to your Maven2 repository:
+
+	$ mvn install
 
 
 Running the test suite
 ------------------------------------------------------------------------------
 
-Use the following command:
-
-	$ ant test
-
-This will create a series of test reports in the directory 'test'.
-
+The maven build automatically runs all provided unit tests (under src/test).
+Test reports are generated under target/surefire-reports.
 
 Generating an Eclipse project
 ------------------------------------------------------------------------------
@@ -108,10 +111,10 @@ workspace):
 
 	$ mvn eclipse:configure-workspace -Declipse.workspace=$WORKSPACE
 
-Then, in the OOPS sources folder, do
+Make sure the parser is installed in your local Maven2 repository (see above).
+Then, do the following:
 
-	$ ant oops-grammar
+	$ cd application
 	$ mvn eclipse:eclipse
 
-Import the project into Eclipse. Finally, add the parser/oops-parser.jar to
-the project build path.
+Now, import the project into Eclipse.
