@@ -88,7 +88,7 @@ public class Theory {
 	public boolean satisfiable(Formula formula)
 	throws TableauErrorException {
 		if (d_formulas.isEmpty()) {
-			return satisfiable(formula);
+			return d_prover.satisfiable(formula);
 		}
 		return d_prover.satisfiable(new Conjunction(asFormula(), formula));
 	}
