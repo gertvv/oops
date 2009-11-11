@@ -22,7 +22,10 @@ package nl.rug.ai.mas.oops.model;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
+
 import nl.rug.ai.mas.oops.formula.Proposition;
+import nl.rug.ai.mas.oops.render.Constants;
 
 /**
  * Represents a valuation (assignment of truth value to propositions)
@@ -43,6 +46,17 @@ public class Valuation {
 	}
 
 	public String toString() {
-		return d_map.toString();
+		StringBuffer buf = new StringBuffer();
+		for (Entry<Proposition, Boolean> e: d_map.entrySet()) {
+			if (!(buf.length() == 0)) {
+				buf.append(", ");
+			}
+			if (e.getValue()) {
+				buf.append(e.getKey());
+			} else {
+				buf.append(Constants.NEG + e.getKey().toString());
+			}
+		}
+		return buf.toString();
 	}
 }
