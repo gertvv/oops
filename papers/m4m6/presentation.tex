@@ -9,6 +9,11 @@
 
 \logo{\includegraphics[height=0.5cm]{RUGR_logoEN_rood_RGB}}
 
+\usepackage{listings}
+\input{lua.def}
+\lstset{language=lua, basicstyle=\small, stringstyle=\upshape,
+stringstyle=\ttfamily, showstringspaces=false, tabsize=4}
+
 \begin{document}
 
 \begin{frame}
@@ -105,14 +110,6 @@
 
 \begin{frame}
 \frametitle{Demonstration}
-\begin{itemize}
-\item Hopefully, I can do a live demonstration
-\item ... and skip the next few slides
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Demonstration}
 \includegraphics[width=0.7\textwidth]{demo01}
 \end{frame}
 
@@ -123,7 +120,175 @@
 
 \begin{frame}
 \frametitle{Demonstration}
-\includegraphics[width=0.8\textwidth]{demo03}
+\includegraphics[width=0.7\textwidth]{demo03}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Puzzle (part 1)}
+Initial situation:
+\begin{itemize}
+\item There are two wise persons: Abelard (1) and Heloise (2)
+\item There are 3 hats, two red (r) and one white (w)
+\item Each wise person wears a hat
+\item Each wise person can see the other's hat
+\item Each wise person can {\em not} see his/her own hat
+\end{itemize}
+Can they figure out their own hat's color?
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Model: initial situation}
+
+\begin{lstlisting}
+-- agents[1] = "Abelard", agents[2] = "Heloise"
+agents = {"Abelard", "Heloise"}
+
+-- propositions:
+-- r1: Abelard wears a red hat
+-- w1: Abelard wears the white hat
+-- r2: Heloise wears a red hat
+-- w2: Heloise wears the white hat
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Model: initial situation}
+\begin{lstlisting}
+-- each person has only one hat
+oneHat = "(r1 = ~w1) & (r2 = ~w2)"
+\end{lstlisting}
+\pause
+\begin{lstlisting}
+-- there is only one white hat
+oneWhite = "(w1 > r2) & (w2 > r1)"
+\end{lstlisting}
+\pause
+\begin{lstlisting}
+-- Abelard can see Heloise's hat
+abelardSees = "#_1 w2 | #_1 r2"
+\end{lstlisting}
+\pause
+\begin{lstlisting}
+-- Heloise can see Abelard's hat
+heloiseSees = "#_2 w1 | #_2 r1"
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Model: initial situation}
+\begin{lstlisting}
+-- background knowledge:
+background = conj(conj(oneHat, oneWhite),
+    conj(abelardSees, heloiseSees))
+
+-- add the background and the wise persons'
+-- knowledge about it (to depth 2)
+th = oops.Theory()
+th:add(background)
+th:add(knows("1", background))
+th:add(knows("2", background))
+th:add(knows2("2", "1", background))
+th:add(knows2("1", "2", background))
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Model: initial situation}
+\begin{lstlisting}
+-- print knowledge state of agent
+function printKnowledge(th, agent)
+    -- ... 
+end
+
+-- print knowledge state of Abelard
+function printAbelard(th)
+    printKnowledge(th, 1)
+end
+
+-- print knowledge state of Heloise
+function printHeloise(th)
+    printKnowledge(th, 2)
+end
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Model: initial situation}
+\begin{lstlisting}
+-- make sure we can show the counter model
+oops.attachModelConstructor()
+
+print("Initial Situation: ")
+printAbelard(th)
+printHeloise(th)
+\end{lstlisting}
+\begin{block}{Output}
+\verb!Initial Situation:! \\
+\verb!Abelard doesn't know! \\
+\verb!Heloise doesn't know!
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Model: initial situation}
+\begin{lstlisting}
+oops.showModel()
+\end{lstlisting}
+\includegraphics[width=\textwidth]{demo04}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Puzzle (part 2)}
+\begin{itemize}
+\item Abelard is asked if he knows the color of his hat
+\item Abelard announces that he doesn't
+\item Now Heloise knows the color of her hat
+\end{itemize}
+What is the color of Heloise's hat?
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Model: after Abelard's announcement}
+\begin{lstlisting}
+-- After Abelard announces he doesn't know:
+abelardKnows = "#_1 w1 | #_1 r1"
+th:add(oops.Formula("#_2 ~ F"):substitute(
+    {F = abelardKnows}, {}))
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Model: after Abelard's announcement}
+\begin{lstlisting}
+print()
+print("After Abelard's announcement: ")
+printAbelard(th)
+oops.showModel()
+printHeloise(th)
+print("Consistent: " .. tostring(th:consistent()))
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Model: after Abelard's announcement}
+\begin{block}{Output}
+\verb!After Abelard's announcement:! \\
+\verb!Abelard doesn't know! \\
+\verb!Heloise knows his/her hat is red! \\
+\verb!Consistent: true!
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Model: after Abelard's announcement}
+Abelard still doesn't know:
+\only<1>{
+\includegraphics[width=\textwidth]{demo05}
+}
+\only<2>{
+\includegraphics[width=\textwidth]{demo06}
+}
 \end{frame}
 
 \section{Conclusion}
@@ -131,12 +296,39 @@
 
 \begin{frame}
 \frametitle{Conclusion}
-
+{\tt OOPS} has some interesting features:
+\begin{itemize}
+\item Cross-platform, easy to run, open source
+\item GUI and integrated scripting
+\item Tableau visualization
+	\begin{itemize}
+	\item Sometimes useful when `debugging' simple models
+	\item Useful when learning tableau methods (check your own answers)
+	\end{itemize}
+\item Counter model visualization
+	\begin{itemize}
+	\item Useful when learning about Kripke semantics
+	\item Useful when `debugging' less simple models
+	\end{itemize}
+\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Future Work}
-
+However, much remains to be done:
+\begin{itemize}
+\item Provide nicer Lua interface (implemented in Lua)
+\item Be able to specify proof rules in Lua
+\item More efficient proof algorithm
+\item Formula simplification
+\item Kripke models:
+	\begin{itemize}
+	\item Construct / alter models through scripting
+	\item Model checking
+	\item Bisimulation
+	\end{itemize}
+\item {\tt OOPS} as a Lua library (in addition to vice versa)
+\end{itemize}
 \end{frame}
 
 \end{document}
