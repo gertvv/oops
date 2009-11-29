@@ -3,6 +3,7 @@ package nl.rug.ai.mas.oops.lua;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.Vector;
 
 import nl.rug.ai.mas.oops.ObserveProver;
@@ -19,6 +20,7 @@ import nl.rug.ai.mas.oops.tableau.Rule;
 
 import org.luaj.platform.J2sePlatform;
 import org.luaj.vm.LFunction;
+import org.luaj.vm.LPrototype;
 import org.luaj.vm.LString;
 import org.luaj.vm.LTable;
 import org.luaj.vm.LUserData;
@@ -129,8 +131,13 @@ public class LuaProver {
 	}
 	
 	public void doStream(InputStream is, String name) {
-		if (d_vm.load(is, name) == 0) {
+		int result = d_vm.load(is, name);
+		if (result == 0) {
 			d_vm.call(0,0);
+		} else if (result == LuaState.LUA_ERRMEM){
+			System.err.println("ERROR: Lua ran out of memory while parsing");
+		} else {
+			System.err.println("ERROR: Lua encountered a syntax error");
 		}
 	}
 
