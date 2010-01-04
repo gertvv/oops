@@ -14,6 +14,7 @@ cp ../styles/entcs/entcs.cls $DEST/
 cp ../styles/entcs/entcs.bst $DEST/
 cp lua.def $DEST/
 cp paper.pdf $DEST/
+cp template.txt $DEST/
 
 rm -f m4m6-oops.zip
 zip -r m4m6-oops $DEST/

@@ -1,0 +1,19 @@
+=======Template for each paper==============================
+Paper Title:              OOPS: An S5n Prover for Educational Settings
+Journal title:            Electronic Notes in Theoretical Computer Science
+Journal Acronym:          ENTCS 
+First Author Initials:    G.
+First Author Last Name:   van Valkenhoef
+Corr Author Title:        Mr.
+Corr Author Initials:     G.
+Corr Author Last Name:    van Valkenhoef
+Corr Author Institute:    Department of Business and ICT, University of Groningen
+Corr Author Address 1:    P.O. Box 800
+Corr Author Address 2:    
+Corr Author City:         Groningen
+Corr Author Country:      The Netherlands
+Corr Author Postcode:     9700 AV
+Corr Author Phone:        +31 50 363 4495
+Corr Author Fax:          +31 50 363 2275
+Corr Author Email:        g.h.m.van.valkenhoef@rug.nl
+=========================================================
