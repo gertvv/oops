@@ -11,15 +11,14 @@ other similar systems.
 Given this, we now identify several directions for further work on \oops.
 First of all, although the implementation currently allows new rule sets to be
 implemented relatively easily, this requires extending the Java source code and
-recompiling \oops. To remedy this, we would like to implement rule sets as Lua
-modules and provide such modules for several logics. We would also like to
-implement an algorithm that allows the $S5_n$ tableau to be generated in
-{\sc pspace}, as our current implementation may require an exponential amount of space.
+recompiling \oops.
+To remedy this, we would like to implement rule sets as Lua modules and provide such modules for several logics.
+Lua is specifically designed to make it easy to implement domain specific languages.
+This facility can be used to provide a more direct integration of the formula input syntax with Lua, making formula input seem like native language support.
+The Lua bindings in general should be improved, but this will require further input from actual use as an educational tool.
+We would also like to implement an algorithm that allows the $S5_n$ tableau to be generated in {\sc pspace}, as our current implementation may require an exponential amount of space.
 
-Furthermore, we would like to have a more complete set of tools to interact
-with theories, formulas and Kripke models. For example, it should be possible
-to simplify formulas and theories. In the case of Kripke models, we would like
-to be able to construct and alter models ourselves and to perform operations
-such as model checking and bisimulation. Finally, the GUI should allow users
-to provide keyboard input to Lua scripts (through `standard in') so that one
-can develop interactive \oops\ scripts.
+Furthermore, we would like to have a more complete set of tools to interact with theories, formulas and Kripke models.
+For example, it should be possible to simplify formulas and theories.
+In the case of Kripke models, we would like to be able to construct and alter models ourselves and to perform operations such as model checking and bisimulation.
+Finally, the GUI should allow users to provide keyboard input to Lua scripts (through `standard in') so that one can develop interactive \oops\ scripts.
