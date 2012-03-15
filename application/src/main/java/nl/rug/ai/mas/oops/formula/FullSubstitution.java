@@ -53,7 +53,7 @@ public class FullSubstitution {
 		return d_fsub.put(k, v);
 	}
 
-	public Formula get(Variable<Formula> k) {
+	public Formula getFormula(Variable<Formula> k) {
 		return d_fsub.get(k);
 	}
 
@@ -61,7 +61,7 @@ public class FullSubstitution {
 		return d_asub.put(k, v);
 	}
 
-	public Agent get(Variable<Agent> k) {
+	public Agent getAgent(Variable<Agent> k) {
 		return d_asub.get(k);
 	}
 

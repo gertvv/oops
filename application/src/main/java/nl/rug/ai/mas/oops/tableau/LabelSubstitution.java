@@ -59,7 +59,7 @@ public class LabelSubstitution {
 		return d_lsub.put(k, v);
 	}
 
-	public Label get(Variable<Label> k) {
+	public Label getLabel(Variable<Label> k) {
 		return d_lsub.get(k);
 	}
 
@@ -71,7 +71,7 @@ public class LabelSubstitution {
 		return d_wsub.put(k, v);
 	}
 
-	public World get(Variable<World> k) {
+	public World getWorld(Variable<World> k) {
 		return d_wsub.get(k);
 	}
 
@@ -83,7 +83,7 @@ public class LabelSubstitution {
 		return d_asub.put(k, v);
 	}
 
-	public Agent get(Variable<Agent> k) {
+	public Agent getAgent(Variable<Agent> k) {
 		return d_asub.get(k);
 	}
 
