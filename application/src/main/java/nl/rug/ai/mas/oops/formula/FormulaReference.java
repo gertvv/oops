@@ -38,7 +38,7 @@ implements Formula {
 	}
 
 	public Formula substitute(FullSubstitution s) {
-		Formula f = s.get(get());
+		Formula f = s.getFormula(get());
 		if (f != null)
 			return f;
 		return this;

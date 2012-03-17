@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>net.sourceforge.luaj</groupId>
 			<artifactId>luaj-j2se</artifactId>
-			<version>0.97</version>
+			<version>1.0.5</version>
 		</dependency>
 
 		<dependency>
