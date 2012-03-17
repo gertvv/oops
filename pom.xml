@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>nl.rug.ai.mas</groupId>
+	<artifactId>oops-pom</artifactId>
+	<version>0.6.2</version>
+	<packaging>pom</packaging>
+	<name>OOPS project</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties> 
+
+	<dependencies>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Java configuration -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+
+			<!-- eclipse integration -->
+			<plugin>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<downloadJavadocs>true</downloadJavadocs>
+					<downloadSources>true</downloadSources>
+				</configuration>
+			</plugin>
+
+			<!-- attach source to release -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- attach javadoc to release -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<modules>
+		<module>parser</module>
+		<module>application</module>
+	</modules>
+</project>
+

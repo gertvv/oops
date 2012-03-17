@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
 	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>nl.rug.ai.mas</groupId>
+		<artifactId>oops-pom</artifactId>
+		<version>0.6.2</version>
+	</parent>
+
 	<groupId>nl.rug.ai.mas</groupId>
 	<artifactId>oops</artifactId>
-	<version>0.6.2</version>
-
-	<repositories>
-		<repository>
-			<id>nl.gertvv</id>
-			<name>gertvv.nl</name>
-			<url>http://gertvv.nl/mvn</url>
-			<layout>default</layout>
-		</repository>
-	</repositories>
 
 	<dependencies>
 		<dependency>
@@ -46,7 +43,6 @@
 			<artifactId>luaj-j2se</artifactId>
 			<version>1.0.5</version>
 		</dependency>
-
 		<dependency>
 			<groupId>nl.rug.ai.mas</groupId>
 			<artifactId>oops-parser</artifactId>
@@ -56,13 +52,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>

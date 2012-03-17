@@ -2,33 +2,32 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
 	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>nl.rug.ai.mas</groupId>
+		<artifactId>oops-pom</artifactId>
+		<version>0.6.2</version>
+	</parent>
+
 	<groupId>nl.rug.ai.mas</groupId>
 	<artifactId>oops-parser</artifactId>
 	<version>0.6</version>
 
 	<build>
 		<plugins>
-		<plugin>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<configuration>
-				<source>1.5</source>
-				<target>1.5</target>
-			</configuration>
-		</plugin>
-		<plugin>
-		   <groupId>org.codehaus.mojo</groupId>
-		   <artifactId>sablecc-maven-plugin</artifactId>
-		   <executions>
-			 <execution>
-			   <phase>generate-sources</phase>
-			   <goals>
-				 <goal>generate</goal>
-			   </goals>
-			 </execution>
-		   </executions>
-		</plugin>
+			<plugin>
+			   <groupId>org.codehaus.mojo</groupId>
+			   <artifactId>sablecc-maven-plugin</artifactId>
+			   <executions>
+				 <execution>
+				   <phase>generate-sources</phase>
+				   <goals>
+					 <goal>generate</goal>
+				   </goals>
+				 </execution>
+			   </executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>
