@@ -10,6 +10,7 @@ import java.io.PipedOutputStream;
 
 import javax.swing.JTextArea;
 
+@SuppressWarnings("serial")
 public class Console extends JTextArea {
 	public PipedInputStream d_out;
 	public PipedInputStream d_err;

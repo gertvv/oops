@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
 
+@SuppressWarnings("serial")
 public class Placement<CellType extends Cell> 
 extends HashMap<CellType, Point> {
 	@SuppressWarnings("unchecked")

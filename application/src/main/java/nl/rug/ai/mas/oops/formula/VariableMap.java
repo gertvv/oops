@@ -24,6 +24,7 @@ import java.util.*;
 /**
  * A map from variable names to a class implementing them.
  */
+@SuppressWarnings("serial")
 public class VariableMap<T> extends HashMap<String, Variable<T>> {
 	public VariableMap() {
 		super();

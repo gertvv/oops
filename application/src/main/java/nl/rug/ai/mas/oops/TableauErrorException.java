@@ -19,6 +19,7 @@
 
 package nl.rug.ai.mas.oops;
 
+@SuppressWarnings("serial")
 public class TableauErrorException extends Exception {
 	public TableauErrorException(String msg) {
 		super(msg);

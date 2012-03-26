@@ -27,6 +27,7 @@ import nl.rug.ai.mas.oops.formula.AgentId;
  * A map from agent symbols to a class implementing them. This enables
  * identification of different agents.
  */
+@SuppressWarnings("serial")
 public class AgentIdMap extends HashMap<String, AgentId> {
 	private int d_code;
 

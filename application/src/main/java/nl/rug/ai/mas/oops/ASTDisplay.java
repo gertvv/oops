@@ -17,7 +17,9 @@ import nl.rug.ai.mas.oops.parser.lexer.*;
 import nl.rug.ai.mas.oops.parser.analysis.*;
 import nl.rug.ai.mas.oops.parser.node.*;
 
-@SuppressWarnings("unchecked")
+//NOTE: (WR) this annotation explicitly suppressed warnings about TreePath and
+//MutableTreeNode generic instantiations...
+//@SuppressWarnings("unchecked")
 public class ASTDisplay extends DepthFirstAdapter
 {
 	public static void main (String[] argv) {
@@ -34,14 +36,14 @@ public class ASTDisplay extends DepthFirstAdapter
 		}
 	}
     
-	private Stack parents = new Stack ();
+	private Stack<DefaultMutableTreeNode> parents = new Stack<DefaultMutableTreeNode> ();
  
 	public ASTDisplay() {
 	}
  
 	public void outStart(Start node) {
 		JFrame frame = new JFrame ("AST Displayer");
-		JTree tree = new JTree ((DefaultMutableTreeNode) parents.pop ());
+		JTree tree = new JTree (parents.pop ());
 		JScrollPane pane = new JScrollPane (tree);
 
 		expandAll (tree);
@@ -72,8 +74,8 @@ public class ASTDisplay extends DepthFirstAdapter
 	 * on the stack, so we pop it off and add it to that node
 	 */
 	public void defaultOut(Node node) {
-		DefaultMutableTreeNode thisNode = (DefaultMutableTreeNode)parents.pop();
-		((DefaultMutableTreeNode)parents.peek()).add(thisNode);
+		DefaultMutableTreeNode thisNode = parents.pop();
+		(parents.peek()).add(thisNode);
 	}
 
 	/**
@@ -101,8 +103,8 @@ public class ASTDisplay extends DepthFirstAdapter
 	}
 
 	public static void expandAll(JTree tree, TreePath path) {
-		for (Iterator i = extremalPaths(tree.getModel(), path,
-				new HashSet()).iterator();
+		for (Iterator<TreePath> i = extremalPaths(tree.getModel(), path,
+				new HashSet<TreePath>()).iterator();
 				i.hasNext(); )
 			tree.expandPath((TreePath)i.next());
 	}
@@ -120,9 +122,9 @@ public class ASTDisplay extends DepthFirstAdapter
         in the order in which they appear in pre-order in the
         tree model.
     */
-    public static Collection extremalPaths(TreeModel data,
+    public static Collection<TreePath> extremalPaths(TreeModel data,
 										   TreePath path, 
-										   Collection result)
+										   Collection<TreePath> result)
     {
         result.clear();
 		
@@ -138,7 +140,7 @@ public class ASTDisplay extends DepthFirstAdapter
 	
 	private static void extremalPathsImpl(TreeModel data, 
 										  TreePath path,
-										  Collection result)
+										  Collection<TreePath> result)
     {
         Object node = path.getLastPathComponent();
         

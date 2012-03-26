@@ -27,6 +27,7 @@ import nl.rug.ai.mas.oops.formula.Proposition;
  * A map from proposition symbols to a class implementing them. This enables
  * identification of different propositions.
  */
+@SuppressWarnings("serial")
 public class PropositionMap extends HashMap<String, Proposition> {
 	private int d_code;
 

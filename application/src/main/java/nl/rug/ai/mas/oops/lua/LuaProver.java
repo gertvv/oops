@@ -3,7 +3,6 @@ package nl.rug.ai.mas.oops.lua;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.util.Vector;
 
 import nl.rug.ai.mas.oops.ObserveProver;
@@ -20,7 +19,6 @@ import nl.rug.ai.mas.oops.tableau.Rule;
 
 import org.luaj.platform.J2sePlatform;
 import org.luaj.vm.LFunction;
-import org.luaj.vm.LPrototype;
 import org.luaj.vm.LString;
 import org.luaj.vm.LTable;
 import org.luaj.vm.LUserData;

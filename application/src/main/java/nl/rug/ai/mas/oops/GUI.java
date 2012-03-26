@@ -27,6 +27,7 @@ import javax.swing.ScrollPaneConstants;
 
 import nl.rug.ai.mas.oops.lua.LuaProver;
 
+@SuppressWarnings("serial")
 public class GUI extends JFrame {
 	private ScriptEditor d_editorArea;
 	private Console d_console;

@@ -27,6 +27,7 @@ import java.awt.Point;
 import java.awt.Dimension;
 import nl.rug.ai.mas.oops.render.tree.Edge;
 
+@SuppressWarnings("serial")
 public class TidyTree extends JComponent {
 	private TidyTreeLayout d_layout;
 

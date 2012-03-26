@@ -24,6 +24,7 @@ import java.util.*;
 /**
  * A substitution of values for variables
  */
+@SuppressWarnings("serial")
 public class Substitution<T> extends HashMap<Variable<T>, T> {
 	public Substitution() {
 		super();

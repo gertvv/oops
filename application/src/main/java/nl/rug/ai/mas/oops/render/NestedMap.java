@@ -112,7 +112,7 @@ public class NestedMap<K0, K1, V> implements Map<K1, V> {
 		for (HashMap<K1, V> m : d_data.values()) {
 			size += m.size();
 		}
-		return size();
+		return size;
 	}
 
 	public Collection<V> values() {
