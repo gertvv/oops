@@ -9,10 +9,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JComponent;
-import javax.swing.JTextArea;
+
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 public class ScriptEditor {
-	private JTextArea d_area;
+	//private JTextArea d_area;
+	private RTextScrollPane d_area;
 	private File d_file;
 	
 	public ScriptEditor() {
@@ -20,7 +24,7 @@ public class ScriptEditor {
 	}
 
 	public String getText() {
-		return d_area.getText();
+		return d_area.getTextArea().getText();
 	}
 	
 	public JComponent getComponent() {
@@ -48,11 +52,11 @@ public class ScriptEditor {
 		}
 		r.close();
 		
-		d_area.setText(sb.toString());
+		d_area.getTextArea().setText(sb.toString());
 	}
 	
 	public void clear() {
-		d_area.setText("");
+		d_area.getTextArea().setText("");
 	}
 	
 	public void write() throws IOException {
@@ -61,18 +65,25 @@ public class ScriptEditor {
 		}
 		
 		BufferedWriter w = new BufferedWriter(new FileWriter(d_file));
-		w.write(d_area.getText());
+		w.write(d_area.getTextArea().getText());
 		w.close();
 	}
 	
-	private static JTextArea createEditor() {
-		JTextArea editorArea = new JTextArea();
+	private static RTextScrollPane createEditor() {
+		RSyntaxTextArea editorArea = new RSyntaxTextArea();
 		editorArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
 		//editorArea.setColumns(80);
 		//editorArea.setRows(25);
 		editorArea.setLineWrap(true);
 		editorArea.setWrapStyleWord(true);
-		return editorArea;
+		editorArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_LUA);
+		editorArea.setAutoIndentEnabled(true);
+		
+		RTextScrollPane sp = new RTextScrollPane(editorArea);
+		sp.setLineNumbersEnabled(true);
+		
+		
+		return sp;
 	}
 	
 }
