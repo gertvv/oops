@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 
+import nl.rug.ai.mas.oops.DynamicProver;
+import nl.rug.ai.mas.oops.DynamicProver.AxiomSystem;
 import nl.rug.ai.mas.oops.ObserveProver;
 import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
@@ -73,6 +75,9 @@ public class LuaProver {
 		d_vm.pushlvalue(new FunctionAttachModelConstructor());
 		d_vm.setfield(-2, new LString("attachModelConstructor"));
 		
+		d_vm.pushlvalue(new FunctionSetProver());
+		d_vm.setfield(-2, new LString("setProver"));
+		
 		d_vm.pushlvalue(new FunctionGetModel());
 		d_vm.setfield(-2, new LString("getModel"));
 		
@@ -118,6 +123,43 @@ public class LuaProver {
 			} catch (FontFormatException e) {
 				throw new RuntimeException(e);
 			}
+			return 0;
+		}
+	}
+	
+	private final class FunctionSetProver extends LFunction {
+		public int invoke(LuaState L) {
+			String systemId = d_vm.checkstring(1);
+			AxiomSystem system = null;
+			try {
+				system = DynamicProver.AxiomSystem.valueOf(systemId);
+			} catch (Exception e) {
+				system = null;
+			}
+			if (system == null) {
+				d_vm.error("Unknown axiom system specified");
+			}
+			
+			Prover prover = system.build();
+			
+			// Change the prover
+			d_prover = prover;
+			
+			// Redefine the Theory and Formula functions to use the new prover
+			
+			LuaFormula formula = new LuaFormula(d_parser, d_prover);
+			LuaTheory theory = new LuaTheory(formula, d_prover);
+			
+			d_vm.getglobal("oops");
+			
+			formula.register(d_vm);
+			d_vm.setfield(-2, new LString("Formula")); // Give the constructor a name
+			
+			theory.register(d_vm);
+			d_vm.setfield(-2, new LString("Theory")); // Give the constructor a name
+			
+			d_vm.setglobal("oops");
+						
 			return 0;
 		}
 	}

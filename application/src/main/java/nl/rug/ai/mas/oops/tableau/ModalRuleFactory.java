@@ -1,25 +1,26 @@
 /**
-  * This program (working title: MAS Prover) is an automated tableaux prover
-  * for epistemic logic (S5n).
-  * Copyright (C) 2007  Elske van der Vaart and Gert van Valkenhoef
+ * This program (working title: MAS Prover) is an automated tableaux prover
+ * for epistemic logic (S5n).
+ * Copyright (C) 2007  Elske van der Vaart and Gert van Valkenhoef
 
-  * This program is free software; you can redistribute it and/or modify it
-  * under the terms of the GNU General Public License version 2 as published
-  * by the Free Software Foundation.
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 as published
+ * by the Free Software Foundation.
 
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
 
-  * You should have received a copy of the GNU General Public License along
-  * with this program; if not, write to the Free Software Foundation, Inc.,
-  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-  */
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 package nl.rug.ai.mas.oops.tableau;
 
 import java.util.*;
+
 import nl.rug.ai.mas.oops.formula.*;
 import nl.rug.ai.mas.oops.parser.Context;
 
@@ -27,24 +28,111 @@ public class ModalRuleFactory {
 	public static String LOZENGE = "&#9674;";
 	public static String SQUARE = "&#9723;";
 
+	private interface RuleClosure {
+		public Rule buildRule(Context c);
+	}
+
+	public enum RuleID {
+		PosO1(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildPosO1(c);
+			}
+		}), PosO2(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildPosO2(c);
+			}
+		}), PosS1(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildPosS1(c);
+			}
+		}), PosS2(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildPosS2(c);
+			}
+		}), BNecO1(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildBNecO1(c);
+			}
+		}), BNecO2(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildBNecO2(c);
+			}
+		}), BNecS1(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildBNecS1(c);
+			}
+		}), BNecS2(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildBNecS2(c);
+			}
+		}), SNecO1(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildSNecO1(c);
+			}
+		}), SNecO2(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildSNecO2(c);
+			}
+		}), SNecS1(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildSNecS1(c);
+			}
+		}), SNecS2(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildSNecS2(c);
+			}
+		}), KPos1(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildKPos1(c);
+			}
+		}), KPos2(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildKPos2(c);
+			}
+		}), KBNec1(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildKBNec1(c);
+			}
+		}), KBNec2(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildKBNec2(c);
+			}
+		});
+
+		private final RuleClosure func;
+
+		RuleID(RuleClosure func) {
+			this.func = func;
+		}
+
+		public Rule buildRule(Context c) {
+			return func.buildRule(c);
+		}
+	}
+
 	private ModalRuleFactory() {
 	}
 
 	public static Vector<Rule> build(Context context) {
 		Vector<Rule> rules = new Vector<Rule>(12);
-		rules.add(buildPosO1(context));
-		rules.add(buildPosO2(context));
-		rules.add(buildPosS1(context));
-		rules.add(buildPosS2(context));
-		rules.add(buildBNecO1(context));
-		rules.add(buildBNecO2(context));
-		rules.add(buildBNecS1(context));
-		rules.add(buildBNecS2(context));
-		rules.add(buildSNecO1(context));
-		rules.add(buildSNecO2(context));
-		rules.add(buildSNecS1(context));
-		rules.add(buildSNecS2(context));
+
+		for (RuleID rule : RuleID.values()) {
+			rules.add(rule.buildRule(context));
+		}
 		return rules;
+	}
+
+	public static Vector<Rule> build(Context context, Vector<RuleID> ruleIds) {
+		Vector<Rule> rules = new Vector<Rule>();
+
+		for (RuleID rule : ruleIds) {
+			rules.add(rule.buildRule(context));
+		}
+		return rules;
+	}
+
+	public static Rule build(Context context, RuleID rule) {
+		return rule.buildRule(context);
 	}
 
 	public static Rule buildPosO1(Context context) {
@@ -52,22 +140,19 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
-		AgentReference jref = new AgentReference(j, 
-			context.getAgentCodeMap().code(j));
+		AgentReference jref = new AgentReference(j, context.getAgentCodeMap().code(j));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
 		// new world
-		//Variable<World> n = new Variable<World>("n");
-		//WorldReference nref = new WorldReference(n);
+		// Variable<World> n = new Variable<World>("n");
+		// WorldReference nref = new WorldReference(n);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
@@ -79,9 +164,7 @@ public class ModalRuleFactory {
 		Label templateLabel = new LabelInstance(lref, kref, jref);
 		Label rewriteLabel = new LabelInstance(templateLabel, n, iref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new CreateRule("PosO1", html,
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula), c);
+		return new CreateRule("PosO1", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildPosO2(Context context) {
@@ -89,22 +172,19 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
-		AgentReference jref = new AgentReference(j, 
-			context.getAgentCodeMap().code(j));
+		AgentReference jref = new AgentReference(j, context.getAgentCodeMap().code(j));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
 		// new world
-		//Variable<World> n = new Variable<World>("n");
-		//WorldReference nref = new WorldReference(n);
+		// Variable<World> n = new Variable<World>("n");
+		// WorldReference nref = new WorldReference(n);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
@@ -116,9 +196,7 @@ public class ModalRuleFactory {
 		Label templateLabel = new LabelInstance(lref, kref, jref);
 		Label rewriteLabel = new LabelInstance(templateLabel, n, iref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new CreateRule("PosO2", html,
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula), c);
+		return new CreateRule("PosO2", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildPosS1(Context context) {
@@ -126,18 +204,16 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
 		// new world
-		//Variable<World> n = new Variable<World>("n");
-		//WorldReference nref = new WorldReference(n);
+		// Variable<World> n = new Variable<World>("n");
+		// WorldReference nref = new WorldReference(n);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
@@ -148,9 +224,7 @@ public class ModalRuleFactory {
 		WorldInstance n = new WorldInstance(rewriteFormula);
 		Label templateLabel = new LabelInstance(lref, kref, iref);
 		Label rewriteLabel = new LabelInstance(lref, n, iref);
-		return new CreateRule("PosS1", html, 
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula));
+		return new CreateRule("PosS1", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula));
 	}
 
 	public static Rule buildPosS2(Context context) {
@@ -158,18 +232,16 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
 		// new world
-		//Variable<World> n = new Variable<World>("n");
-		//WorldReference nref = new WorldReference(n);
+		// Variable<World> n = new Variable<World>("n");
+		// WorldReference nref = new WorldReference(n);
 		// superlabel
 		Variable<Label> l = new Variable<Label>("L");
 		LabelReference lref = new LabelReference(l);
@@ -180,9 +252,7 @@ public class ModalRuleFactory {
 		WorldInstance n = new WorldInstance(rewriteFormula);
 		Label templateLabel = new LabelInstance(lref, kref, iref);
 		Label rewriteLabel = new LabelInstance(lref, n, iref);
-		return new CreateRule("PosS2", html,
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula));
+		return new CreateRule("PosS2", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula));
 	}
 
 	public static Rule buildBNecO1(Context context) {
@@ -190,16 +260,13 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
-		AgentReference jref = new AgentReference(j, 
-			context.getAgentCodeMap().code(j));
+		AgentReference jref = new AgentReference(j, context.getAgentCodeMap().code(j));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
@@ -216,9 +283,7 @@ public class ModalRuleFactory {
 		Label templateLabel = new LabelInstance(lref, kref, jref);
 		Label rewriteLabel = new LabelInstance(templateLabel, nref, iref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("BNecO1", html,
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula), c);
+		return new AccessRule("BNecO1", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildBNecO2(Context context) {
@@ -226,16 +291,13 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
-		AgentReference jref = new AgentReference(j, 
-			context.getAgentCodeMap().code(j));
+		AgentReference jref = new AgentReference(j, context.getAgentCodeMap().code(j));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
@@ -252,9 +314,7 @@ public class ModalRuleFactory {
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("BNecO2", html,
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula), c);
+		return new AccessRule("BNecO2", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildBNecS1(Context context) {
@@ -262,12 +322,10 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
@@ -283,9 +341,7 @@ public class ModalRuleFactory {
 		Label rewriteLabel = new LabelInstance(lref, nref, iref);
 		Formula templateFormula = new MultiBox(iref, fref);
 		Formula rewriteFormula = fref;
-		return new AccessRule("BNecS1", html,
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula));
+		return new AccessRule("BNecS1", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula));
 	}
 
 	public static Rule buildBNecS2(Context context) {
@@ -293,12 +349,10 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
@@ -314,9 +368,7 @@ public class ModalRuleFactory {
 		Label rewriteLabel = new LabelInstance(lref, nref, iref);
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
-		return new AccessRule("BNecS2", html,
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula));
+		return new AccessRule("BNecS2", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula));
 	}
 
 	public static Rule buildSNecO1(Context context) {
@@ -324,16 +376,13 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
-		AgentReference jref = new AgentReference(j, 
-			context.getAgentCodeMap().code(j));
+		AgentReference jref = new AgentReference(j, context.getAgentCodeMap().code(j));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
@@ -347,9 +396,7 @@ public class ModalRuleFactory {
 		Formula templateFormula = new MultiBox(iref, fref);
 		Formula rewriteFormula = fref;
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("SNecO1", html,
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula), c);
+		return new AccessRule("SNecO1", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildSNecO2(Context context) {
@@ -357,16 +404,13 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// different agent
 		Variable<Agent> j = new Variable<Agent>("j");
-		AgentReference jref = new AgentReference(j, 
-			context.getAgentCodeMap().code(j));
+		AgentReference jref = new AgentReference(j, context.getAgentCodeMap().code(j));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
@@ -380,9 +424,7 @@ public class ModalRuleFactory {
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
 		Constraint c = new NotEqualConstraint(i, j);
-		return new AccessRule("SNecO2", html,
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula), c);
+		return new AccessRule("SNecO2", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildSNecS1(Context context) {
@@ -390,12 +432,10 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
@@ -405,12 +445,10 @@ public class ModalRuleFactory {
 
 		// formula f. agents i, j. worlds k, n. label l.
 		Label templateLabel = new LabelInstance(lref, kref, iref);
-		Label rewriteLabel = lref; 
+		Label rewriteLabel = lref;
 		Formula templateFormula = new MultiBox(iref, fref);
 		Formula rewriteFormula = fref;
-		return new AccessRule("SNecS1", html,
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula));
+		return new AccessRule("SNecS1", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula));
 	}
 
 	public static Rule buildSNecS2(Context context) {
@@ -418,12 +456,10 @@ public class ModalRuleFactory {
 		// variables occuring
 		// the formula
 		Variable<Formula> f = new Variable<Formula>("F");
-		FormulaReference fref = new FormulaReference(f,
-			context.getFormulaCodeMap().code(f));
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
 		// agent for which the modal operator holds
 		Variable<Agent> i = new Variable<Agent>("i");
-		AgentReference iref = new AgentReference(i, 
-			context.getAgentCodeMap().code(i));
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
 		// current world
 		Variable<World> k = new Variable<World>("k");
 		WorldReference kref = new WorldReference(k);
@@ -436,8 +472,148 @@ public class ModalRuleFactory {
 		Label rewriteLabel = lref;
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(fref);
-		return new AccessRule("SNecS2", html,
-				new Node(templateLabel, templateFormula),
-				new Node(rewriteLabel, rewriteFormula));
+		return new AccessRule("SNecS2", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula));
 	}
+
+	public static Rule buildKPos1(Context context) {
+		String html = "KM<sub>" + LOZENGE + "</sub>";
+		// variables occuring
+		
+		// the formula
+		Variable<Formula> f = new Variable<Formula>("F");
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
+		
+		// agent for which the modal operator holds
+		Variable<Agent> i = new Variable<Agent>("i");
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
+		
+		// different agent
+		Variable<Agent> j = new Variable<Agent>("j");
+		AgentReference jref = new AgentReference(j, context.getAgentCodeMap().code(j));
+		
+		// current world
+		Variable<World> k = new Variable<World>("k");
+		WorldReference kref = new WorldReference(k);
+		
+		// new world
+		//Variable<World> n = new Variable<World>("n");
+		//WorldReference nref = new WorldReference(n);
+		
+		// superlabel
+		Variable<Label> l = new Variable<Label>("L");
+		LabelReference lref = new LabelReference(l);
+
+		// formula f. agents i, j. worlds k, n. label l.
+		Formula templateFormula = new MultiDiamond(iref, fref);
+		Formula rewriteFormula = fref;
+		
+		WorldInstance n = new WorldInstance(rewriteFormula);
+		Label templateLabel = new LabelInstance(lref, kref, jref);
+		Label rewriteLabel = new LabelInstance(templateLabel, n, iref);
+
+		return new CreateRule("KPos1", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula));
+	}
+	
+	public static Rule buildKBNec1(Context context) {
+		String html = "KK<sub>" + SQUARE + "</sub>";
+		// variables occuring
+		// the formula
+		Variable<Formula> f = new Variable<Formula>("F");
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
+		
+		// agent for which the modal operator holds
+		Variable<Agent> i = new Variable<Agent>("i");
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
+		
+		// current world
+		Variable<World> k = new Variable<World>("k");
+		WorldReference kref = new WorldReference(k);
+		
+		// new world
+		Variable<World> n = new Variable<World>("n");
+		WorldReference nref = new WorldReference(n);
+		
+		// superlabel
+		Variable<Label> l = new Variable<Label>("L");
+		LabelReference lref = new LabelReference(l);
+
+		// formula f. agents i, j. worlds k, n. label l.
+		Label templateLabel = new LabelInstance(lref, kref, iref);
+		Label rewriteLabel = new LabelInstance(lref, nref, iref);
+		Formula templateFormula = new MultiBox(iref, fref);
+		Formula rewriteFormula = fref;
+		return new AccessRule("KBNec1", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula));
+	}
+
+	public static Rule buildKPos2(Context context) {
+		// variables occuring
+		String html = "KM<sub>¬" + SQUARE + "</sub>";
+		// the formula
+		Variable<Formula> f = new Variable<Formula>("F");
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
+		
+		// agent for which the modal operator holds
+		Variable<Agent> i = new Variable<Agent>("i");
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
+		
+		// different agent
+		Variable<Agent> j = new Variable<Agent>("j");
+		AgentReference jref = new AgentReference(j, context.getAgentCodeMap().code(j));
+		
+		// current world
+		Variable<World> k = new Variable<World>("k");
+		WorldReference kref = new WorldReference(k);
+		
+		// new world
+		//Variable<World> n = new Variable<World>("n");
+		//WorldReference nref = new WorldReference(n);
+		
+		// superlabel
+		Variable<Label> l = new Variable<Label>("L");
+		LabelReference lref = new LabelReference(l);
+
+		// formula f. agents i, j. worlds k, n. label l.
+		Formula templateFormula = new Negation(new MultiBox(iref, fref));
+		Formula rewriteFormula = new Negation(fref);
+		
+		WorldInstance n = new WorldInstance(rewriteFormula);
+		Label templateLabel = new LabelInstance(lref, kref, jref);
+		Label rewriteLabel = new LabelInstance(templateLabel, n, iref);
+
+		return new CreateRule("KPos2", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula));
+	}
+	
+	public static Rule buildKBNec2(Context context) {
+		String html = "KK<sub>¬" + LOZENGE + "</sub>";
+		// variables occuring
+		// the formula
+		Variable<Formula> f = new Variable<Formula>("F");
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
+		
+		// agent for which the modal operator holds
+		Variable<Agent> i = new Variable<Agent>("i");
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
+		
+		// current world
+		Variable<World> k = new Variable<World>("k");
+		WorldReference kref = new WorldReference(k);
+		
+		// new world
+		Variable<World> n = new Variable<World>("n");
+		WorldReference nref = new WorldReference(n);
+		
+		// superlabel
+		Variable<Label> l = new Variable<Label>("L");
+		LabelReference lref = new LabelReference(l);
+
+		// formula f. agents i, j. worlds k, n. label l.
+		Label templateLabel = new LabelInstance(lref, kref, iref);
+		Label rewriteLabel = new LabelInstance(lref, nref, iref);
+		
+		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
+		Formula rewriteFormula = new Negation(fref);
+		return new AccessRule("KBNec2", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula));
+	}
+
+	
 }

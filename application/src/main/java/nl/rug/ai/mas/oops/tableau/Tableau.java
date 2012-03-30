@@ -258,8 +258,9 @@ public class Tableau {
 				}
 			} else {
 				if (!n.getFormula().isSimple()) {
-					d_error = n.toString() + s_errorNoMatch;
-					d_result = BranchState.ERROR;
+					// HACK: suppress errors
+					//d_error = n.toString() + s_errorNoMatch;
+					//d_result = BranchState.ERROR;
 				}
 			}
 		}
