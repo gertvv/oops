@@ -11,9 +11,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +23,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
@@ -29,6 +32,7 @@ import nl.rug.ai.mas.oops.lua.LuaProver;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame {
+	private JScrollPane d_editorPane;
 	private ScriptEditor d_editorArea;
 	private Console d_console;
 	private JMenuItem d_saveItem;
@@ -36,22 +40,33 @@ public class GUI extends JFrame {
 
 	public GUI() {
 		super("OOPS Graphical Environment");
-		
+
 		setJMenuBar(buildMenuBar());
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowListener() {
 			public void windowClosing(WindowEvent e) {
 				quitApplication();
 			}
-			
-			public void windowClosed(WindowEvent e) { }
-			public void windowActivated(WindowEvent e) { }
-			public void windowDeactivated(WindowEvent e) { }
-			public void windowDeiconified(WindowEvent e) { }
-			public void windowIconified(WindowEvent e) { }
-			public void windowOpened(WindowEvent e) { }
+
+			public void windowClosed(WindowEvent e) {
+			}
+
+			public void windowActivated(WindowEvent e) {
+			}
+
+			public void windowDeactivated(WindowEvent e) {
+			}
+
+			public void windowDeiconified(WindowEvent e) {
+			}
+
+			public void windowIconified(WindowEvent e) {
+			}
+
+			public void windowOpened(WindowEvent e) {
+			}
 		});
-		
+
 		JFrame panel = this;
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -65,27 +80,29 @@ public class GUI extends JFrame {
 		panel.add(new JLabel("Editor"), c);
 		c.gridx = 2;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		panel.add(new JLabel("---"), c);
-		
+
+		// FIXME: Is this useful?
+		// panel.add(new JLabel("---"), c);
+
 		c.gridy = 2;
 		c.gridx = 1;
 		c.gridwidth = 2;
 		c.weighty = 0.7;
 		c.weightx = 1.0;
 		c.fill = GridBagConstraints.BOTH;
-		JScrollPane editorPane = new JScrollPane();
-		editorPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		d_editorArea = new ScriptEditor();
-		editorPane.setViewportView(d_editorArea.getComponent());
-		panel.add(editorPane, c);
-		
+		d_editorPane = new JScrollPane();
+		d_editorPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		d_editorArea = new ScriptEditor(false);
+		d_editorPane.setViewportView(d_editorArea.getComponent());
+		panel.add(d_editorPane, c);
+
 		c.gridy = 3;
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 0.0;
 		c.weightx = 0.0;
 		panel.add(new JLabel("Console Output"), c);
-		
+
 		c.gridy = 4;
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.BOTH;
@@ -97,7 +114,7 @@ public class GUI extends JFrame {
 		d_console.setEditable(false);
 		consolePane.setViewportView(d_console);
 		panel.add(consolePane, c);
-		
+
 		d_console.start();
 		try {
 			System.setOut(new PrintStream(d_console.getOutputStream()));
@@ -108,8 +125,7 @@ public class GUI extends JFrame {
 	}
 
 	private void showError(Exception e, String title) {
-		JOptionPane.showMessageDialog(this, title + " \n" + e.getMessage(),
-				title, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, title + " \n" + e.getMessage(), title, JOptionPane.ERROR_MESSAGE);
 	}
 
 	protected void quitApplication() {
@@ -120,13 +136,14 @@ public class GUI extends JFrame {
 	private JMenuBar buildMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.add(buildFileMenu());
+		menuBar.add(buildEditMenu());
 		menuBar.add(buildRunMenu());
 		return menuBar;
 	}
 
 	private JMenu buildRunMenu() {
 		JMenu runMenu = new JMenu("Run");
-		
+
 		JMenuItem runItem = buildMenuItem("Execute", 'E', KeyEvent.VK_E, false);
 		runItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -141,7 +158,7 @@ public class GUI extends JFrame {
 			}
 		});
 		runMenu.add(clearItem);
-		
+
 		return runMenu;
 	}
 
@@ -149,6 +166,7 @@ public class GUI extends JFrame {
 		String text = d_editorArea.getText();
 		LuaProver prover = new LuaProver();
 		prover.doStream(new ByteArrayInputStream(text.getBytes()), "EditorContents");
+
 		while (!d_console.streamsFlushed()) {
 			try {
 				Thread.sleep(100);
@@ -156,16 +174,139 @@ public class GUI extends JFrame {
 				showError(e);
 			}
 		}
+
 		System.err.println("\n  ============================= Run completed =============================\n");
+
+		// Scroll down
+		d_console.setCaretPosition(d_console.getDocument().getLength());
 	}
-	
+
 	protected void clearConsole() {
 		d_console.clear();
 	}
 
+	private JMenu buildEditMenu() {
+		JMenu editMenu = new JMenu("Edit");
+
+		JMenuItem undoItem = buildMenuItem("Undo", 'U', KeyEvent.VK_Z, false);
+		undoItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				d_editorArea.undo();
+			}
+		});
+
+		editMenu.add(undoItem);
+		JMenuItem redoItem = buildMenuItem("Redo", 'R', KeyEvent.VK_Y, false);
+		redoItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				d_editorArea.redo();
+			}
+		});
+		editMenu.add(redoItem);
+
+		editMenu.addSeparator();
+
+		JMenuItem cutItem = buildMenuItem("Cut", 't', KeyEvent.VK_X, false);
+		cutItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				d_editorArea.cut();
+			}
+		});
+		editMenu.add(cutItem);
+
+		JMenuItem copyItem = buildMenuItem("Copy", 'C', KeyEvent.VK_C, false);
+		copyItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				d_editorArea.copy();
+			}
+		});
+		editMenu.add(copyItem);
+
+		JMenuItem pasteItem = buildMenuItem("Paste", 'P', KeyEvent.VK_V, false);
+		pasteItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				d_editorArea.paste();
+			}
+		});
+		editMenu.add(pasteItem);
+
+		editMenu.addSeparator();
+
+		JMenu styleMenu = new JMenu("Editor");
+
+		ButtonGroup group = new ButtonGroup();
+
+		final JRadioButtonMenuItem plainEditorItem = new JRadioButtonMenuItem("Plain Editor", true);
+		final JRadioButtonMenuItem styledEditorItem = new JRadioButtonMenuItem("Styled Editor", false);
+
+		plainEditorItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (!setPlainEditor()) {
+					styledEditorItem.setSelected(true);
+				}
+
+			}
+		});
+		group.add(plainEditorItem);
+		styleMenu.add(plainEditorItem);
+
+		styledEditorItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (!setStyledEditor()) {
+					plainEditorItem.setSelected(true);
+				}
+			}
+		});
+		group.add(styledEditorItem);
+		styleMenu.add(styledEditorItem);
+
+		editMenu.add(styleMenu);
+
+		return editMenu;
+	}
+
+	private boolean setStyledEditor() {
+
+		if (d_editorArea.isStyled())
+			return true;
+
+		if (JOptionPane.showConfirmDialog(this, "Changing the editor type will purge the undo history. Continue?", "Changing editor", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION) {
+			return false;
+		}
+
+		String text = d_editorArea.getText();
+		File file = d_editorArea.getFile();
+
+		d_editorArea = new ScriptEditor(true);
+		d_editorPane.setViewportView(d_editorArea.getComponent());
+
+		d_editorArea.setText(text);
+		d_editorArea.setFile(file);
+		return true;
+	}
+
+	private boolean setPlainEditor() {
+		if (!d_editorArea.isStyled())
+			return true;
+
+		if (JOptionPane.showConfirmDialog(this, "Changing the editor type will purge the undo history. Continue?", "Changing editor", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION) {
+			return false;
+		}
+
+		String text = d_editorArea.getText();
+		File file = d_editorArea.getFile();
+
+		d_editorArea = new ScriptEditor(false);
+		d_editorPane.setViewportView(d_editorArea.getComponent());
+
+		d_editorArea.setText(text);
+		d_editorArea.setFile(file);
+		return true;
+	}
+
 	private JMenu buildFileMenu() {
 		JMenu fileMenu = new JMenu("File");
-		
+
 		// New file
 		JMenuItem newItem = buildMenuItem("New", 'N', KeyEvent.VK_N, false);
 		newItem.setEnabled(true);
@@ -175,7 +316,7 @@ public class GUI extends JFrame {
 			}
 		});
 		fileMenu.add(newItem);
-		
+
 		// Open file
 		JMenuItem openItem = buildMenuItem("Open", 'O', KeyEvent.VK_O, false);
 		openItem.setEnabled(true);
@@ -186,7 +327,7 @@ public class GUI extends JFrame {
 		});
 		fileMenu.add(openItem);
 		fileMenu.addSeparator();
-		
+
 		// Save file
 		JMenuItem saveItem = buildMenuItem("Save", 'S', KeyEvent.VK_S, false);
 		saveItem.setEnabled(false);
@@ -197,7 +338,7 @@ public class GUI extends JFrame {
 		});
 		fileMenu.add(saveItem);
 		d_saveItem = saveItem;
-		
+
 		// Save file as
 		JMenuItem saveAsItem = buildMenuItem("Save As", 'A', KeyEvent.VK_S, true);
 		saveAsItem.setEnabled(true);
@@ -207,9 +348,9 @@ public class GUI extends JFrame {
 			}
 		});
 		fileMenu.add(saveAsItem);
-		
+
 		fileMenu.addSeparator();
-		
+
 		// Refresh file (reload from file system)
 		JMenuItem refreshItem = buildMenuItem("Refresh", 'R', KeyEvent.VK_R, false);
 		refreshItem.setEnabled(false);
@@ -220,9 +361,9 @@ public class GUI extends JFrame {
 		});
 		fileMenu.add(refreshItem);
 		d_refreshItem = refreshItem;
-		
+
 		fileMenu.addSeparator();
-		
+
 		// Exit program
 		JMenuItem exitItem = buildMenuItem("Exit", 'E', KeyEvent.VK_Q, false);
 		exitItem.addActionListener(new ActionListener() {
@@ -231,10 +372,10 @@ public class GUI extends JFrame {
 			}
 		});
 		fileMenu.add(exitItem);
-		
+
 		return fileMenu;
 	}
-	
+
 	private void refreshFile() {
 		try {
 			d_editorArea.load();
@@ -299,6 +440,7 @@ public class GUI extends JFrame {
 
 	/**
 	 * Build a menu item without key accelerator.
+	 * 
 	 * @param title
 	 * @param mnemnonic
 	 * @return
@@ -311,6 +453,7 @@ public class GUI extends JFrame {
 
 	/**
 	 * Build a menu item with key accelerator.
+	 * 
 	 * @param title
 	 * @param mnemonic
 	 * @param accelerator
@@ -323,11 +466,11 @@ public class GUI extends JFrame {
 		if (shift) {
 			keyMask = keyMask | KeyEvent.SHIFT_MASK;
 		}
-		item.setAccelerator(KeyStroke.getKeyStroke(accelerator,
-				keyMask, false));
+
+		item.setAccelerator(KeyStroke.getKeyStroke(accelerator, keyMask, false));
 		return item;
 	}
-	
+
 	public static void main(String args[]) {
 		JFrame window = new GUI();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
