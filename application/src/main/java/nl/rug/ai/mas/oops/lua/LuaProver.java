@@ -134,8 +134,11 @@ public class LuaProver {
 			d_vm.call(0,0);
 		} else if (result == LuaState.LUA_ERRMEM){
 			System.err.println("ERROR: Lua ran out of memory while parsing");
+			d_vm.pop(1);
 		} else {
-			System.err.println("ERROR: Lua encountered a syntax error");
+			String error = d_vm.tostring(-1);
+			System.err.println("ERROR: Lua encountered a syntax error: " + error);
+			d_vm.pop(1);
 		}
 	}
 
