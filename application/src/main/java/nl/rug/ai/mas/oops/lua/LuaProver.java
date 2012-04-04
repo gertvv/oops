@@ -10,7 +10,8 @@ import nl.rug.ai.mas.oops.DynamicProver.AxiomSystem;
 import nl.rug.ai.mas.oops.ObserveProver;
 import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
-import nl.rug.ai.mas.oops.model.S5nModel;
+import nl.rug.ai.mas.oops.model.Model; // Edit; Changed S5nModel to Model
+import nl.rug.ai.mas.oops.model.Model.ModelType; // Added 
 import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.parser.FormulaParser;
 import nl.rug.ai.mas.oops.render.TableauObserverSwing;
@@ -57,8 +58,9 @@ public class LuaProver {
 		d_vm = Platform.newLuaState();
 		org.luaj.compiler.LuaC.install();
 		
+		// Standard start with S5 Model 
 		d_modelConstructor = new ModelConstructingObserver(
-				new S5nModel(d_parser.getContext().getAgentIdView()));
+				new Model(d_parser.getContext().getAgentIdView(), ModelType.S5 ));  // * Edit; changed S5nModel to Model + ModelType parameter in constructor 
 		
 		registerNameSpace();
 	}
@@ -144,6 +146,22 @@ public class LuaProver {
 			
 			// Change the prover
 			d_prover = prover;
+			
+			// Change the model
+			ModelType modelType = null;
+			
+			
+			// Can't use switch for strings?? Needs Java 1.7?
+			if(systemId == "S5") 
+				modelType = ModelType.S5; 
+			
+			if(systemId == "S4")
+				modelType = ModelType.S4;			
+			
+				
+			d_modelConstructor = new ModelConstructingObserver(
+					new Model(d_parser.getContext().getAgentIdView(), modelType ));  // * Edit; changed S5nModel to Model + ModelType parameter in constructor 
+			
 			
 			// Redefine the Theory and Formula functions to use the new prover
 			
