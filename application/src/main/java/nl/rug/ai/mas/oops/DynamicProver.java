@@ -28,6 +28,8 @@ public class DynamicProver extends Prover {
 		B(BRules, BRelations),
 		D(DRules, DRelations),
 		K4(K4Rules, K4Relations),
+		K45(K45Rules, K45Relations),
+		KD45(KD45Rules, KD45Relations),
 		S4(S4Rules, S4Relations),
 		S5(S5Rules, S5Relations);
 		
@@ -49,6 +51,8 @@ public class DynamicProver extends Prover {
 	public static final Relation[] DRelations = { /*Relation.SERIAL */ };
 	public static final Relation[] BRelations = { Relation.SYMMETRIC };
 	public static final Relation[] K4Relations = { Relation.TRANSITIVE };
+	public static final Relation[] K45Relations = { Relation.TRANSITIVE, Relation.SYMMETRIC };
+	public static final Relation[] KD45Relations = { /*Relation.SERIAL, */ Relation.TRANSITIVE, Relation.SYMMETRIC };
 	public static final Relation[] S4Relations = { Relation.REFLEXIVE, Relation.TRANSITIVE };
 	public static final Relation[] S5Relations = { Relation.REFLEXIVE, Relation.TRANSITIVE, Relation.SYMMETRIC };
 	
@@ -56,6 +60,8 @@ public class DynamicProver extends Prover {
 	public static final RuleID[] TRules = { RuleID.PosO1, RuleID.PosO2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO1, RuleID.SNecO2 };
 	public static final RuleID[] DRules = { RuleID.PosO1, RuleID.PosO2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO3, RuleID.SNecO4 };
 	public static final RuleID[] K4Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2 };
+	public static final RuleID[] K45Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecS3, RuleID.SNecS4 };
+	public static final RuleID[] KD45Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO3, RuleID.SNecO4, RuleID.SNecS3, RuleID.SNecS4 };
 	public static final RuleID[] BRules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecS1, RuleID.SNecS2 };
 	public static final RuleID[] S4Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO1, RuleID.SNecO2 };
 	public static final RuleID[] S5Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.BNecS1, RuleID.BNecS2, RuleID.SNecO1, RuleID.SNecO2, RuleID.SNecS1, RuleID.SNecS2 };
