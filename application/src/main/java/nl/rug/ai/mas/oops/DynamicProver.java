@@ -89,7 +89,7 @@ public class DynamicProver extends Prover {
 					System.out.println("Invalid prover specified");
 					return;
 				}
-			} else {
+			} else if (formula == null && !arg.startsWith("--")) {
 				formula = args[argNum];
 			}
 		}
