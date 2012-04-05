@@ -97,6 +97,14 @@ public class ModalRuleFactory {
 			public Rule buildRule(Context c) {
 				return buildSNecS4(c);
 			}
+		}), EK1(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildEK1(c);
+			}
+		}), EK2(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildEK2(c);
+			}
 		});
 
 		private final RuleClosure func;
@@ -577,5 +585,43 @@ public class ModalRuleFactory {
 		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
 		Formula rewriteFormula = new Negation(new MultiDiamond(iref, fref));
 		return new AccessRule("SNecS4", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula));
+	}
+	
+	public static Rule buildEK1(Context context) {
+		String html = "E" + "<sub>" + SQUARE + "</sub>";
+		// variables
+		Variable<Formula> F = new Variable<Formula>("F");
+		FormulaReference fref = new FormulaReference(F, 
+			context.getFormulaCodeMap().code(F));
+
+		// formula
+		Formula f = new UniBox(fref);
+
+		// rewrites
+		Vector<Formula> rwt = new Vector<Formula>();
+		for (AgentId agent : context.getAgentIdMap().getAgentSet())
+		{
+			rwt.add(new MultiBox(agent, fref));
+		}
+		return new LinearRule("EK1", html, f, rwt);
+	}
+	
+	public static Rule buildEK2(Context context) {
+		String html = "E" + "<sub>" + LOZENGE + "</sub>";
+		// variables
+		Variable<Formula> F = new Variable<Formula>("F");
+		FormulaReference fref = new FormulaReference(F, 
+			context.getFormulaCodeMap().code(F));
+
+		// formula
+		Formula f = new UniDiamond(fref);
+
+		// rewrites
+		Vector<Formula> rwt = new Vector<Formula>();
+		for (AgentId agent : context.getAgentIdMap().getAgentSet())
+		{
+			rwt.add(new MultiDiamond(agent, fref));
+		}
+		return new LinearRule("EK2", html, f, rwt);
 	}
 }
