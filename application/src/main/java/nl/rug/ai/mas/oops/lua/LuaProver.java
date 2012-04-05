@@ -64,6 +64,9 @@ public class LuaProver {
 		d_vm.pushlvalue(new FunctionSetProver());
 		d_vm.setfield(-2, new LString("setProver"));
 		
+		d_vm.pushlvalue(new FunctionGetProvers());
+		d_vm.setfield(-2, new LString("getProvers"));
+		
 		d_vm.pushlvalue(new FunctionGetModel());
 		d_vm.setfield(-2, new LString("getModel"));
 		
@@ -112,6 +115,22 @@ public class LuaProver {
 			return 0;
 		}
 	}
+	
+	private final class FunctionGetProvers extends LFunction {
+		public int invoke(LuaState L) {
+			LTable result = new LTable();
+			int i = 1;
+			for (AxiomSystem system : DynamicProver.AxiomSystem.values())
+			{
+				result.put(i++, new LString(system.name()));
+			}
+			
+			d_vm.pushlvalue(result);
+			
+			return 1;
+		}
+	}
+	
 	
 	private final class FunctionSetProver extends LFunction {
 		public int invoke(LuaState L) {

@@ -73,6 +73,14 @@ public class ModalRuleFactory {
 			public Rule buildRule(Context c) {
 				return buildSNecO2(c);
 			}
+		}), SNecO3(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildSNecO3(c);
+			}
+		}), SNecO4(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildSNecO4(c);
+			}
 		}), SNecS1(new RuleClosure() {
 			public Rule buildRule(Context c) {
 				return buildSNecS1(c);
@@ -409,6 +417,62 @@ public class ModalRuleFactory {
 		Formula rewriteFormula = new Negation(fref);
 		Constraint c = new NotEqualConstraint(i, j);
 		return new AccessRule("SNecO2", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula), c);
+	}
+	
+	public static Rule buildSNecO3(Context context) {
+		String html = "D<sub>" + SQUARE + "</sub>";
+		// variables occuring
+		// the formula
+		Variable<Formula> f = new Variable<Formula>("F");
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
+		// agent for which the modal operator holds
+		Variable<Agent> i = new Variable<Agent>("i");
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
+		// different agent
+		Variable<Agent> j = new Variable<Agent>("j");
+		AgentReference jref = new AgentReference(j, context.getAgentCodeMap().code(j));
+		// current world
+		Variable<World> k = new Variable<World>("k");
+		WorldReference kref = new WorldReference(k);
+		// superlabel
+		Variable<Label> l = new Variable<Label>("L");
+		LabelReference lref = new LabelReference(l);
+
+		// formula f. agents i, j. worlds k, n. label l.
+		Label templateLabel = new LabelInstance(lref, kref, jref);
+		Label rewriteLabel = templateLabel;
+		Formula templateFormula = new MultiBox(iref, fref);
+		Formula rewriteFormula = new MultiDiamond(iref, fref);
+		Constraint c = new NotEqualConstraint(i, j);
+		return new AccessRule("SNecO3", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula), c);
+	}
+
+	public static Rule buildSNecO4(Context context) {
+		String html = "D<sub>" + LOZENGE + "</sub>";
+		// variables occuring
+		// the formula
+		Variable<Formula> f = new Variable<Formula>("F");
+		FormulaReference fref = new FormulaReference(f, context.getFormulaCodeMap().code(f));
+		// agent for which the modal operator holds
+		Variable<Agent> i = new Variable<Agent>("i");
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
+		// different agent
+		Variable<Agent> j = new Variable<Agent>("j");
+		AgentReference jref = new AgentReference(j, context.getAgentCodeMap().code(j));
+		// current world
+		Variable<World> k = new Variable<World>("k");
+		WorldReference kref = new WorldReference(k);
+		// superlabel
+		Variable<Label> l = new Variable<Label>("L");
+		LabelReference lref = new LabelReference(l);
+
+		// formula f. agents i, j. worlds k, n. label l.
+		Label templateLabel = new LabelInstance(lref, kref, jref);
+		Label rewriteLabel = templateLabel;
+		Formula templateFormula = new Negation(new MultiDiamond(iref, fref));
+		Formula rewriteFormula = new Negation(new MultiBox(iref, fref));
+		Constraint c = new NotEqualConstraint(i, j);
+		return new AccessRule("SNecO4", html, new Node(templateLabel, templateFormula), new Node(rewriteLabel, rewriteFormula), c);
 	}
 
 	public static Rule buildSNecS1(Context context) {
