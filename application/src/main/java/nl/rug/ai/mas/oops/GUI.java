@@ -28,6 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 
+import nl.rug.ai.mas.oops.DynamicProver.AxiomSystem;
 import nl.rug.ai.mas.oops.lua.LuaProver;
 
 @SuppressWarnings("serial")
@@ -37,6 +38,7 @@ public class GUI extends JFrame {
 	private Console d_console;
 	private JMenuItem d_saveItem;
 	private JMenuItem d_refreshItem;
+	private String d_defaultProver;
 
 	public GUI() {
 		super("OOPS Graphical Environment");
@@ -81,9 +83,6 @@ public class GUI extends JFrame {
 		c.gridx = 2;
 		c.fill = GridBagConstraints.HORIZONTAL;
 
-		// FIXME: Is this useful?
-		// panel.add(new JLabel("---"), c);
-
 		c.gridy = 2;
 		c.gridx = 1;
 		c.gridwidth = 2;
@@ -115,6 +114,9 @@ public class GUI extends JFrame {
 		consolePane.setViewportView(d_console);
 		panel.add(consolePane, c);
 
+		// Set default prover to S5
+		d_defaultProver = "S5";
+		
 		d_console.start();
 		try {
 			System.setOut(new PrintStream(d_console.getOutputStream()));
@@ -143,6 +145,25 @@ public class GUI extends JFrame {
 
 	private JMenu buildRunMenu() {
 		JMenu runMenu = new JMenu("Run");
+		
+		ButtonGroup group = new ButtonGroup();
+		
+		JMenu proversMenu = new JMenu("Default prover");
+		for (final AxiomSystem system : DynamicProver.AxiomSystem.values())
+		{
+			JRadioButtonMenuItem systemItem = new JRadioButtonMenuItem(system.name(), system.name() == "S5" ? true : false);
+			systemItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					d_defaultProver = system.name();
+				}
+			});
+			
+			group.add(systemItem);
+			proversMenu.add(systemItem);
+		}
+		
+		runMenu.add(proversMenu);
+		runMenu.addSeparator();
 
 		JMenuItem runItem = buildMenuItem("Execute", 'E', KeyEvent.VK_E, false);
 		runItem.addActionListener(new ActionListener() {
@@ -164,7 +185,7 @@ public class GUI extends JFrame {
 
 	protected void runEditorContents() {
 		String text = d_editorArea.getText();
-		LuaProver prover = new LuaProver();
+		LuaProver prover = new LuaProver(d_defaultProver);
 		prover.doStream(new ByteArrayInputStream(text.getBytes()), "EditorContents");
 
 		while (!d_console.streamsFlushed()) {

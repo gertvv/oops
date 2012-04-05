@@ -33,18 +33,19 @@ public class LuaProver {
 	private LuaState d_vm;
 	private ModelConstructingObserver d_modelConstructor;
 	
-	public LuaProver() {
-		// Start with S5 Axiom system by default
-		// TODO: Make this changeable
-		d_prover = DynamicProver.AxiomSystem.S5.build();
+	public LuaProver(String proverName) {
+	
+		// If the system does not exist, this will throw an exception
+		AxiomSystem system = DynamicProver.AxiomSystem.valueOf(proverName);
+		
+		d_prover = system.build();
 		d_parser = new FormulaParser(d_prover.getContext());
 
 		
 		Platform.setInstance(new J2sePlatform());
 		d_vm = Platform.newLuaState();
 		org.luaj.compiler.LuaC.install();
-		
-		// Standard start with S5 Model 
+		 
 		d_modelConstructor = new ModelConstructingObserver(d_prover.getModel());
 		registerNameSpace();
 	}
@@ -200,7 +201,8 @@ public class LuaProver {
 	}
 
 	public static void main(String[] args) {
-		LuaProver prover = new LuaProver();
+		// TODO: Handle command-line argument to set axiom system
+		LuaProver prover = new LuaProver("S5");
 		if (args.length == 0) {
 			prover.interactive();
 		} else {
