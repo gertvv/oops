@@ -24,6 +24,9 @@ import nl.rug.ai.mas.oops.tableau.Rule;
 public class DynamicProver extends Prover {
 	public enum AxiomSystem {
 		K(KRules, KRelations),
+		T(TRules, TRelations),
+		B(BRules, BRelations),
+		K4(K4Rules, K4Relations),
 		S4(S4Rules, S4Relations),
 		S5(S5Rules, S5Relations);
 		
@@ -41,11 +44,17 @@ public class DynamicProver extends Prover {
 	}
 	
 	public static final Relation[] KRelations = {};
+	public static final Relation[] TRelations = { Relation.REFLEXIVE };
+	public static final Relation[] BRelations = { Relation.SYMMETRIC };
+	public static final Relation[] K4Relations = { Relation.TRANSITIVE };
 	public static final Relation[] S4Relations = { Relation.REFLEXIVE, Relation.TRANSITIVE };
 	public static final Relation[] S5Relations = { Relation.REFLEXIVE, Relation.TRANSITIVE, Relation.SYMMETRIC };
 	
-	public static final RuleID[] KRules = { RuleID.KPos1, RuleID.KPos2, RuleID.KBNec1, RuleID.KBNec2 };
-	public static final RuleID[] S4Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO1, RuleID.SNecO2, RuleID.SNecS1, RuleID.SNecS2 };
+	public static final RuleID[] KRules = { RuleID.PosO1, RuleID.PosO2, RuleID.BNecO1, RuleID.BNecO2 };
+	public static final RuleID[] TRules = { RuleID.PosO1, RuleID.PosO2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO1, RuleID.SNecO2 };
+	public static final RuleID[] K4Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2 };
+	public static final RuleID[] BRules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecS1, RuleID.SNecS2 };
+	public static final RuleID[] S4Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO1, RuleID.SNecO2 };
 	public static final RuleID[] S5Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.BNecS1, RuleID.BNecS2, RuleID.SNecO1, RuleID.SNecO2, RuleID.SNecS1, RuleID.SNecS2 };
 	
 	public static DynamicProver build(RuleID[] ruleIdsArray, Relation[] relationsArray) {
