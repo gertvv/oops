@@ -175,10 +175,7 @@ public class GUI extends JFrame {
 			}
 		}
 
-		System.err.println("\n  ============================= Run completed =============================\n");
-
-		// Scroll down
-		d_console.setCaretPosition(d_console.getDocument().getLength());
+		System.out.println("\n  ============================= Run completed =============================\n");		
 	}
 
 	protected void clearConsole() {

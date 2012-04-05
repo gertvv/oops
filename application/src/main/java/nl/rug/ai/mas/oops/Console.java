@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTextArea;
 
@@ -16,14 +18,17 @@ public class Console extends JTextArea {
 	public PipedInputStream d_err;
 	
 	private static class ReaderThread extends Thread {
-		private BufferedReader d_input;
+		private List<BufferedReader> d_input = new ArrayList<BufferedReader>();
 		private JTextArea d_console;
 		
-		public ReaderThread(InputStream is, JTextArea console) {
-			d_input = new BufferedReader(new InputStreamReader(is));
+		public ReaderThread(JTextArea console) {
 			d_console = console;
 		}
 
+		public void addInputStream(InputStream is) {
+			d_input.add(new BufferedReader(new InputStreamReader(is)));
+		}
+		
 		@Override
 		public void run() {
 			while (true) {
@@ -33,10 +38,15 @@ public class Console extends JTextArea {
 				
 				}
 				try {
-					if (d_input.ready()) {
-						String line = d_input.readLine();
-						synchronized(d_console) {
-							d_console.append(line + "\n");
+					for (BufferedReader reader : d_input) {
+						if (reader.ready()) {
+							String line = reader.readLine();
+							synchronized(d_console) {
+								d_console.append(line + "\n");
+								
+								// Scroll down
+								d_console.setCaretPosition(d_console.getDocument().getLength());
+							}
 						}
 					}
 				} catch (IOException e) {
@@ -54,12 +64,11 @@ public class Console extends JTextArea {
 	}
 	
 	public void start() {
-		Thread outThread = new ReaderThread(d_out, this);
-		outThread.setDaemon(true);
-		outThread.start();
-		Thread errThread = new ReaderThread(d_err, this);
-		errThread.setDaemon(true);
-		errThread.start();
+		ReaderThread readerThread = new ReaderThread(this);
+		readerThread.addInputStream(d_out);
+		readerThread.addInputStream(d_err);
+		readerThread.setDaemon(true);
+		readerThread.start();
 	}
 	
 	public OutputStream getOutputStream() throws IOException {
