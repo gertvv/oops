@@ -219,7 +219,7 @@ public class LuaProver {
 					System.out.println("Invalid prover specified");
 					return;
 				}
-			} else if (file == null && !arg.startsWith("--")) {
+			} else if (file == null && !arg.startsWith("--") && !arg.startsWith("-")) {
 				file = arg;
 			}
 			
