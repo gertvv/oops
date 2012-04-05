@@ -66,6 +66,53 @@ public class DynamicProver extends Prover {
 	public static final RuleID[] S4Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO1, RuleID.SNecO2 };
 	public static final RuleID[] S5Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.BNecS1, RuleID.BNecS2, RuleID.SNecO1, RuleID.SNecO2, RuleID.SNecS1, RuleID.SNecS2 };
 	
+	
+	public static void main(String [] args) {
+		String formula = null;
+		boolean satisfyMode = false;
+		
+		AxiomSystem system = AxiomSystem.S5;
+
+		int argNum = 0;
+		
+		// Parse command-line
+		
+		while (argNum < args.length) {
+			String arg = args[argNum++];
+			
+			if (arg.equals("--sat")) {
+				satisfyMode = true;
+			} else if (arg.equals("--prover")) {
+				try {
+					system = AxiomSystem.valueOf(args[argNum++]);
+				} catch (Exception e) {
+					System.out.println("Invalid prover specified");
+					return;
+				}
+			} else {
+				formula = args[argNum];
+			}
+		}
+		
+		if (formula == null) {
+			System.out.println("Please supply a formula on the command line.");
+			return;
+		}
+	
+		DynamicProver p = system.build();
+		try {
+			if (satisfyMode) {
+				System.out.println(p.provable(formula));
+			} else {
+				System.out.println(p.satisfiable(formula));
+			}
+		} catch (TableauErrorException e) {
+			System.out.println(e);
+			System.exit(1);
+		}
+	}
+	
+	
 	public static DynamicProver build(RuleID[] ruleIdsArray, Relation[] relationsArray) {
 		Vector<RuleID> rules = new Vector<RuleID>();
 		Collections.addAll(rules, ruleIdsArray);
