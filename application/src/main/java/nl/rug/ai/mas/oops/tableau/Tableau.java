@@ -244,6 +244,7 @@ public class Tableau {
 			Tableau.this.notify(new NodeAddedEvent(d_branch, n, m));
 		}
 
+		@SuppressWarnings("unused")
 		private void matchPut(Node n, Match m) {
 			put(n, m);
 			Vector<Match> v = match(n);
@@ -257,10 +258,10 @@ public class Tableau {
 					}
 				}
 			} else {
-				if (!n.getFormula().isSimple()) {
-					// HACK: suppress errors
-					//d_error = n.toString() + s_errorNoMatch;
-					//d_result = BranchState.ERROR;
+				// HACK: suppress errors
+				if (false /*!n.getFormula().isSimple()*/) {
+					d_error = n.toString() + s_errorNoMatch;
+					d_result = BranchState.ERROR;
 				}
 			}
 		}

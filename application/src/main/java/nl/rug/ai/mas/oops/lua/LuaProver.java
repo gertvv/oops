@@ -3,22 +3,14 @@ package nl.rug.ai.mas.oops.lua;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
 
 import nl.rug.ai.mas.oops.DynamicProver;
 import nl.rug.ai.mas.oops.DynamicProver.AxiomSystem;
 import nl.rug.ai.mas.oops.ObserveProver;
 import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
-import nl.rug.ai.mas.oops.model.Model; // Edit; Changed S5nModel to Model
-import nl.rug.ai.mas.oops.model.Model.ModelType; // Added 
-import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.parser.FormulaParser;
 import nl.rug.ai.mas.oops.render.TableauObserverSwing;
-import nl.rug.ai.mas.oops.tableau.ModalRuleFactory;
-import nl.rug.ai.mas.oops.tableau.MultiModalValidator;
-import nl.rug.ai.mas.oops.tableau.PropositionalRuleFactory;
-import nl.rug.ai.mas.oops.tableau.Rule;
 
 import org.luaj.platform.J2sePlatform;
 import org.luaj.vm.LFunction;
@@ -33,10 +25,7 @@ public class LuaProver {
 	 * The parser instance.
 	 */
 	private FormulaParser d_parser;
-	/**
-	 * The (parser) context.
-	 */
-	private Context d_context;
+
 	/**
 	 * The prover instance.
 	 */
@@ -45,23 +34,18 @@ public class LuaProver {
 	private ModelConstructingObserver d_modelConstructor;
 	
 	public LuaProver() {
-		d_context = new Context();
+		// Start with S5 Axiom system by default
+		// TODO: Make this changeable
+		d_prover = DynamicProver.AxiomSystem.S5.build();
+		d_parser = new FormulaParser(d_prover.getContext());
 
-		// build rules
-		Vector<Rule> rules = PropositionalRuleFactory.build(d_context);
-		rules.addAll(ModalRuleFactory.build(d_context));
-
-		d_prover = new Prover(rules, new MultiModalValidator());
-		d_parser = new FormulaParser(d_context);
-
+		
 		Platform.setInstance(new J2sePlatform());
 		d_vm = Platform.newLuaState();
 		org.luaj.compiler.LuaC.install();
 		
 		// Standard start with S5 Model 
-		d_modelConstructor = new ModelConstructingObserver(
-				new Model(d_parser.getContext().getAgentIdView(), ModelType.S5 ));  // * Edit; changed S5nModel to Model + ModelType parameter in constructor 
-		
+		d_modelConstructor = new ModelConstructingObserver(d_prover.getModel());
 		registerNameSpace();
 	}
 	
@@ -147,22 +131,12 @@ public class LuaProver {
 			// Change the prover
 			d_prover = prover;
 			
+			// Change parser
+			d_parser = new FormulaParser(d_prover.getContext());
+			
 			// Change the model
-			ModelType modelType = null;
-			
-			
-			// Can't use switch for strings?? Needs Java 1.7?
-			if(systemId == "S5") 
-				modelType = ModelType.S5; 
-			
-			if(systemId == "S4")
-				modelType = ModelType.S4;			
-			
-				
-			d_modelConstructor = new ModelConstructingObserver(
-					new Model(d_parser.getContext().getAgentIdView(), modelType ));  // * Edit; changed S5nModel to Model + ModelType parameter in constructor 
-			
-			
+			d_modelConstructor = new ModelConstructingObserver(prover.getModel());
+					
 			// Redefine the Theory and Formula functions to use the new prover
 			
 			LuaFormula formula = new LuaFormula(d_parser, d_prover);

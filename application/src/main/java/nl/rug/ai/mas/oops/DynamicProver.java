@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.Vector;
 
 import nl.rug.ai.mas.oops.formula.Formula;
+import nl.rug.ai.mas.oops.model.KripkeModel;
+import nl.rug.ai.mas.oops.model.Model;
+import nl.rug.ai.mas.oops.model.Model.Relation;
 import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.parser.FormulaParser;
 import nl.rug.ai.mas.oops.tableau.FormulaValidator;
@@ -20,32 +23,42 @@ import nl.rug.ai.mas.oops.tableau.Rule;
  */
 public class DynamicProver extends Prover {
 	public enum AxiomSystem {
-		K(KRules),
-		S4(S4Rules),
-		S5(S5Rules);
+		K(KRules, KRelations),
+		S4(S4Rules, S4Relations),
+		S5(S5Rules, S5Relations);
 		
 		private final RuleID[] rules;
-		private AxiomSystem(RuleID[] rules) {
+		private final Relation[] relations;
+		private AxiomSystem(RuleID[] rules, Relation[] relations) {
 			this.rules = rules;
+			this.relations = relations;
 		}
 		
 		public DynamicProver build()
 		{
-			return DynamicProver.build(rules);
+			return DynamicProver.build(rules, relations);
 		}
 	}
+	
+	public static final Relation[] KRelations = {};
+	public static final Relation[] S4Relations = { Relation.REFLEXIVE, Relation.TRANSITIVE };
+	public static final Relation[] S5Relations = { Relation.REFLEXIVE, Relation.TRANSITIVE, Relation.SYMMETRIC };
 	
 	public static final RuleID[] KRules = { RuleID.KPos1, RuleID.KPos2, RuleID.KBNec1, RuleID.KBNec2 };
 	public static final RuleID[] S4Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO1, RuleID.SNecO2, RuleID.SNecS1, RuleID.SNecS2 };
 	public static final RuleID[] S5Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.BNecS1, RuleID.BNecS2, RuleID.SNecO1, RuleID.SNecO2, RuleID.SNecS1, RuleID.SNecS2 };
-
-	public static DynamicProver build(RuleID[] ruleIds) {
+	
+	public static DynamicProver build(RuleID[] ruleIdsArray, Relation[] relationsArray) {
 		Vector<RuleID> rules = new Vector<RuleID>();
-		Collections.addAll(rules, ruleIds);
-		return build(rules);
+		Collections.addAll(rules, ruleIdsArray);
+		
+		Vector<Relation> relations = new Vector<Relation>();
+		Collections.addAll(relations, relationsArray);
+		
+		return build(rules, relations);
 	}
 
-	public static DynamicProver build(Vector<RuleID> ruleIds) {
+	public static DynamicProver build(Vector<RuleID> ruleIds, Vector<Relation> relations) {
 		Context c = new Context();
 
 		Vector<Rule> rules = PropositionalRuleFactory.build(c);
@@ -53,7 +66,7 @@ public class DynamicProver extends Prover {
 
 		FormulaValidator validator = new MultiModalValidator();
 
-		return new DynamicProver(rules, validator, c);
+		return new DynamicProver(rules, relations, validator, c);
 	}
 
 	/**
@@ -64,13 +77,19 @@ public class DynamicProver extends Prover {
 	 * The (parser) context.
 	 */
 	private Context d_context;
+	
+	/**
+	 * The model relations
+	 */
+	private Vector<Relation> d_relations;
 
 	/**
 	 * Constructor. Constructs a new prover object. May be used to parse, prove
 	 * or sat-check any number of formulas.
 	 */
-	public DynamicProver(Vector<Rule> rules, FormulaValidator v, Context c) {
+	public DynamicProver(Vector<Rule> rules, Vector<Relation> relations, FormulaValidator v, Context c) {
 		super(rules, v);
+		d_relations = relations;
 		d_context = c;
 		d_formulaAdapter = new FormulaParser(c);
 	}
@@ -108,6 +127,11 @@ public class DynamicProver extends Prover {
 	 */
 	public Context getContext() {
 		return d_context;
+	}
+
+	@Override
+	public KripkeModel getModel() {
+		return new Model(d_context.getAgentIdView(), d_relations);
 	}
 
 }

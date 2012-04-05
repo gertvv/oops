@@ -32,9 +32,7 @@ import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.model.Arrow;
 import nl.rug.ai.mas.oops.model.KripkeModel;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
-import nl.rug.ai.mas.oops.model.Model; //Edit: Changed S5nModel to Model
 import nl.rug.ai.mas.oops.model.World;
-import nl.rug.ai.mas.oops.model.Model.ModelType;
 import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.render.TableauObserverSwing;
 
@@ -76,7 +74,7 @@ public class ObserveProver {
 		Context c = p.getContext();
 		
 		// THIS CLASS IS NOT BEING USED BY THE GUI???
-		Model model = new Model(c.getAgentIdMap().getAgentSet(), ModelType.NONE); // Edit: Changed S5nModel to Model + parameter ModelType
+		KripkeModel model = p.getModel();
 		p.getTableau().attachObserver(new ModelConstructingObserver(model));
 
 		System.out.println("Context agents: " + c.getAgentIdMap());

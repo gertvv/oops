@@ -21,12 +21,14 @@ package nl.rug.ai.mas.oops;
 
 import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
+import nl.rug.ai.mas.oops.model.KripkeModel;
+import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.tableau.*;
 
 /**
  * Proves formulas using a tableau.
  */
-public class Prover {
+public abstract class Prover {
 	/**
 	 * The Tableau instance.
 	 */
@@ -71,6 +73,9 @@ public class Prover {
 		}
 		return result == Tableau.BranchState.OPEN;
 	}
+	
+	public abstract KripkeModel getModel();
+	public abstract Context getContext();
 
 	/**
 	 * Retreive the used Tableau instance.

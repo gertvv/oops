@@ -31,7 +31,7 @@ public class Model extends KripkeModel {
 	ModelType modelType;
 
 	public enum ModelType {
-		S5, S4, K, NONE;
+		S5, S4, K, CUSTOM;
 	}
 
 	public enum Relation {
@@ -39,23 +39,10 @@ public class Model extends KripkeModel {
 	}
 
 	// Create model with agents, model-type and relations   <-- Delete this?
-	public Model(Set<AgentId> agents, ModelType m, Vector<Relation> r) {
+	public Model(Set<AgentId> agents, Vector<Relation> r) {
 		super(agents);
-		relationsModel = new Vector<Relation>();
-		modelType = m;
-
-		switch (m) {
-		case S5:
-			relationsModel.add(Relation.TRANSITIVE);
-			relationsModel.add(Relation.REFLEXIVE);
-			relationsModel.add(Relation.SYMMETRIC);
-			break;
-
-		case NONE:
-			relationsModel = r;
-			break;
-
-		}
+		relationsModel = r;
+		modelType = ModelType.CUSTOM;
 	}
 	
 	
@@ -79,6 +66,13 @@ public class Model extends KripkeModel {
 				
 		}
 	}
+
+	private Model(Set<AgentId> agents, ModelType modelType, Vector<Relation> relationsModel) {
+		super(agents);
+		this.relationsModel = relationsModel;
+		this.modelType = modelType;
+	}
+
 
 	@Override
 	public Model newModel() {
