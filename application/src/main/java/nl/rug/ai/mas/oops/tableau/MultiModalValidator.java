@@ -23,10 +23,12 @@ public class MultiModalValidator implements FormulaValidator {
 		public void visitProposition(Proposition f) {
 		}
 		public void visitUniBox(UniBox f) {
-			d_valid = false;
+			// Repurpose these to the [E] operator
+			//d_valid = false;
 		}
 		public void visitUniDiamond(UniDiamond f) {
-			d_valid = false;
+			// Repurpose these to the <E> operator
+			//d_valid = false;
 		}
 		public void visitFormulaReference(FormulaReference f) {
 		}

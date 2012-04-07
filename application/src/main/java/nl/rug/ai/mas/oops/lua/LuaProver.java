@@ -202,11 +202,33 @@ public class LuaProver {
 
 	public static void main(String[] args) {
 		// TODO: Handle command-line argument to set axiom system
-		LuaProver prover = new LuaProver("S5");
-		if (args.length == 0) {
+		int argNum = 0;
+		
+		// Default to the S5 prover
+		AxiomSystem system = AxiomSystem.S5;
+		String file = null;
+		
+		while (argNum < args.length)
+		{
+			String arg = args[argNum++];
+			
+			if (arg.equals("--prover")) {
+				try {
+					system = AxiomSystem.valueOf(args[argNum++]);
+				} catch (Exception e) {
+					System.out.println("Invalid prover specified");
+					return;
+				}
+			} else if (file == null && !arg.startsWith("--") && !arg.startsWith("-")) {
+				file = arg;
+			}
+			
+		}
+		LuaProver prover = new LuaProver(system.name());
+		if (file == null) {
 			prover.interactive();
 		} else {
-			prover.doFile(args[0]);
+			prover.doFile(file);
 		}
 	}
 

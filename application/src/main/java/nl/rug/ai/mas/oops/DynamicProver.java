@@ -31,7 +31,8 @@ public class DynamicProver extends Prover {
 		K45(K45Rules, K45Relations),
 		KD45(KD45Rules, KD45Relations),
 		S4(S4Rules, S4Relations),
-		S5(S5Rules, S5Relations);
+		S5(S5Rules, S5Relations),
+		S5E(S5ERules, S5Relations);
 		
 		private final RuleID[] rules;
 		private final Relation[] relations;
@@ -65,7 +66,7 @@ public class DynamicProver extends Prover {
 	public static final RuleID[] BRules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecS1, RuleID.SNecS2 };
 	public static final RuleID[] S4Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO1, RuleID.SNecO2 };
 	public static final RuleID[] S5Rules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.BNecS1, RuleID.BNecS2, RuleID.SNecO1, RuleID.SNecO2, RuleID.SNecS1, RuleID.SNecS2 };
-	
+	public static final RuleID[] S5ERules = { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.BNecS1, RuleID.BNecS2, RuleID.SNecO1, RuleID.SNecO2, RuleID.SNecS1, RuleID.SNecS2, RuleID.EK1, RuleID.EK2 };
 	
 	public static void main(String [] args) {
 		String formula = null;
@@ -89,8 +90,8 @@ public class DynamicProver extends Prover {
 					System.out.println("Invalid prover specified");
 					return;
 				}
-			} else {
-				formula = args[argNum];
+			} else if (formula == null && !arg.startsWith("--") && !arg.startsWith("-") ) {
+				formula = arg;
 			}
 		}
 		
