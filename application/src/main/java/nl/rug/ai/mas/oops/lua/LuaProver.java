@@ -11,6 +11,7 @@ import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
 import nl.rug.ai.mas.oops.parser.FormulaParser;
 import nl.rug.ai.mas.oops.render.TableauObserverSwing;
+import nl.rug.ai.mas.oops.tableau.SystemOutObserver;
 
 import org.luaj.platform.J2sePlatform;
 import org.luaj.vm.LFunction;
@@ -58,6 +59,9 @@ public class LuaProver {
 		
 		d_vm.pushlvalue(new FunctionAttachTableauVisualizer());
 		d_vm.setfield(-2, new LString("attachTableauVisualizer"));
+				
+		d_vm.pushlvalue(new FunctionAttachTableauObserver());
+		d_vm.setfield(-2, new LString("attachTableauObserver"));
 		
 		d_vm.pushlvalue(new FunctionAttachModelConstructor());
 		d_vm.setfield(-2, new LString("attachModelConstructor"));
@@ -113,6 +117,13 @@ public class LuaProver {
 			} catch (FontFormatException e) {
 				throw new RuntimeException(e);
 			}
+			return 0;
+		}
+	}
+	
+	private final class FunctionAttachTableauObserver extends LFunction {
+		public int invoke(LuaState L) {
+			d_prover.getTableau().attachObserver(new SystemOutObserver());
 			return 0;
 		}
 	}
