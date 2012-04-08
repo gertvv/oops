@@ -21,7 +21,7 @@ import nl.rug.ai.mas.oops.tableau.Rule;
  * @author Lourens
  * 
  */
-public class DynamicProver extends Prover {
+public class ConfigurableProver extends Prover {
 	public enum AxiomSystem {
 		K(KRules, KRelations),
 		T(TRules, TRelations),
@@ -41,9 +41,9 @@ public class DynamicProver extends Prover {
 			this.relations = relations;
 		}
 		
-		public DynamicProver build()
+		public ConfigurableProver build()
 		{
-			return DynamicProver.build(rules, relations);
+			return ConfigurableProver.build(rules, relations);
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class DynamicProver extends Prover {
 			return;
 		}
 	
-		DynamicProver p = system.build();
+		ConfigurableProver p = system.build();
 		try {
 			if (satisfyMode) {
 				System.out.println(p.provable(formula));
@@ -114,7 +114,7 @@ public class DynamicProver extends Prover {
 	}
 	
 	
-	public static DynamicProver build(RuleID[] ruleIdsArray, Relation[] relationsArray) {
+	public static ConfigurableProver build(RuleID[] ruleIdsArray, Relation[] relationsArray) {
 		Vector<RuleID> rules = new Vector<RuleID>();
 		Collections.addAll(rules, ruleIdsArray);
 		
@@ -124,7 +124,7 @@ public class DynamicProver extends Prover {
 		return build(rules, relations);
 	}
 
-	public static DynamicProver build(Vector<RuleID> ruleIds, Vector<Relation> relations) {
+	public static ConfigurableProver build(Vector<RuleID> ruleIds, Vector<Relation> relations) {
 		Context c = new Context();
 
 		Vector<Rule> rules = PropositionalRuleFactory.build(c);
@@ -132,7 +132,7 @@ public class DynamicProver extends Prover {
 
 		FormulaValidator validator = new MultiModalValidator();
 
-		return new DynamicProver(rules, relations, validator, c);
+		return new ConfigurableProver(rules, relations, validator, c);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class DynamicProver extends Prover {
 	 * Constructor. Constructs a new prover object. May be used to parse, prove
 	 * or sat-check any number of formulas.
 	 */
-	public DynamicProver(Vector<Rule> rules, Vector<Relation> relations, FormulaValidator v, Context c) {
+	public ConfigurableProver(Vector<Rule> rules, Vector<Relation> relations, FormulaValidator v, Context c) {
 		super(rules, v);
 		d_relations = relations;
 		d_context = c;

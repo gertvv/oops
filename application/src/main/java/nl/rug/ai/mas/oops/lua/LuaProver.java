@@ -4,8 +4,8 @@ import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import nl.rug.ai.mas.oops.DynamicProver;
-import nl.rug.ai.mas.oops.DynamicProver.AxiomSystem;
+import nl.rug.ai.mas.oops.ConfigurableProver;
+import nl.rug.ai.mas.oops.ConfigurableProver.AxiomSystem;
 import nl.rug.ai.mas.oops.ObserveProver;
 import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
@@ -36,7 +36,7 @@ public class LuaProver {
 	public LuaProver(String proverName) {
 	
 		// If the system does not exist, this will throw an exception
-		AxiomSystem system = DynamicProver.AxiomSystem.valueOf(proverName);
+		AxiomSystem system = ConfigurableProver.AxiomSystem.valueOf(proverName);
 		
 		d_prover = system.build();
 		d_parser = new FormulaParser(d_prover.getContext());
@@ -121,7 +121,7 @@ public class LuaProver {
 		public int invoke(LuaState L) {
 			LTable result = new LTable();
 			int i = 1;
-			for (AxiomSystem system : DynamicProver.AxiomSystem.values())
+			for (AxiomSystem system : ConfigurableProver.AxiomSystem.values())
 			{
 				result.put(i++, new LString(system.name()));
 			}
@@ -138,7 +138,7 @@ public class LuaProver {
 			String systemId = d_vm.checkstring(1);
 			AxiomSystem system = null;
 			try {
-				system = DynamicProver.AxiomSystem.valueOf(systemId);
+				system = ConfigurableProver.AxiomSystem.valueOf(systemId);
 			} catch (Exception e) {
 				system = null;
 			}

@@ -28,7 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 
-import nl.rug.ai.mas.oops.DynamicProver.AxiomSystem;
+import nl.rug.ai.mas.oops.ConfigurableProver.AxiomSystem;
 import nl.rug.ai.mas.oops.lua.LuaProver;
 
 @SuppressWarnings("serial")
@@ -149,7 +149,7 @@ public class GUI extends JFrame {
 		ButtonGroup group = new ButtonGroup();
 		
 		JMenu proversMenu = new JMenu("Default prover");
-		for (final AxiomSystem system : DynamicProver.AxiomSystem.values())
+		for (final AxiomSystem system : ConfigurableProver.AxiomSystem.values())
 		{
 			JRadioButtonMenuItem systemItem = new JRadioButtonMenuItem(system.name(), system.name() == "S5" ? true : false);
 			systemItem.addActionListener(new ActionListener() {
