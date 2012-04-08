@@ -2,7 +2,7 @@ package nl.rug.ai.mas.oops.tableau;
 
 import nl.rug.ai.mas.oops.formula.*;
 
-public class MultiModalValidator implements FormulaValidator {
+public class EMultiModalValidator implements FormulaValidator {
 	private static class Validator implements FormulaVisitor {
 		private boolean d_valid = true;
 
@@ -23,10 +23,10 @@ public class MultiModalValidator implements FormulaValidator {
 		public void visitProposition(Proposition f) {
 		}
 		public void visitUniBox(UniBox f) {
-			d_valid = false;
+			// Repurpose these to the [E] operator
 		}
 		public void visitUniDiamond(UniDiamond f) {
-			d_valid = false;
+			// Repurpose these to the <E> operator
 		}
 		public void visitFormulaReference(FormulaReference f) {
 		}
@@ -43,6 +43,6 @@ public class MultiModalValidator implements FormulaValidator {
 	}
 
 	public String toString() {
-		return "MultiModalValidator";
+		return "EMultiModalValidator";
 	}
 }
