@@ -5,8 +5,8 @@ import java.util.Vector;
 
 import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.model.KripkeModel;
-import nl.rug.ai.mas.oops.model.Model;
-import nl.rug.ai.mas.oops.model.Model.Relation;
+import nl.rug.ai.mas.oops.model.ConfigurableModel;
+import nl.rug.ai.mas.oops.model.ConfigurableModel.Relation;
 import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.parser.FormulaParser;
 import nl.rug.ai.mas.oops.tableau.FormulaValidator;
@@ -206,7 +206,7 @@ public class ConfigurableProver extends Prover {
 
 	@Override
 	public KripkeModel getModel() {
-		return new Model(d_context.getAgentIdView(), d_relations);
+		return new ConfigurableModel(d_context.getAgentIdView(), d_relations);
 	}
 
 }

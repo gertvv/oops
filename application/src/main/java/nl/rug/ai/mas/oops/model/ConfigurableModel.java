@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.LinkedList;
 import java.util.Vector;
 
-public class Model extends KripkeModel {
+public class ConfigurableModel extends KripkeModel {
 
 	Vector<Relation> relationsModel;
 	ModelType modelType;
@@ -39,7 +39,7 @@ public class Model extends KripkeModel {
 	}
 
 	// Create model with agents, model-type and relations   <-- Delete this?
-	public Model(Set<AgentId> agents, Vector<Relation> r) {
+	public ConfigurableModel(Set<AgentId> agents, Vector<Relation> r) {
 		super(agents);
 		relationsModel = r;
 		modelType = ModelType.CUSTOM;
@@ -47,7 +47,7 @@ public class Model extends KripkeModel {
 	
 	
 	// Create a model with corresponding relations 
-	public Model(Set<AgentId> agents, ModelType m) {
+	public ConfigurableModel(Set<AgentId> agents, ModelType m) {
 		super(agents);
 		relationsModel = new Vector<Relation>();
 		modelType = m;
@@ -67,7 +67,7 @@ public class Model extends KripkeModel {
 		}
 	}
 
-	private Model(Set<AgentId> agents, ModelType modelType, Vector<Relation> relationsModel) {
+	private ConfigurableModel(Set<AgentId> agents, ModelType modelType, Vector<Relation> relationsModel) {
 		super(agents);
 		this.relationsModel = relationsModel;
 		this.modelType = modelType;
@@ -75,8 +75,8 @@ public class Model extends KripkeModel {
 
 
 	@Override
-	public Model newModel() {
-		return new Model(d_agents, modelType, relationsModel);
+	public ConfigurableModel newModel() {
+		return new ConfigurableModel(d_agents, modelType, relationsModel);
 	}
 
 	/**
