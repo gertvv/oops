@@ -23,6 +23,10 @@ import nl.rug.ai.mas.oops.tableau.Rule;
  */
 public class ConfigurableProver extends Prover {
 	public enum AxiomSystem {
+		Propositional(
+				new RuleID[] {},
+				new Relation[] {}
+		),
 		K(
 				new RuleID[] { RuleID.PosO1, RuleID.PosO2, RuleID.BNecO1, RuleID.BNecO2 },
 				new Relation[] {}
