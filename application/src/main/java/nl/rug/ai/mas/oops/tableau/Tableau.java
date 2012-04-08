@@ -226,7 +226,7 @@ public class Tableau {
 				}
 			}
 		}
-
+		
 		private void handleNode(Node n, Match m) {
 			Node neg = new Node(n.getLabel(), n.getFormula().opposite());
 			if (d_branch.contains(neg)) {
