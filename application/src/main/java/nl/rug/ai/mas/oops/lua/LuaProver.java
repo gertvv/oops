@@ -38,7 +38,7 @@ public class LuaProver {
 		// If the system does not exist, this will throw an exception
 		AxiomSystem system = ConfigurableProver.AxiomSystem.valueOf(proverName);
 		
-		d_prover = system.build();
+		d_prover = system.buildProver();
 		d_parser = new FormulaParser(d_prover.getContext());
 
 		
@@ -146,7 +146,7 @@ public class LuaProver {
 				d_vm.error("Unknown axiom system specified");
 			}
 			
-			Prover prover = system.build();
+			Prover prover = system.buildProver();
 			
 			// Change the prover
 			d_prover = prover;

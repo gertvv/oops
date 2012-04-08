@@ -41,7 +41,7 @@ public class ConfigurableProver extends Prover {
 			this.relations = relations;
 		}
 		
-		public ConfigurableProver build()
+		public ConfigurableProver buildProver()
 		{
 			return ConfigurableProver.build(rules, relations);
 		}
@@ -100,7 +100,7 @@ public class ConfigurableProver extends Prover {
 			return;
 		}
 	
-		ConfigurableProver p = system.build();
+		ConfigurableProver p = system.buildProver();
 		try {
 			if (satisfyMode) {
 				System.out.println(p.provable(formula));
