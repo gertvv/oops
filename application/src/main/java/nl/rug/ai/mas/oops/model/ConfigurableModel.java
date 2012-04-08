@@ -27,56 +27,20 @@ import java.util.Vector;
 
 public class ConfigurableModel extends KripkeModel {
 
-	Vector<Relation> relationsModel;
-	ModelType modelType;
-
-	public enum ModelType {
-		S5, S4, K, CUSTOM;
-	}
+	Vector<Relation> d_relationsModel;
 
 	public enum Relation {
 		TRANSITIVE, REFLEXIVE, SYMMETRIC;
 	}
 
-	// Create model with agents, model-type and relations   <-- Delete this?
-	public ConfigurableModel(Set<AgentId> agents, Vector<Relation> r) {
+	public ConfigurableModel(Set<AgentId> agents, Vector<Relation> relationsModel) {
 		super(agents);
-		relationsModel = r;
-		modelType = ModelType.CUSTOM;
+		d_relationsModel = relationsModel;
 	}
-	
-	
-	// Create a model with corresponding relations 
-	public ConfigurableModel(Set<AgentId> agents, ModelType m) {
-		super(agents);
-		relationsModel = new Vector<Relation>();
-		modelType = m;
-
-		switch (m) {
-			case S5:
-				relationsModel.add(Relation.TRANSITIVE);
-				relationsModel.add(Relation.REFLEXIVE);
-				relationsModel.add(Relation.SYMMETRIC);
-				break;
-				
-			case S4:
-				relationsModel.add(Relation.REFLEXIVE);
-				relationsModel.add(Relation.TRANSITIVE);
-				break;		
-				
-		}
-	}
-
-	private ConfigurableModel(Set<AgentId> agents, ModelType modelType, Vector<Relation> relationsModel) {
-		super(agents);
-		this.relationsModel = relationsModel;
-		this.modelType = modelType;
-	}
-
 
 	@Override
 	public ConfigurableModel newModel() {
-		return new ConfigurableModel(d_agents, modelType, relationsModel);
+		return new ConfigurableModel(d_agents, d_relationsModel);
 	}
 
 	/**
@@ -88,7 +52,7 @@ public class ConfigurableModel extends KripkeModel {
 			return false;
 		}
 
-		if (relationsModel.contains(Relation.REFLEXIVE)) {
+		if (d_relationsModel.contains(Relation.REFLEXIVE)) {
 			addReflexive(w);
 		}
 
@@ -103,11 +67,11 @@ public class ConfigurableModel extends KripkeModel {
 			return false;
 		}
 
-		if (relationsModel.contains(Relation.SYMMETRIC)) {
+		if (d_relationsModel.contains(Relation.SYMMETRIC)) {
 			addSymmetry(r1);
 		}
 
-		if (relationsModel.contains(Relation.TRANSITIVE)) {
+		if (d_relationsModel.contains(Relation.TRANSITIVE)) {
 			addTransitivity(r1);
 		}
 
