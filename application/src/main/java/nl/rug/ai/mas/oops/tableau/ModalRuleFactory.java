@@ -105,6 +105,14 @@ public class ModalRuleFactory {
 			public Rule buildRule(Context c) {
 				return buildEK2(c);
 			}
+		}), EK3(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildEK3(c);
+			}
+		}), EK4(new RuleClosure() {
+			public Rule buildRule(Context c) {
+				return buildEK4(c);
+			}
 		});
 
 		private final RuleClosure func;
@@ -621,5 +629,41 @@ public class ModalRuleFactory {
 		Formula rwt = new Negation(new MultiBox(iref, fref));
 		
 		return new AgentSplitRule("EK2", html, f, rwt, context, iref);
+	}
+	
+	public static Rule buildEK3(Context context) {
+		String html = "I" + "<sub>" + LOZENGE + "</sub>";
+		// variables
+		Variable<Formula> F = new Variable<Formula>("F");
+		FormulaReference fref = new FormulaReference(F, context.getFormulaCodeMap().code(F));
+
+		Variable<Agent> i = new Variable<Agent>("i");
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
+
+		// formula
+		Formula f = new UniDiamond(fref);
+
+		// rewrites
+		Formula rwt = new MultiBox(iref, fref);
+		
+		return new AgentSplitRule("EK3", html, f, rwt, context, iref);
+	}
+	
+	public static Rule buildEK4(Context context) {
+		String html = "I" + "<sub>" + LOZENGE + "*</sub>";
+		// variables
+		Variable<Formula> F = new Variable<Formula>("F");
+		FormulaReference fref = new FormulaReference(F, context.getFormulaCodeMap().code(F));
+
+		Variable<Agent> i = new Variable<Agent>("i");
+		AgentReference iref = new AgentReference(i, context.getAgentCodeMap().code(i));
+
+		// formula
+		Formula f = new Negation(new UniDiamond(fref));
+
+		// rewrites
+		Formula rwt = new Negation(new MultiBox(iref, fref));
+		
+		return new AgentLinearRule("EK2", html, f, rwt, context, iref);
 	}
 }

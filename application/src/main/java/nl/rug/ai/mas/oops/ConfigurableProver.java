@@ -76,7 +76,7 @@ public class ConfigurableProver extends Prover {
 				new MultiModalValidator()
 		),
 		S5E(
-				new RuleID[] { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.BNecS1, RuleID.BNecS2, RuleID.SNecO1, RuleID.SNecO2, RuleID.SNecS1, RuleID.SNecS2, RuleID.EK1, RuleID.EK2 },
+				new RuleID[] { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.BNecS1, RuleID.BNecS2, RuleID.SNecO1, RuleID.SNecO2, RuleID.SNecS1, RuleID.SNecS2, RuleID.EK1, RuleID.EK2, RuleID.EK3, RuleID.EK4 },
 				new Relation[] { Relation.REFLEXIVE, Relation.TRANSITIVE, Relation.SYMMETRIC },
 				new EMultiModalValidator()
 		);

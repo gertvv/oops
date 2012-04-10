@@ -26,7 +26,7 @@ public class EMultiModalValidator implements FormulaValidator {
 			// Repurpose these to the [E] operator
 		}
 		public void visitUniDiamond(UniDiamond f) {
-			d_valid = false;
+			// Repurpose these to the <I> operator
 		}
 		public void visitFormulaReference(FormulaReference f) {
 		}
