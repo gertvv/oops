@@ -30,7 +30,7 @@ public class ConfigurableModel extends KripkeModel {
 	Vector<Relation> d_relationsModel;
 
 	public enum Relation {
-		TRANSITIVE, REFLEXIVE, SYMMETRIC;
+		TRANSITIVE, REFLEXIVE, SYMMETRIC, SERIAL;
 	}
 
 	public ConfigurableModel(Set<AgentId> agents, Vector<Relation> relationsModel) {
@@ -129,6 +129,32 @@ public class ConfigurableModel extends KripkeModel {
 			}
 		}
 
+		return true;
+	}
+	
+	// Check serial, if world doesn't have outgoing arrow, make an new arrow pointing to it self. 
+	public boolean checkSerial()
+	{
+		if(d_relationsModel.contains(Relation.SYMMETRIC))
+		{
+			Set<World> worlds = getWorlds();
+			Set<Arrow> arrows; 
+			
+			for(World world: worlds)
+			{
+				
+				for(AgentId agent: d_agents)
+				{
+					arrows = getArrowsFrom(agent, world);
+					
+					if(arrows.isEmpty())
+					{
+						super.addArrow(agent, world, world);
+					}
+				}			
+			}
+		}
+		
 		return true;
 	}
 }

@@ -124,6 +124,11 @@ public class KripkeModel {
 
 		return graph;
 	}
+	
+	public boolean checkSerial() // Check serial relations
+	{
+		return checkSerial();
+	}
 
 	
 	/**
