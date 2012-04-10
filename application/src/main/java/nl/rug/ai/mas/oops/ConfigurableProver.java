@@ -47,7 +47,7 @@ public class ConfigurableProver extends Prover {
 		),
 		D(
 				new RuleID[] { RuleID.PosO1, RuleID.PosO2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO3, RuleID.SNecO4 },
-				new Relation[] { /*Relation.SERIAL */ },
+				new Relation[] { Relation.SERIAL },
 				new MultiModalValidator()
 		),
 		K4(
@@ -62,7 +62,7 @@ public class ConfigurableProver extends Prover {
 		),
 		KD45(
 				new RuleID[] { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO3, RuleID.SNecO4, RuleID.SNecS3, RuleID.SNecS4 },
-				new Relation[] { /*Relation.SERIAL, */ Relation.TRANSITIVE, Relation.SYMMETRIC },
+				new Relation[] { Relation.SERIAL, Relation.TRANSITIVE, Relation.SYMMETRIC },
 				new MultiModalValidator()
 		),
 		S4(
