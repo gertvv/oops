@@ -35,6 +35,12 @@ public class ConfigurableProver extends Prover {
 				new Relation[] {},
 				new MultiModalValidator()
 		),
+		KE
+		(
+				new RuleID[] { RuleID.PosO1, RuleID.PosO2, RuleID.BNecO1, RuleID.BNecO2, RuleID.EK1, RuleID.EK2, RuleID.EK3, RuleID.EK4 },
+				new Relation[] {},
+				new EMultiModalValidator()
+		),
 		T(
 				new RuleID[] { RuleID.PosO1, RuleID.PosO2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO1, RuleID.SNecO2 },
 				new Relation[] { Relation.REFLEXIVE },
@@ -69,6 +75,11 @@ public class ConfigurableProver extends Prover {
 				new RuleID[] { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO1, RuleID.SNecO2 },
 				new Relation[] { Relation.REFLEXIVE, Relation.TRANSITIVE },
 				new MultiModalValidator()
+		),
+		S4E(
+				new RuleID[] { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.SNecO1, RuleID.SNecO2, RuleID.EK1, RuleID.EK2, RuleID.EK3, RuleID.EK4 },
+				new Relation[] { Relation.REFLEXIVE, Relation.TRANSITIVE },
+				new EMultiModalValidator()
 		),
 		S5(
 				new RuleID[] { RuleID.PosO1, RuleID.PosO2, RuleID.PosS1, RuleID.PosS2, RuleID.BNecO1, RuleID.BNecO2, RuleID.BNecS1, RuleID.BNecS2, RuleID.SNecO1, RuleID.SNecO2, RuleID.SNecS1, RuleID.SNecS2 },
