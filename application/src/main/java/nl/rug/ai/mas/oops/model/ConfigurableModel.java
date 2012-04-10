@@ -135,7 +135,7 @@ public class ConfigurableModel extends KripkeModel {
 	// Check serial, if world doesn't have outgoing arrow, make an new arrow pointing to it self. 
 	public boolean checkSerial()
 	{
-		if(d_relationsModel.contains(Relation.SYMMETRIC))
+		if(d_relationsModel.contains(Relation.SERIAL))
 		{
 			Set<World> worlds = getWorlds();
 			Set<Arrow> arrows; 
