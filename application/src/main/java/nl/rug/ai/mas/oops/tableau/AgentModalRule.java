@@ -48,11 +48,17 @@ public class AgentModalRule extends Rule {
 			return null;
 		Vector<Node> v = new Vector<Node>();
 	
+		if (d_context.getAgentIdView().size() == 0) {
+			// Ensure at least one agent is in the context
+			d_context.getAgentIdMap().getOrCreate("1");
+		}
+		
 		for (Agent agent : d_context.getAgentIdView()) {
 			
 			s.put(d_agentRef.get(), agent);
 			v.add(new Node(n.getLabel(), d_rewrite.substitute(s)));
 		}
+	
 		
 		return new Match(this, n, v);
 	}
