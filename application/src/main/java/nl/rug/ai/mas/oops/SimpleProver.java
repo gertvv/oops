@@ -21,12 +21,14 @@ package nl.rug.ai.mas.oops;
 
 import java.util.*;
 import nl.rug.ai.mas.oops.formula.*;
+import nl.rug.ai.mas.oops.model.KripkeModel;
+import nl.rug.ai.mas.oops.model.S5nModel;
 import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.parser.FormulaParser;
 import nl.rug.ai.mas.oops.tableau.*;
 
 /**
- * A simple wrapper for a Prover with default rules. Takes a formula as a
+ * A simple wrapper for a Prover with default (S5) rules. Takes a formula as a
  * command line argument and checks whether it is provable (or satisfiable).
  */
 public class SimpleProver extends Prover {
@@ -133,5 +135,10 @@ public class SimpleProver extends Prover {
 	 */
 	public Context getContext() {
 		return d_context;
+	}
+
+	@Override
+	public KripkeModel getModel() {
+		return new S5nModel(d_context.getAgentIdView());
 	}
 }

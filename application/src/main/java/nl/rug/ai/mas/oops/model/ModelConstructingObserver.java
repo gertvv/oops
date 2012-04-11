@@ -91,6 +91,8 @@ public class ModelConstructingObserver implements TableauObserver {
 				World w2 = labelMap.get(l);
 				d_model.addArrow((AgentId)l.getAgent(), w1, w2);
 			}
+			
+			d_model.checkSerial(); // Edit, check for serial relations after the model is made. 
 		}
 	}
 }

@@ -3,19 +3,15 @@ package nl.rug.ai.mas.oops.lua;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
 
+import nl.rug.ai.mas.oops.ConfigurableProver;
+import nl.rug.ai.mas.oops.ConfigurableProver.AxiomSystem;
 import nl.rug.ai.mas.oops.ObserveProver;
 import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.model.ModelConstructingObserver;
-import nl.rug.ai.mas.oops.model.S5nModel;
-import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.parser.FormulaParser;
 import nl.rug.ai.mas.oops.render.TableauObserverSwing;
-import nl.rug.ai.mas.oops.tableau.ModalRuleFactory;
-import nl.rug.ai.mas.oops.tableau.MultiModalValidator;
-import nl.rug.ai.mas.oops.tableau.PropositionalRuleFactory;
-import nl.rug.ai.mas.oops.tableau.Rule;
+import nl.rug.ai.mas.oops.tableau.SystemOutObserver;
 
 import org.luaj.platform.J2sePlatform;
 import org.luaj.vm.LFunction;
@@ -30,10 +26,7 @@ public class LuaProver {
 	 * The parser instance.
 	 */
 	private FormulaParser d_parser;
-	/**
-	 * The (parser) context.
-	 */
-	private Context d_context;
+
 	/**
 	 * The prover instance.
 	 */
@@ -41,23 +34,20 @@ public class LuaProver {
 	private LuaState d_vm;
 	private ModelConstructingObserver d_modelConstructor;
 	
-	public LuaProver() {
-		d_context = new Context();
+	public LuaProver(String proverName) {
+	
+		// If the system does not exist, this will throw an exception
+		AxiomSystem system = ConfigurableProver.AxiomSystem.valueOf(proverName);
+		
+		d_prover = system.buildProver();
+		d_parser = new FormulaParser(d_prover.getContext());
 
-		// build rules
-		Vector<Rule> rules = PropositionalRuleFactory.build(d_context);
-		rules.addAll(ModalRuleFactory.build(d_context));
-
-		d_prover = new Prover(rules, new MultiModalValidator());
-		d_parser = new FormulaParser(d_context);
-
+		
 		Platform.setInstance(new J2sePlatform());
 		d_vm = Platform.newLuaState();
 		org.luaj.compiler.LuaC.install();
-		
-		d_modelConstructor = new ModelConstructingObserver(
-				new S5nModel(d_parser.getContext().getAgentIdView()));
-		
+		 
+		d_modelConstructor = new ModelConstructingObserver(d_prover.getModel());
 		registerNameSpace();
 	}
 	
@@ -69,9 +59,18 @@ public class LuaProver {
 		
 		d_vm.pushlvalue(new FunctionAttachTableauVisualizer());
 		d_vm.setfield(-2, new LString("attachTableauVisualizer"));
+				
+		d_vm.pushlvalue(new FunctionAttachTableauObserver());
+		d_vm.setfield(-2, new LString("attachTableauObserver"));
 		
 		d_vm.pushlvalue(new FunctionAttachModelConstructor());
 		d_vm.setfield(-2, new LString("attachModelConstructor"));
+		
+		d_vm.pushlvalue(new FunctionSetProver());
+		d_vm.setfield(-2, new LString("setProver"));
+		
+		d_vm.pushlvalue(new FunctionGetProvers());
+		d_vm.setfield(-2, new LString("getProvers"));
 		
 		d_vm.pushlvalue(new FunctionGetModel());
 		d_vm.setfield(-2, new LString("getModel"));
@@ -121,6 +120,72 @@ public class LuaProver {
 			return 0;
 		}
 	}
+	
+	private final class FunctionAttachTableauObserver extends LFunction {
+		public int invoke(LuaState L) {
+			d_prover.getTableau().attachObserver(new SystemOutObserver());
+			return 0;
+		}
+	}
+	
+	private final class FunctionGetProvers extends LFunction {
+		public int invoke(LuaState L) {
+			LTable result = new LTable();
+			int i = 1;
+			for (AxiomSystem system : ConfigurableProver.AxiomSystem.values())
+			{
+				result.put(i++, new LString(system.name()));
+			}
+			
+			d_vm.pushlvalue(result);
+			
+			return 1;
+		}
+	}
+	
+	
+	private final class FunctionSetProver extends LFunction {
+		public int invoke(LuaState L) {
+			String systemId = d_vm.checkstring(1);
+			AxiomSystem system = null;
+			try {
+				system = ConfigurableProver.AxiomSystem.valueOf(systemId);
+			} catch (Exception e) {
+				system = null;
+			}
+			if (system == null) {
+				d_vm.error("Unknown axiom system specified");
+			}
+			
+			Prover prover = system.buildProver();
+			
+			// Change the prover
+			d_prover = prover;
+			
+			// Change parser
+			d_parser = new FormulaParser(d_prover.getContext());
+			
+			// Change the model
+			d_modelConstructor = new ModelConstructingObserver(prover.getModel());
+					
+			// Redefine the Theory and Formula functions to use the new prover
+			
+			LuaFormula formula = new LuaFormula(d_parser, d_prover);
+			LuaTheory theory = new LuaTheory(formula, d_prover);
+			
+			d_vm.getglobal("oops");
+			
+			formula.register(d_vm);
+			d_vm.setfield(-2, new LString("Formula")); // Give the constructor a name
+			
+			theory.register(d_vm);
+			d_vm.setfield(-2, new LString("Theory")); // Give the constructor a name
+			
+			d_vm.setglobal("oops");
+						
+			return 0;
+		}
+	}
 
 	public void doFile(String file) {
 		d_vm.getglobal("dofile");
@@ -147,11 +212,34 @@ public class LuaProver {
 	}
 
 	public static void main(String[] args) {
-		LuaProver prover = new LuaProver();
-		if (args.length == 0) {
+		// TODO: Handle command-line argument to set axiom system
+		int argNum = 0;
+		
+		// Default to the S5 prover
+		AxiomSystem system = AxiomSystem.S5;
+		String file = null;
+		
+		while (argNum < args.length)
+		{
+			String arg = args[argNum++];
+			
+			if (arg.equals("--prover")) {
+				try {
+					system = AxiomSystem.valueOf(args[argNum++]);
+				} catch (Exception e) {
+					System.out.println("Invalid prover specified");
+					return;
+				}
+			} else if (file == null && !arg.startsWith("--") && !arg.startsWith("-")) {
+				file = arg;
+			}
+			
+		}
+		LuaProver prover = new LuaProver(system.name());
+		if (file == null) {
 			prover.interactive();
 		} else {
-			prover.doFile(args[0]);
+			prover.doFile(file);
 		}
 	}
 

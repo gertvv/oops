@@ -226,7 +226,7 @@ public class Tableau {
 				}
 			}
 		}
-
+		
 		private void handleNode(Node n, Match m) {
 			Node neg = new Node(n.getLabel(), n.getFormula().opposite());
 			if (d_branch.contains(neg)) {
@@ -255,11 +255,6 @@ public class Tableau {
 					} else {
 						d_queue.add(match);
 					}
-				}
-			} else {
-				if (!n.getFormula().isSimple()) {
-					d_error = n.toString() + s_errorNoMatch;
-					d_result = BranchState.ERROR;
 				}
 			}
 		}
