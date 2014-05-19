@@ -20,7 +20,10 @@ License
 ==============================================================================
 
     OOPS - Object Oriented Prover for S5n
-    Copyright (C) 2007-2009  Elske van der Vaart and Gert van Valkenhoef
+    Copyright (C) 2007-2009 Elske van der Vaart and Gert van Valkenhoef
+		  2012 Gert van Valkenhoef, Wouter Reckman, Lourens Elzinga,
+                       and Rik Timmers.
+                  2014 Gert van Valkenhoef
 
     This program is free software; you can redistribute it and/or modify it
     under the terms of the GNU General Public License version 2 as published
