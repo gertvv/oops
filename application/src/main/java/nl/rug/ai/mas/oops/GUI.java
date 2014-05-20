@@ -16,7 +16,6 @@ import java.io.PrintStream;
 import java.net.URL;
 
 import javax.help.CSH;
-import javax.help.HelpBroker;
 import javax.help.HelpSet;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
