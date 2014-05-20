@@ -13,7 +13,11 @@ import java.awt.event.WindowListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URL;
 
+import javax.help.CSH;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -134,7 +138,25 @@ public class GUI extends JFrame {
 		menuBar.add(buildFileMenu());
 		menuBar.add(buildEditMenu());
 		menuBar.add(buildRunMenu());
+		menuBar.add(buildHelpMenu());
 		return menuBar;
+	}
+
+	private JMenu buildHelpMenu() {
+		try {
+			URL url = HelpSet.findHelpSet(GUI.class.getClassLoader(), "nl/rug/ai/mas/oops/OopsHelp.hs");
+			HelpSet hs = new HelpSet(null, url);
+			
+			JMenu menu = new JMenu("Help");
+			JMenuItem item = new JMenuItem("Show Help");
+			menu.add(item);
+			item.addActionListener(new CSH.DisplayHelpFromSource(hs.createHelpBroker()));
+			
+			return menu;
+		} catch (Exception e) {
+			System.err.println(e);
+			return null;
+		}
 	}
 
 	private JMenu buildRunMenu() {
