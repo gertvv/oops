@@ -5,19 +5,29 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.URL;
 
 import javax.help.CSH;
+import javax.help.DefaultHelpBroker;
+import javax.help.HelpBroker;
 import javax.help.HelpSet;
+import javax.help.SwingHelpUtilities;
+import javax.help.WindowPresentation;
 import javax.swing.ButtonGroup;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,7 +37,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import nl.rug.ai.mas.oops.ConfigurableProver.AxiomSystem;
 import nl.rug.ai.mas.oops.lua.LuaProver;
@@ -39,33 +51,20 @@ public class GUI extends JFrame {
 	private JMenuItem d_saveItem;
 	private JMenuItem d_refreshItem;
 	private String d_defaultProver;
+	private String d_licenseText;
+	private HelpBroker d_helpBroker;
 
 	public GUI() {
 		super("OOPS Graphical Environment");
+		
+		readLicenseText();
+		initializeHelp();
 
 		setJMenuBar(buildMenuBar());
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		addWindowListener(new WindowListener() {
+		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				quitApplication();
-			}
-
-			public void windowClosed(WindowEvent e) {
-			}
-
-			public void windowActivated(WindowEvent e) {
-			}
-
-			public void windowDeactivated(WindowEvent e) {
-			}
-
-			public void windowDeiconified(WindowEvent e) {
-			}
-
-			public void windowIconified(WindowEvent e) {
-			}
-
-			public void windowOpened(WindowEvent e) {
 			}
 		});
 
@@ -123,6 +122,31 @@ public class GUI extends JFrame {
 		}
 	}
 
+	private void readLicenseText() {
+		try {
+			URL resource = GUI.class.getClassLoader().getResource("nl/rug/ai/mas/oops/LICENSE");
+			File file = new File(resource.toURI());
+			BufferedInputStream bis = (BufferedInputStream) resource.getContent();
+			byte[] data = new byte[(int)file.length()];
+			bis.read(data);
+			bis.close();
+			d_licenseText = new String(data, "UTF-8");
+		} catch (Exception e) {
+			System.err.println("Failed to read LICENSE: " + e);
+		}
+	}
+	
+	private void initializeHelp() {
+		try {
+			SwingHelpUtilities.setContentViewerUI("nl.rug.ai.mas.oops.ExternalLinkContentViewerUI");
+			URL url = HelpSet.findHelpSet(GUI.class.getClassLoader(), "nl/rug/ai/mas/oops/OopsHelp.hs");
+			HelpSet hs = new HelpSet(null, url);
+			d_helpBroker = hs.createHelpBroker();
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+	}
+
 	private void showError(Exception e, String title) {
 		JOptionPane.showMessageDialog(this, title + " \n" + e.getMessage(), title, JOptionPane.ERROR_MESSAGE);
 	}
@@ -141,21 +165,22 @@ public class GUI extends JFrame {
 		return menuBar;
 	}
 
-	private JMenu buildHelpMenu() {
-		try {
-			URL url = HelpSet.findHelpSet(GUI.class.getClassLoader(), "nl/rug/ai/mas/oops/OopsHelp.hs");
-			HelpSet hs = new HelpSet(null, url);
-			
-			JMenu menu = new JMenu("Help");
-			JMenuItem item = new JMenuItem("Show Help");
-			menu.add(item);
-			item.addActionListener(new CSH.DisplayHelpFromSource(hs.createHelpBroker()));
-			
-			return menu;
-		} catch (Exception e) {
-			System.err.println(e);
-			return null;
-		}
+    private JMenu buildHelpMenu() {
+		JMenu menu = new JMenu("Help");
+
+		JMenuItem manual = new JMenuItem("Manual");
+		manual.addActionListener(new CSH.DisplayHelpFromSource(d_helpBroker));
+		menu.add(manual);
+
+		JMenuItem license = new JMenuItem("License");
+		license.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showLicenseDialog();
+			}
+		});
+		menu.add(license);
+
+		return menu;
 	}
 
 	private JMenu buildRunMenu() {
@@ -431,6 +456,17 @@ public class GUI extends JFrame {
 
 		item.setAccelerator(KeyStroke.getKeyStroke(accelerator, keyMask, false));
 		return item;
+	}
+
+	private void showLicenseDialog() {
+		JDialog jDialog = new JDialog(this, "OOPS license", true);
+		JTextArea jTextArea = new JTextArea(d_licenseText);
+		jTextArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
+		jTextArea.setEditable(false);
+		jDialog.add(jTextArea);
+		jDialog.pack();
+		jDialog.setLocationRelativeTo(this);
+		jDialog.setVisible(true);
 	}
 
 	public static void main(String args[]) {
