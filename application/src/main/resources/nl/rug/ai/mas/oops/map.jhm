@@ -4,5 +4,25 @@
          "http://java.sun.com/products/javahelp/map_1_0.dtd">
 
 <map version="1.0">
-	<mapID target="oops" url="help/oops.html" />
+	<mapID target="oops.intro" url="help/oops/intro.html" />
+	<mapID target="oops.script" url="help/oops/script.html" />
+	<mapID target="oops.tableaux" url="help/oops/tableaux.html" />
+	
+	<mapID target="modal.intro" url="help/modal/intro.html" />
+	<mapID target="modal.kripke" url="help/modal/kripke.html" />
+	<mapID target="modal.tableaux" url="help/modal/tableaux.html" />
+
+	<mapID target="logic.p" url="help/logic/p.html" />
+	<mapID target="logic.k" url="help/logic/k.html" />
+	<mapID target="logic.t" url="help/logic/t.html" />
+	<mapID target="logic.b" url="help/logic/b.html" />
+	<mapID target="logic.d" url="help/logic/d.html" />
+	<mapID target="logic.k4" url="help/logic/k4.html" />
+	<mapID target="logic.k45" url="help/logic/k45.html" />
+	<mapID target="logic.kd45" url="help/logic/kd45.html" />
+	<mapID target="logic.s4" url="help/logic/s4.html" />
+	<mapID target="logic.s5" url="help/logic/s5.html" />
+	<mapID target="logic.ke" url="help/logic/ke.html" />
+	<mapID target="logic.s4e" url="help/logic/s4e.html" />
+	<mapID target="logic.s5e" url="help/logic/s5e.html" />
 </map>

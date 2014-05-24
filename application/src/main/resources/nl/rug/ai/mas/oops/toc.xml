@@ -6,7 +6,36 @@
 <toc version="2.0">
 <tocitem text="OOPS">
 
-   <tocitem text="Introduction to OOPS" target="oops"/>
+   <tocitem text="Introduction" target="oops.intro" />
+   <tocitem text="Scripting" target="oops.script" />
+   <tocitem text="Tableaux" target="oops.tableaux" />
 
+</tocitem>
+<tocitem text="Modal logic">
+	<tocitem text="Introduction" target="modal.intro"/>
+	<tocitem text="Kripke semantics" target="modal.kripke"/>
+	<tocitem text="Tableaux" target="modal.tableaux"/>
+	
+	<tocitem text="Logic systems">
+	    <tocitem text="Propositional logic" target="logic.p" />
+		
+		<tocitem text="Regular modal logics">
+            <tocitem text="Modal logic K" target="logic.k" />
+            <tocitem text="Modal logic T" target="logic.t" />
+            <tocitem text="Modal logic B" target="logic.b" />
+            <tocitem text="Modal logic D" target="logic.d" />
+            <tocitem text="Modal logic K4" target="logic.k4" />
+            <tocitem text="Modal logic K45" target="logic.k45" />
+            <tocitem text="Modal logic KD45" target="logic.kd45" />
+            <tocitem text="Modal logic S4" target="logic.s4" />
+            <tocitem text="Modal logic S5" target="logic.s5" />
+        </tocitem>
+        
+        <tocitem text="Modal logics + E">
+            <tocitem text="Modal logic KE" target="logic.ke" />
+            <tocitem text="Modal logic S4E" target="logic.s4e" />
+            <tocitem text="Modal logic S5E" target="logic.s5e" />
+        </tocitem>
+	</tocitem>
 </tocitem>
 </toc>
