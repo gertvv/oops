@@ -3,8 +3,7 @@ package nl.rug.ai.mas.oops.lua;
 import java.awt.FontFormatException;
 import java.io.IOException;
 
-import nl.rug.ai.mas.oops.ConfigurableProver;
-import nl.rug.ai.mas.oops.ConfigurableProver.AxiomSystem;
+import nl.rug.ai.mas.oops.AxiomSystem;
 import nl.rug.ai.mas.oops.ObserveProver;
 import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.TableauErrorException;
@@ -51,7 +50,7 @@ public class LuaTheory {
 		}
 		
 		public String toString() {
-			return d_theory.toString();
+			return d_theory.getProver().getAxiomSystem().toString() + d_theory.toString();
 		}
 	}
 
@@ -106,7 +105,7 @@ public class LuaTheory {
 				String systemStr = L.tostring(1);
 				system = AxiomSystem.valueOf(systemStr);
 			}
-			ConfigurableProver prover = system.buildProver();
+			Prover prover = system.buildProver();
 			L.pushlvalue(new LUserData(new TheoryData(prover), table));
 			return 1;
 		}

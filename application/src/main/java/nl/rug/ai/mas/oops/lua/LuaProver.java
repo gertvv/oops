@@ -2,8 +2,7 @@ package nl.rug.ai.mas.oops.lua;
 
 import java.io.InputStream;
 
-import nl.rug.ai.mas.oops.ConfigurableProver;
-import nl.rug.ai.mas.oops.ConfigurableProver.AxiomSystem;
+import nl.rug.ai.mas.oops.AxiomSystem;
 
 import org.luaj.platform.J2sePlatform;
 import org.luaj.vm.LFunction;
@@ -46,7 +45,7 @@ public class LuaProver {
 		public int invoke(LuaState L) {
 			LTable result = new LTable();
 			int i = 1;
-			for (AxiomSystem system : ConfigurableProver.AxiomSystem.values())
+			for (AxiomSystem system : AxiomSystem.values())
 			{
 				result.put(i++, new LString(system.name()));
 			}
