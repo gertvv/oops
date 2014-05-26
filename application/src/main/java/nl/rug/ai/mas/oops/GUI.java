@@ -21,7 +21,6 @@ import javax.help.CSH;
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
 import javax.help.SwingHelpUtilities;
-import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -30,12 +29,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
-import nl.rug.ai.mas.oops.ConfigurableProver.AxiomSystem;
 import nl.rug.ai.mas.oops.lua.LuaProver;
 
 @SuppressWarnings("serial")
@@ -44,7 +41,6 @@ public class GUI extends JFrame {
 	private Console d_console;
 	private JMenuItem d_saveItem;
 	private JMenuItem d_refreshItem;
-	private String d_defaultProver;
 	private String d_licenseText;
 	private HelpBroker d_helpBroker;
 
@@ -103,9 +99,6 @@ public class GUI extends JFrame {
 		d_console.setEditable(false);
 		consolePane.setViewportView(d_console);
 		panel.add(consolePane, c);
-
-		// Set default prover to S5
-		d_defaultProver = "S5";
 		
 		d_console.start();
 		try {
@@ -179,25 +172,6 @@ public class GUI extends JFrame {
 
 	private JMenu buildRunMenu() {
 		JMenu runMenu = new JMenu("Run");
-		
-		ButtonGroup group = new ButtonGroup();
-		
-		JMenu proversMenu = new JMenu("Default prover");
-		for (final AxiomSystem system : ConfigurableProver.AxiomSystem.values())
-		{
-			JRadioButtonMenuItem systemItem = new JRadioButtonMenuItem(system.name(), system.name() == "S5" ? true : false);
-			systemItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					d_defaultProver = system.name();
-				}
-			});
-			
-			group.add(systemItem);
-			proversMenu.add(systemItem);
-		}
-		
-		runMenu.add(proversMenu);
-		runMenu.addSeparator();
 
 		JMenuItem runItem = buildMenuItem("Execute", 'E', KeyEvent.VK_E, false);
 		runItem.addActionListener(new ActionListener() {
@@ -206,6 +180,7 @@ public class GUI extends JFrame {
 			}
 		});
 		runMenu.add(runItem);
+
 		JMenuItem clearItem = buildMenuItem("Clear console", 'C', KeyEvent.VK_E, true);
 		clearItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -219,7 +194,7 @@ public class GUI extends JFrame {
 
 	protected void runEditorContents() {
 		String text = d_editor.getText();
-		LuaProver prover = new LuaProver(d_defaultProver);
+		LuaProver prover = new LuaProver();
 		prover.doStream(new ByteArrayInputStream(text.getBytes()), "EditorContents");
 
 		while (!d_console.streamsFlushed()) {

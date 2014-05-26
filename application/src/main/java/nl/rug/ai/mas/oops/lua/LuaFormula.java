@@ -1,27 +1,25 @@
 package nl.rug.ai.mas.oops.lua;
 
-import org.luaj.vm.LFunction;
-import org.luaj.vm.LTable;
-import org.luaj.vm.LUserData;
-import org.luaj.vm.LuaState;
-
-import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.formula.Agent;
 import nl.rug.ai.mas.oops.formula.AgentId;
 import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.formula.FullSubstitution;
 import nl.rug.ai.mas.oops.formula.Substitution;
 import nl.rug.ai.mas.oops.formula.Variable;
+import nl.rug.ai.mas.oops.parser.Context;
 import nl.rug.ai.mas.oops.parser.FormulaParser;
+
+import org.luaj.vm.LFunction;
+import org.luaj.vm.LTable;
+import org.luaj.vm.LUserData;
+import org.luaj.vm.LuaState;
 
 public class LuaFormula {
 	FormulaParser d_parser;
-	Prover d_prover;
 	private LTable d_table;
 
-	public LuaFormula(FormulaParser adapter, Prover prover) {
-		d_parser = adapter;
-		d_prover = prover;
+	public LuaFormula() {
+		d_parser = new FormulaParser(new Context());
 	}
 	
 	/**
@@ -56,23 +54,22 @@ public class LuaFormula {
 		}
 	}
 	
-	public Formula checkFormula(LuaState L, int pos) {
+	public Formula checkFormula(LuaState L, int pos, FormulaParser parser) {
 		String s = L.tostring(pos);
 
-		return checkFormula(L, s);
+		return checkFormula(L, s, parser);
+	}
+	
+	private Formula checkFormula(LuaState L, int pos) {
+		return checkFormula(L, pos, d_parser);
 	}
 
-	private Formula checkFormula(LuaState L, String s) {
-		if (!d_parser.parse(s)) {
-			L.error(d_parser.getErrorCause().toString());
+	private Formula checkFormula(LuaState L, String s, FormulaParser parser) {
+		if (!parser.parse(s)) {
+			L.error(parser.getErrorCause().toString());
 		}
 
-		Formula f = d_parser.getFormula();
-		if (!d_prover.validate(f)) {
-			L.error("Formula failed to validate");
-		}
-
-		return f;
+		return parser.getFormula();
 	}
 	
 	private final class SubConstrFuncA extends LFunction {
