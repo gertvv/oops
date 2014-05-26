@@ -28,8 +28,8 @@ public class LuaProver {
 		
 		d_vm.pushlvalue(new LTable());
 		
-		d_vm.pushlvalue(new FunctionGetProvers());
-		d_vm.setfield(-2, new LString("getProvers"));
+		d_vm.pushlvalue(new FunctionGetLogics());
+		d_vm.setfield(-2, new LString("getLogics"));
 		
 		formula.register(d_vm);
 		d_vm.setfield(-2, new LString("Formula")); // Give the constructor a name
@@ -41,7 +41,7 @@ public class LuaProver {
 	}
 	
 	
-	private final class FunctionGetProvers extends LFunction {
+	private final class FunctionGetLogics extends LFunction {
 		public int invoke(LuaState L) {
 			LTable result = new LTable();
 			int i = 1;

@@ -26,8 +26,12 @@ The following is a simple example script that will output "Hello, World!" on the
 <p>OOPS uses the <a href="htp://www.lua.org">Lua</a> scripting language.</p>
 
 <p>
-The interface is built around the concept of a background theory, which is simply a collection of logical formulas that are assumed to be true.
-A new theory is created by calling <code>oops.Theory()</code>, which will return a new empty theory.
+The interface is built around the concept of a background theory, which is simply a specific <em>logic</em> (axiom system) and  a collection of additional logical formulas that are assumed to be true.
+A new theory is created by calling <code>oops.Theory(<em>logic</em>)</code>, which will return a new empty theory in the specified logic.
+When no logic is specified, as in <code>oops.Theory()</code>, OOPS will by default assume the S5 system.
+</p>
+
+<p>
 Formulas can be added to the theory using the <code><em>theory</em>.add(<em>formula</em>)</code> method.
 Given the background theory, formulas can be checked for provability and satisfiability using
 <code><em>theory</em>.provable(<em>formula</em>)</code> and
@@ -37,7 +41,7 @@ The background theory can be checked for consistency using
 </p>
 
 <p>The following example illustrates these features (see below for details of the formula syntax):</p>
-<pre>th = oops.Theory()
+<pre>th = oops.Theory("Propositional")
 th:add("a &gt; ~b")
 th:add("a")
 print("Theory:", th)
@@ -130,7 +134,7 @@ This is even clearer if we try to prove a formula that is itself inconsistent:
 </tr>
 </tbody>
 </table>
-<p>Note that some of these operators are only valid in certain logic systems. For instance, when using the propositional system, modal operators will not be available. Attempting to use these will result in an error.</p>
+<p>Note that some of these operators are only valid in certain logics. For instance, when using the propositional system, modal operators will not be available. Attempting to use these will result in an error.</p>
 
 <h2>About OOPS</h2>
 
@@ -171,7 +175,7 @@ Wouter Reckman provided some implementation assistance.
 </p>
 
 <p>
-In 2014, Gert van Valkenhoef added the help system.
+In 2014, Gert van Valkenhoef added the help system, and refactored the Lua interface to be more consistent.
 </p>
 
 </body>
