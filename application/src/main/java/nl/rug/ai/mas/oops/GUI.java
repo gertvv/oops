@@ -14,8 +14,10 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.Scanner;
 
 import javax.help.CSH;
 import javax.help.HelpBroker;
@@ -109,15 +111,21 @@ public class GUI extends JFrame {
 		}
 	}
 
+	// Thanks, http://stackoverflow.com/questions/309424/
+	static String slurp(java.io.InputStream is) {
+	    java.util.Scanner s = new Scanner(is, "UTF-8");
+	    s.useDelimiter("\\A");
+	    String str = s.hasNext() ? s.next() : "";
+	    s.close();
+	    return str;
+	}
+
 	private void readLicenseText() {
 		try {
-			URL resource = GUI.class.getClassLoader().getResource("nl/rug/ai/mas/oops/LICENSE");
-			File file = new File(resource.toURI());
-			BufferedInputStream bis = (BufferedInputStream) resource.getContent();
-			byte[] data = new byte[(int)file.length()];
-			bis.read(data);
-			bis.close();
-			d_licenseText = new String(data, "UTF-8");
+			InputStream resource = GUI.class.getClassLoader().getResourceAsStream("nl/rug/ai/mas/oops/LICENSE");
+			if (resource != null) {
+				d_licenseText = slurp(resource);
+			}
 		} catch (Exception e) {
 			System.err.println("Failed to read LICENSE: " + e);
 		}
