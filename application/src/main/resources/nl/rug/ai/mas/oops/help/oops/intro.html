@@ -1,15 +1,16 @@
 <html>
 <head><title>Introduction to OOPS</title></head>
+<!--  useful unicode: φψ∀∃∈∧∨¬→↔□◊ -->
 <body>
 
 <h1>Introduction to OOPS</h1>
 
 <p>
 OOPS is an automated prover for propositional and modal logic.
-It uses a tableau method to check satisfiability of a formula &phi;.
-To prove a formula &psi; it will check whether &not;&psi; is satisfiable.
-If it is, the tableau method has identified a <em>counter model</em> to &psi;.
-If not, &psi; is provable.
+It uses a tableau method to check satisfiability of a formula φ.
+To prove a formula ψ it will check whether ¬ψ is satisfiable.
+If it is, the tableau method has identified a <em>counter model</em> to ψ.
+If not, ψ is provable.
 </p>
 
 <h2>Working with OOPS</h2>
@@ -50,8 +51,8 @@ print("Prov.: ~b?", th:provable("~b"))
 print("Sat.: ~b?", th:satisfiable("~b"))
 </pre>
 <p>
-Here, the background theory consists of <strong>a &rarr; &not;b</strong> and <strong>a</strong>.
-This theory is consistent, and from it we can prove that <strong>&not;b</strong>, which implies that <strong>&not;b</strong> is also satisfiable.
+Here, the background theory consists of <strong>a → ¬b</strong> and <strong>a</strong>.
+This theory is consistent, and from it we can prove that <strong>¬b</strong>, which implies that <strong>¬b</strong> is also satisfiable.
 Now, if we add <strong>b</strong> to the theory, things change:
 </p>
 <pre>th:add("b")
@@ -79,27 +80,27 @@ This is even clearer if we try to prove a formula that is itself inconsistent:
 <tbody>
 <tr>
 <td>&amp;</td>
-<td>&and;</td>
+<td>∧</td>
 <td>Conjunction</td>
 </tr>
 <tr>
 <td>|</td>
-<td>&or;</td>
+<td>∨</td>
 <td>Disjunction</td>
 </tr>
 <tr>
 <td>~</td>
-<td>&not;</td>
+<td>¬</td>
 <td>Negation</td>
 </tr>
 <tr>
 <td>&gt;</td>
-<td>&rarr;</td>
+<td>→</td>
 <td>Implication</td>
 </tr>
 <tr>
 <td>=</td>
-<td>&harr;</td>
+<td>↔</td>
 <td>Bi-implication (If and only if)</td>
 </tr>
 <tr>
@@ -108,24 +109,24 @@ This is even clearer if we try to prove a formula that is itself inconsistent:
 <td>Propositions</td>
 </tr>
 <tr>
-<td>#_<em>i</em> &phi;</td>
-<td>&#9633;<sub><em>i</em></sub> &phi;</td>
-<td>Knowledge: Agent i knows &phi;(<em>i</em> must be a number). &phi; must be a proposition or set of propositions in parentheses.</td>
+<td>#_<em>i</em> φ</td>
+<td>□<sub><em>i</em></sub> φ</td>
+<td>Knowledge: Agent i knows φ(<em>i</em> must be a number). φ must be a proposition or set of propositions in parentheses.</td>
 </tr>
 <tr>
-<td>%_<em>i</em> &phi;</td>
-<td>&loz;<sub><em>i</em></sub> &phi;</td>
-<td>Knowledge: Agent <em>i</em> considers it possible that &phi;.</td>
+<td>%_<em>i</em> φ</td>
+<td>◊<sub><em>i</em></sub> φ</td>
+<td>Knowledge: Agent <em>i</em> considers it possible that φ.</td>
 </tr>
 <tr>
-<td># &phi;</td>
-<td>&forall;<sub><em>i</em>&isin;A</sub>&#9633;<sub><em>i</em></sub> &phi;</td>
-<td>Shared knowledge: Every agent knows &phi;.</td>
+<td># φ</td>
+<td>∀<sub><em>i</em>∈A</sub>□<sub><em>i</em></sub> φ</td>
+<td>Shared knowledge: Every agent knows φ.</td>
 </tr>
 <tr>
-<td>% &phi;</td>
-<td>&exist;<sub><em>i</em>&isin;A</sub>&#9633;<sub><em>i</em></sub> &phi;</td>
-<td>Shared knowledge: There is an agent that knows &phi;.</td>
+<td>% φ</td>
+<td>∃<sub><em>i</em>∈A</sub>□<sub><em>i</em></sub> φ</td>
+<td>Shared knowledge: There is an agent that knows φ.</td>
 </tr>
 <tr>
 <td>A-Z</td>
@@ -135,7 +136,6 @@ This is even clearer if we try to prove a formula that is itself inconsistent:
 </tbody>
 </table>
 <p>Note that some of these operators are only valid in certain logics. For instance, when using the propositional system, modal operators will not be available. Attempting to use these will result in an error.</p>
-
 <h2>About OOPS</h2>
 
 <p>OOPS is open source software under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GNU GPL version 2</a>.
