@@ -29,6 +29,10 @@ public class Theory {
 		return Collections.unmodifiableSet(d_formulas);
 	}
 	
+	public Prover getProver() {
+		return d_prover;
+	}
+	
 	/**
 	 * Add a formula to this Theory.
 	 * @param f The formula to add.

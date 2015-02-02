@@ -1,20 +1,23 @@
 package nl.rug.ai.mas.oops.theory.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import nl.rug.ai.mas.oops.SimpleProver;
+import nl.rug.ai.mas.oops.AxiomSystem;
+import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.formula.Conjunction;
 import nl.rug.ai.mas.oops.formula.Formula;
 import nl.rug.ai.mas.oops.formula.Proposition;
 import nl.rug.ai.mas.oops.parser.PropositionMap;
 import nl.rug.ai.mas.oops.theory.Theory;
+
+import org.junit.Before;
+import org.junit.Test;
 
 public class TheoryTest {
 	Theory d_th;
@@ -22,7 +25,7 @@ public class TheoryTest {
 	
 	@Before
 	public void setUp() {
-		d_th = new Theory(SimpleProver.build());
+		d_th = new Theory(new Prover(AxiomSystem.S5));
 		d_propMap = new PropositionMap();
 	}
 	

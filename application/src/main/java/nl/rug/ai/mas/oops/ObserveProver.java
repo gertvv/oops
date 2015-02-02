@@ -55,7 +55,7 @@ public class ObserveProver {
 			return;
 		}
 
-		SimpleProver p = SimpleProver.build();
+		Prover p = new Prover(AxiomSystem.S5);
 		Formula f = null;
 		try {
 			f = p.parse(args[0]);

@@ -8,14 +8,22 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.net.URL;
+import java.util.Scanner;
 
-import javax.swing.ButtonGroup;
+import javax.help.CSH;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.help.SwingHelpUtilities;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,49 +31,32 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
-import javax.swing.ScrollPaneConstants;
 
-import nl.rug.ai.mas.oops.ConfigurableProver.AxiomSystem;
 import nl.rug.ai.mas.oops.lua.LuaProver;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame {
-	private JScrollPane d_editorPane;
-	private ScriptEditor d_editorArea;
+	private ScriptEditor d_editor;
 	private Console d_console;
 	private JMenuItem d_saveItem;
 	private JMenuItem d_refreshItem;
-	private String d_defaultProver;
+	private String d_licenseText;
+	private HelpBroker d_helpBroker;
 
 	public GUI() {
 		super("OOPS Graphical Environment");
+		
+		readLicenseText();
+		initializeHelp();
 
 		setJMenuBar(buildMenuBar());
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		addWindowListener(new WindowListener() {
+		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				quitApplication();
-			}
-
-			public void windowClosed(WindowEvent e) {
-			}
-
-			public void windowActivated(WindowEvent e) {
-			}
-
-			public void windowDeactivated(WindowEvent e) {
-			}
-
-			public void windowDeiconified(WindowEvent e) {
-			}
-
-			public void windowIconified(WindowEvent e) {
-			}
-
-			public void windowOpened(WindowEvent e) {
 			}
 		});
 
@@ -89,11 +80,8 @@ public class GUI extends JFrame {
 		c.weighty = 0.7;
 		c.weightx = 1.0;
 		c.fill = GridBagConstraints.BOTH;
-		d_editorPane = new JScrollPane();
-		d_editorPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		d_editorArea = new ScriptEditor(false);
-		d_editorPane.setViewportView(d_editorArea.getComponent());
-		panel.add(d_editorPane, c);
+		d_editor = new ScriptEditor();
+		panel.add(d_editor.getComponent(), c);
 
 		c.gridy = 3;
 		c.gridwidth = 1;
@@ -113,9 +101,6 @@ public class GUI extends JFrame {
 		d_console.setEditable(false);
 		consolePane.setViewportView(d_console);
 		panel.add(consolePane, c);
-
-		// Set default prover to S5
-		d_defaultProver = "S5";
 		
 		d_console.start();
 		try {
@@ -123,6 +108,37 @@ public class GUI extends JFrame {
 			System.setErr(new PrintStream(d_console.getErrorStream()));
 		} catch (IOException e) {
 			showError(e, "Error Initializing Console");
+		}
+	}
+
+	// Thanks, http://stackoverflow.com/questions/309424/
+	static String slurp(java.io.InputStream is) {
+	    java.util.Scanner s = new Scanner(is, "UTF-8");
+	    s.useDelimiter("\\A");
+	    String str = s.hasNext() ? s.next() : "";
+	    s.close();
+	    return str;
+	}
+
+	private void readLicenseText() {
+		try {
+			InputStream resource = GUI.class.getClassLoader().getResourceAsStream("nl/rug/ai/mas/oops/LICENSE");
+			if (resource != null) {
+				d_licenseText = slurp(resource);
+			}
+		} catch (Exception e) {
+			System.err.println("Failed to read LICENSE: " + e);
+		}
+	}
+	
+	private void initializeHelp() {
+		try {
+			SwingHelpUtilities.setContentViewerUI("nl.rug.ai.mas.oops.ExternalLinkContentViewerUI");
+			URL url = HelpSet.findHelpSet(GUI.class.getClassLoader(), "nl/rug/ai/mas/oops/OopsHelp.hs");
+			HelpSet hs = new HelpSet(null, url);
+			d_helpBroker = hs.createHelpBroker();
+		} catch (Exception e) {
+			System.err.println(e);
 		}
 	}
 
@@ -140,30 +156,30 @@ public class GUI extends JFrame {
 		menuBar.add(buildFileMenu());
 		menuBar.add(buildEditMenu());
 		menuBar.add(buildRunMenu());
+		menuBar.add(buildHelpMenu());
 		return menuBar;
+	}
+
+    private JMenu buildHelpMenu() {
+		JMenu menu = new JMenu("Help");
+
+		JMenuItem manual = new JMenuItem("Manual");
+		manual.addActionListener(new CSH.DisplayHelpFromSource(d_helpBroker));
+		menu.add(manual);
+
+		JMenuItem license = new JMenuItem("License");
+		license.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				showLicenseDialog();
+			}
+		});
+		menu.add(license);
+
+		return menu;
 	}
 
 	private JMenu buildRunMenu() {
 		JMenu runMenu = new JMenu("Run");
-		
-		ButtonGroup group = new ButtonGroup();
-		
-		JMenu proversMenu = new JMenu("Default prover");
-		for (final AxiomSystem system : ConfigurableProver.AxiomSystem.values())
-		{
-			JRadioButtonMenuItem systemItem = new JRadioButtonMenuItem(system.name(), system.name() == "S5" ? true : false);
-			systemItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					d_defaultProver = system.name();
-				}
-			});
-			
-			group.add(systemItem);
-			proversMenu.add(systemItem);
-		}
-		
-		runMenu.add(proversMenu);
-		runMenu.addSeparator();
 
 		JMenuItem runItem = buildMenuItem("Execute", 'E', KeyEvent.VK_E, false);
 		runItem.addActionListener(new ActionListener() {
@@ -172,6 +188,7 @@ public class GUI extends JFrame {
 			}
 		});
 		runMenu.add(runItem);
+
 		JMenuItem clearItem = buildMenuItem("Clear console", 'C', KeyEvent.VK_E, true);
 		clearItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -184,8 +201,8 @@ public class GUI extends JFrame {
 	}
 
 	protected void runEditorContents() {
-		String text = d_editorArea.getText();
-		LuaProver prover = new LuaProver(d_defaultProver);
+		String text = d_editor.getText();
+		LuaProver prover = new LuaProver();
 		prover.doStream(new ByteArrayInputStream(text.getBytes()), "EditorContents");
 
 		while (!d_console.streamsFlushed()) {
@@ -209,7 +226,7 @@ public class GUI extends JFrame {
 		JMenuItem undoItem = buildMenuItem("Undo", 'U', KeyEvent.VK_Z, false);
 		undoItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				d_editorArea.undo();
+				d_editor.undo();
 			}
 		});
 
@@ -217,7 +234,7 @@ public class GUI extends JFrame {
 		JMenuItem redoItem = buildMenuItem("Redo", 'R', KeyEvent.VK_Y, false);
 		redoItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				d_editorArea.redo();
+				d_editor.redo();
 			}
 		});
 		editMenu.add(redoItem);
@@ -227,7 +244,7 @@ public class GUI extends JFrame {
 		JMenuItem cutItem = buildMenuItem("Cut", 't', KeyEvent.VK_X, false);
 		cutItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				d_editorArea.cut();
+				d_editor.cut();
 			}
 		});
 		editMenu.add(cutItem);
@@ -235,7 +252,7 @@ public class GUI extends JFrame {
 		JMenuItem copyItem = buildMenuItem("Copy", 'C', KeyEvent.VK_C, false);
 		copyItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				d_editorArea.copy();
+				d_editor.copy();
 			}
 		});
 		editMenu.add(copyItem);
@@ -243,83 +260,12 @@ public class GUI extends JFrame {
 		JMenuItem pasteItem = buildMenuItem("Paste", 'P', KeyEvent.VK_V, false);
 		pasteItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				d_editorArea.paste();
+				d_editor.paste();
 			}
 		});
 		editMenu.add(pasteItem);
 
-		editMenu.addSeparator();
-
-		JMenu styleMenu = new JMenu("Editor");
-
-		ButtonGroup group = new ButtonGroup();
-
-		final JRadioButtonMenuItem plainEditorItem = new JRadioButtonMenuItem("Plain Editor", true);
-		final JRadioButtonMenuItem styledEditorItem = new JRadioButtonMenuItem("Styled Editor", false);
-
-		plainEditorItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (!setPlainEditor()) {
-					styledEditorItem.setSelected(true);
-				}
-
-			}
-		});
-		group.add(plainEditorItem);
-		styleMenu.add(plainEditorItem);
-
-		styledEditorItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (!setStyledEditor()) {
-					plainEditorItem.setSelected(true);
-				}
-			}
-		});
-		group.add(styledEditorItem);
-		styleMenu.add(styledEditorItem);
-
-		editMenu.add(styleMenu);
-
 		return editMenu;
-	}
-
-	private boolean setStyledEditor() {
-
-		if (d_editorArea.isStyled())
-			return true;
-
-		if (JOptionPane.showConfirmDialog(this, "Changing the editor type will purge the undo history. Continue?", "Changing editor", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION) {
-			return false;
-		}
-
-		String text = d_editorArea.getText();
-		File file = d_editorArea.getFile();
-
-		d_editorArea = new ScriptEditor(true);
-		d_editorPane.setViewportView(d_editorArea.getComponent());
-
-		d_editorArea.setText(text);
-		d_editorArea.setFile(file);
-		return true;
-	}
-
-	private boolean setPlainEditor() {
-		if (!d_editorArea.isStyled())
-			return true;
-
-		if (JOptionPane.showConfirmDialog(this, "Changing the editor type will purge the undo history. Continue?", "Changing editor", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION) {
-			return false;
-		}
-
-		String text = d_editorArea.getText();
-		File file = d_editorArea.getFile();
-
-		d_editorArea = new ScriptEditor(false);
-		d_editorPane.setViewportView(d_editorArea.getComponent());
-
-		d_editorArea.setText(text);
-		d_editorArea.setFile(file);
-		return true;
 	}
 
 	private JMenu buildFileMenu() {
@@ -396,7 +342,7 @@ public class GUI extends JFrame {
 
 	private void refreshFile() {
 		try {
-			d_editorArea.load();
+			d_editor.load();
 		} catch (IOException e) {
 			showError(e);
 		}
@@ -407,9 +353,9 @@ public class GUI extends JFrame {
 		JFileChooser fc = new JFileChooser();
 		int result = fc.showSaveDialog(this);
 		if (result == JFileChooser.APPROVE_OPTION) {
-			d_editorArea.setFile(fc.getSelectedFile());
+			d_editor.setFile(fc.getSelectedFile());
 			try {
-				d_editorArea.write();
+				d_editor.write();
 			} catch (IOException e) {
 				showError(e);
 			}
@@ -419,7 +365,7 @@ public class GUI extends JFrame {
 
 	private void saveFile() {
 		try {
-			d_editorArea.write();
+			d_editor.write();
 		} catch (IOException e) {
 			showError(e);
 		}
@@ -430,9 +376,9 @@ public class GUI extends JFrame {
 		JFileChooser fc = new JFileChooser();
 		int result = fc.showOpenDialog(this);
 		if (result == JFileChooser.APPROVE_OPTION) {
-			d_editorArea.setFile(fc.getSelectedFile());
+			d_editor.setFile(fc.getSelectedFile());
 			try {
-				d_editorArea.load();
+				d_editor.load();
 			} catch (IOException e) {
 				showError(e);
 			}
@@ -445,13 +391,13 @@ public class GUI extends JFrame {
 	}
 
 	private void newFile() {
-		d_editorArea.setFile(null);
-		d_editorArea.clear();
+		d_editor.setFile(null);
+		d_editor.clear();
 		updateEnabledMenuItems();
 	}
 
 	private void updateEnabledMenuItems() {
-		boolean enabled = d_editorArea.getFile() != null;
+		boolean enabled = d_editor.getFile() != null;
 		d_saveItem.setEnabled(enabled);
 		d_refreshItem.setEnabled(enabled);
 	}
@@ -487,6 +433,17 @@ public class GUI extends JFrame {
 
 		item.setAccelerator(KeyStroke.getKeyStroke(accelerator, keyMask, false));
 		return item;
+	}
+
+	private void showLicenseDialog() {
+		JDialog jDialog = new JDialog(this, "OOPS license", true);
+		JTextArea jTextArea = new JTextArea(d_licenseText);
+		jTextArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
+		jTextArea.setEditable(false);
+		jDialog.add(jTextArea);
+		jDialog.pack();
+		jDialog.setLocationRelativeTo(this);
+		jDialog.setVisible(true);
 	}
 
 	public static void main(String args[]) {

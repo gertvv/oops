@@ -1,0 +1,55 @@
+<html>
+<head><title>Scripting OOPS</title></head>
+<body>
+
+<h1>Scripting OOPS</h1>
+
+<p>If you haven't read the <a href="intro.html">introduction</a>, it is strongly recommended to do so first.</p>
+<p>In addition to the creation of theories, and subsequently testing provability and satisfiability, the Lua interface provides a set of additional capabilities, which will be addressed in this page.</p>
+
+<h2>Formula substitution</h2>
+
+<p>It is possible to create a formula template in Lua, and subsequently substitute parts of it with the desired values. To do this, create a formula using oops.Formula(<em>formula</em>). In this formula, it is possible to define variables using uppercase characters (A-Z). If no variables are defined, the return value of these will act exactly the same as if you typed it in directly as an argument to one of the theory methods.</p>
+<p>Once a template formula is made, calling the substitute(<em>formulaSubstitutions</em>, <em>agentSubsitutions</em>), will substitite the given forumas and agents (in the format of {Variable1 = Value1[, &nbsp;Variable2 = Value2]}, etc) and will return the new formula.</p>
+<p>An example of this:</p>
+<p>f = oops.Formula("#_I A"):substitute({A = "a"}, {I = "1"})</p>
+<p>This will create a formula "#_I A" with the variables I and A, and subsequently substitutes these by replacing the formula A with a and the agent I with 1, resulting in the formula #_1 a.</p>
+
+<h2>Listing logics</h2>
+
+<p>The supported logic systems can be listed using the following Lua script:</p>
+
+<pre>
+logics = oops.getLogics()
+
+for k,v in pairs(logics) do
+  print(v)
+end
+</pre>
+
+<h2>Visualizing the tableau</h2>
+
+An observer can be attached to the tableau prover to generate a visual representation of the tableau:
+
+<pre>
+th = oops.Theory()
+th:attachTableauVisualizer()
+print(th:provable("#_1 a &gt; b"))
+</pre>
+
+Note that this will slow down large tableaux significantly, and it may cause Java to run out of memory.
+
+<h2>Generating (counter) models</h2>
+
+An observer that generates models corresponding to open tableaux is also available:
+
+<pre>
+th = oops.Theory()
+th:attachModelConstructor()
+print(th:provable("#_1 a | ~b"))
+th:showModel()
+print(th:getModel())
+</pre>
+
+</body>
+</html>

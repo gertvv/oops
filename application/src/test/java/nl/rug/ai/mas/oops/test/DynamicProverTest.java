@@ -3,7 +3,8 @@ package nl.rug.ai.mas.oops.test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import nl.rug.ai.mas.oops.ConfigurableProver;
+import nl.rug.ai.mas.oops.AxiomSystem;
+import nl.rug.ai.mas.oops.Prover;
 import nl.rug.ai.mas.oops.TableauErrorException;
 
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class DynamicProverTest {
 	/* 	K Test  */
 	@Test public void testK() {
 		try {
-			ConfigurableProver prover = ConfigurableProver.AxiomSystem.K.buildProver();
+			Prover prover = AxiomSystem.K.buildProver();
 			for (String formula : TestA1) {
 				assertTrue(prover.provable(formula));
 			}
@@ -42,7 +43,7 @@ public class DynamicProverTest {
 	/* 	T Test  */
 	@Test public void testT() {
 		try {
-			ConfigurableProver prover = ConfigurableProver.AxiomSystem.T.buildProver();
+			Prover prover = AxiomSystem.T.buildProver();
 			for (String formula : TestA1) {
 				assertTrue(prover.provable(formula));
 			}
@@ -62,7 +63,7 @@ public class DynamicProverTest {
 	/* 	D Test  */
 	@Test public void testD() {
 		try {
-			ConfigurableProver prover = ConfigurableProver.AxiomSystem.D.buildProver();
+			Prover prover = AxiomSystem.D.buildProver();
 			for (String formula : TestA1) {
 				assertTrue(prover.provable(formula));
 			}
@@ -82,7 +83,7 @@ public class DynamicProverTest {
 	/* 	K4 Test  */
 	@Test public void testK4() {
 		try {
-			ConfigurableProver prover = ConfigurableProver.AxiomSystem.K4.buildProver();
+			Prover prover = AxiomSystem.K4.buildProver();
 			for (String formula : TestA1) {
 				assertTrue(prover.provable(formula));
 			}
@@ -102,7 +103,7 @@ public class DynamicProverTest {
 	/* 	K45 Test  */
 	@Test public void testK45() {
 		try {
-			ConfigurableProver prover = ConfigurableProver.AxiomSystem.K45.buildProver();
+			Prover prover = AxiomSystem.K45.buildProver();
 			for (String formula : TestA1) {
 				assertTrue(prover.provable(formula));
 			}
@@ -122,7 +123,7 @@ public class DynamicProverTest {
 	/* 	KD45 Test  */
 	@Test public void testKD45() {
 		try {
-			ConfigurableProver prover = ConfigurableProver.AxiomSystem.KD45.buildProver();
+			Prover prover = AxiomSystem.KD45.buildProver();
 			for (String formula : TestA1) {
 				assertTrue(prover.provable(formula));
 			}
@@ -142,7 +143,7 @@ public class DynamicProverTest {
 	/* 	S4 Test  */
 	@Test public void testS4() {
 		try {
-			ConfigurableProver prover = ConfigurableProver.AxiomSystem.S4.buildProver();
+			Prover prover = AxiomSystem.S4.buildProver();
 			for (String formula : TestA1) {
 				assertTrue(prover.provable(formula));
 			}
@@ -162,7 +163,7 @@ public class DynamicProverTest {
 	/* 	S5 Test  */
 	@Test public void testS5() {
 		try {
-			ConfigurableProver prover = ConfigurableProver.AxiomSystem.S5.buildProver();
+			Prover prover = AxiomSystem.S5.buildProver();
 			for (String formula : TestA1) {
 				assertTrue(prover.provable(formula));
 			}
@@ -182,7 +183,7 @@ public class DynamicProverTest {
 	/* 	B Test  */
 	@Test public void testB() {
 		try {
-			ConfigurableProver prover = ConfigurableProver.AxiomSystem.B.buildProver();
+			Prover prover = AxiomSystem.B.buildProver();
 			for (String formula : TestA1) {
 				assertTrue(prover.provable(formula));
 			}

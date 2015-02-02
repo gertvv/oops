@@ -1,0 +1,182 @@
+<html>
+<head><title>Introduction to OOPS</title></head>
+<!--  useful unicode: φψ∀∃∈∧∨¬→↔□◊ -->
+<body>
+
+<h1>Introduction to OOPS</h1>
+
+<p>
+OOPS is an automated prover for propositional and modal logic.
+It uses a tableau method to check satisfiability of a formula φ.
+To prove a formula ψ it will check whether ¬ψ is satisfiable.
+If it is, the tableau method has identified a <em>counter model</em> to ψ.
+If not, ψ is provable.
+</p>
+
+<h2>Working with OOPS</h2>
+
+<p>
+The OOPS window consists of two main panels: the script editor (top) and the output console (bottom).
+The user writes scripts in the editor, which can then be run using (Run > Execute, or Ctrl+E).
+Each run is fully independent of previous runs, and can produce output on the console.
+The following is a simple example script that will output "Hello, World!" on the console:
+</p>
+
+<pre>print("Hello, World!")</pre>
+
+<p>OOPS uses the <a href="htp://www.lua.org">Lua</a> scripting language.</p>
+
+<p>
+The interface is built around the concept of a background theory, which is simply a specific <em>logic</em> (axiom system) and  a collection of additional logical formulas that are assumed to be true.
+A new theory is created by calling <code>oops.Theory(<em>logic</em>)</code>, which will return a new empty theory in the specified logic.
+When no logic is specified, as in <code>oops.Theory()</code>, OOPS will by default assume the S5 system.
+</p>
+
+<p>
+Formulas can be added to the theory using the <code><em>theory</em>.add(<em>formula</em>)</code> method.
+Given the background theory, formulas can be checked for provability and satisfiability using
+<code><em>theory</em>.provable(<em>formula</em>)</code> and
+<code><em>theory</em>.satisfiable(<em>formula</em>)</code> respectively.
+The background theory can be checked for consistency using
+<code><em>theory</em>.consistent()</code>.
+</p>
+
+<p>The following example illustrates these features (see below for details of the formula syntax):</p>
+<pre>th = oops.Theory("Propositional")
+th:add("a &gt; ~b")
+th:add("a")
+print("Theory:", th)
+print("Consistent?", th:consistent())
+print("Prov.: ~b?", th:provable("~b"))
+print("Sat.: ~b?", th:satisfiable("~b"))
+</pre>
+<p>
+Here, the background theory consists of <strong>a → ¬b</strong> and <strong>a</strong>.
+This theory is consistent, and from it we can prove that <strong>¬b</strong>, which implies that <strong>¬b</strong> is also satisfiable.
+Now, if we add <strong>b</strong> to the theory, things change:
+</p>
+<pre>th:add("b")
+print("\nTheory:", th)
+print("Consistent?", th:consistent())
+print("Prov.: ~b?", th:provable("~b"))
+print("Sat.: ~b?", th:satisfiable("~b"))
+</pre>
+<p>
+Since the theory is inconsistent, all formulas are provable, and there are no satisfiable formulas.
+This is even clearer if we try to prove a formula that is itself inconsistent:
+</p>
+<pre>print("Prov.: b & ~b?", th:provable("b & ~b"))</pre>
+
+<h3>Formula syntax</h3>
+<p>For formulas, OOPS follows the following syntax:</p>
+<table>
+<thead>
+<tr>
+<td>OOPS symbol</td>
+<td>Logical Symbol</td>
+<td>Description</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&amp;</td>
+<td>∧</td>
+<td>Conjunction</td>
+</tr>
+<tr>
+<td>|</td>
+<td>∨</td>
+<td>Disjunction</td>
+</tr>
+<tr>
+<td>~</td>
+<td>¬</td>
+<td>Negation</td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>→</td>
+<td>Implication</td>
+</tr>
+<tr>
+<td>=</td>
+<td>↔</td>
+<td>Bi-implication (If and only if)</td>
+</tr>
+<tr>
+<td>a-z</td>
+<td>a-z</td>
+<td>Propositions</td>
+</tr>
+<tr>
+<td>#_<em>i</em> φ</td>
+<td>□<sub><em>i</em></sub> φ</td>
+<td>Knowledge: Agent i knows φ(<em>i</em> must be a number). φ must be a proposition or set of propositions in parentheses.</td>
+</tr>
+<tr>
+<td>%_<em>i</em> φ</td>
+<td>◊<sub><em>i</em></sub> φ</td>
+<td>Knowledge: Agent <em>i</em> considers it possible that φ.</td>
+</tr>
+<tr>
+<td># φ</td>
+<td>∀<sub><em>i</em>∈A</sub>□<sub><em>i</em></sub> φ</td>
+<td>Shared knowledge: Every agent knows φ.</td>
+</tr>
+<tr>
+<td>% φ</td>
+<td>∃<sub><em>i</em>∈A</sub>□<sub><em>i</em></sub> φ</td>
+<td>Shared knowledge: There is an agent that knows φ.</td>
+</tr>
+<tr>
+<td>A-Z</td>
+<td>N/A</td>
+<td>Variables. These can be used for substitution.</td>
+</tr>
+</tbody>
+</table>
+<p>Note that some of these operators are only valid in certain logics. For instance, when using the propositional system, modal operators will not be available. Attempting to use these will result in an error.</p>
+<h2>About OOPS</h2>
+
+<p>OOPS is open source software under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GNU GPL version 2</a>.
+It is implemented in <a href="http://en.wikipedia.org/wiki/Java_%28programming_language%29">Java</a> and uses a pure Java implementation of the <a href="http://www.lua.org/">Lua</a> scripting language as its user interface.
+
+<p>
+OOPS was first developed in 2007 by
+<a href="http://gertvv.nl/">Gert van Valkenhoef</a> and
+<a href="http://www.ai.rug.nl/~elskevdv/">Elske van der Vaart</a>
+as a student project for the MSc course "Multi-Agent Systems" under the
+supervision of <a href="http://rinekeverbrugge.nl/">Rineke Verbrugge</a>
+[<a href="http://cloud.github.com/downloads/gertvv/oops/report-v2.pdf">Report</a>].
+At first, it supported only the <em>S5(n)</em> logic, and OOPS stood
+for <em>Object Oriented Prover for S5(n)</em>.
+In 2008 Gert did a follow-up project supervised by Rineke Verbrugge to prove the
+soundness and correctness of OOPS for <em>S5(n)</em>, investigate its
+computational complexity, and implement several new features
+[<a href="http://cloud.github.com/downloads/gertvv/oops/elaborations.pdf">Report</a>].
+</p>
+
+<p>
+In 2009, Rineke and Elske started using OOPS during the multi-agent systems course.
+To make this possible, Gert implemented the graphical user interface and the scripting language (Lua) support.
+Gert, Elske, and Rineke published a
+<a href="http://cloud.github.com/downloads/gertvv/oops/m4m6-oops.pdf">paper describing OOPS</a>
+in the proceedings of the 6th Workshop on Methods for Modalities (M4M-6) 
+[<a href="http://dx.doi.org/10.1016/j.entcs.2010.04.018">doi:10.1016/j.entcs.2010.04.018</a>].
+</p>
+
+<p>
+In 2012, Lourens Elzinga and Rik Timmers extended OOPS with support for a number of additional logics:
+K, T, B, D, K4, K45, KD45, S4, S5, KE, S4E, and S5E.
+To achieve this, they made the proof system configurable, implemented a number
+of new tableau rules, and added the seriality model property.
+They also made some improvements to the GUI, such as an edit menu and an editor with syntax highlighting.
+Wouter Reckman provided some implementation assistance.
+</p>
+
+<p>
+In 2014, Gert van Valkenhoef added the help system, and refactored the Lua interface to be more consistent.
+</p>
+
+</body>
+</html>

@@ -28,10 +28,10 @@ import static org.junit.Assert.fail;
 import nl.rug.ai.mas.oops.*;
 
 public class ProverTest {
-	private static SimpleProver s_prover;
+	private static Prover s_prover;
 
 	@BeforeClass public static void initProver() {
-		s_prover = SimpleProver.build();
+		s_prover = new Prover(AxiomSystem.S5);
 	}
 
 	/* 	#1  */
