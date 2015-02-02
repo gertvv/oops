@@ -84,21 +84,10 @@ Building the JAR
 
 Do the following:
 
-	$ cd parser
-	$ mvn install
-
-This will install the parser library to your local Maven2 repository. Then:
-
-	$ cd application
 	$ mvn package
 
 This will create application/target/oops-$VERSION-jar-with-dependencies.jar,
 which you can use to run OOPS.
-
-Alternatively, the following will install OOPS to your Maven2 repository:
-
-	$ mvn install
-
 
 Running the test suite
 ------------------------------------------------------------------------------
@@ -106,18 +95,7 @@ Running the test suite
 The maven build automatically runs all provided unit tests (under src/test).
 Test reports are generated under target/surefire-reports.
 
-Generating an Eclipse project
+Developing in Eclipse
 ------------------------------------------------------------------------------
 
-First, set up Eclipse to work with Maven (this sets some variables in your
-workspace):
-
-	$ mvn eclipse:configure-workspace -Declipse.workspace=$WORKSPACE
-
-Make sure the parser is installed in your local Maven2 repository (see above).
-Then, do the following:
-
-	$ cd application
-	$ mvn eclipse:eclipse
-
-Now, import the project into Eclipse.
+Use the M2 Eclipse plugin to import OOPS as an existing maven project.
