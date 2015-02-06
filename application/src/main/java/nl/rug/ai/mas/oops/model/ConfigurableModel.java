@@ -19,23 +19,23 @@
 
 package nl.rug.ai.mas.oops.model;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import nl.rug.ai.mas.oops.formula.AgentId;
 
-import java.util.Set;
-import java.util.LinkedList;
-import java.util.Vector;
-
 public class ConfigurableModel extends KripkeModel {
-
-	Vector<Relation> d_relationsModel;
+	List<Relation> d_relationsModel;
 
 	public enum Relation {
 		TRANSITIVE, REFLEXIVE, SYMMETRIC, SERIAL;
 	}
 
-	public ConfigurableModel(Set<AgentId> agents, Vector<Relation> relationsModel) {
+	public ConfigurableModel(Set<AgentId> agents, List<Relation> relationsModel) {
 		super(agents);
-		d_relationsModel = relationsModel;
+		d_relationsModel = Collections.unmodifiableList(relationsModel);
 	}
 
 	@Override
@@ -44,70 +44,98 @@ public class ConfigurableModel extends KripkeModel {
 	}
 
 	/**
-	 * Add a world to the model. Reflexive arrows are being added here ( if existing in the model )
+	 * Add a world to the model. This may include closure under reflexivity.
 	 */
 	public boolean addWorld(World w) {
-		if (!super.addWorld(w)) // the world already existed
-		{
+		if (!super.addWorld(w)) { // the world already existed
 			return false;
 		}
 
-		if (d_relationsModel.contains(Relation.REFLEXIVE)) {
-			addReflexive(w);
+		if (isReflexive()) {
+			closeReflexivity(w);
 		}
 
 		return true;
 	}
 
 	/**
-	 * Add an arrow. This can include closure under symmetry and transitivity.
+	 * Add an arrow to the model. This may include closure under symmetry and transitivity.
 	 */
 	public boolean addArrow(Arrow r1) {
 		if (!super.addArrow(r1)) { // the arrow already existed
 			return false;
 		}
 
-		if (d_relationsModel.contains(Relation.SYMMETRIC)) {
-			addSymmetry(r1);
-		}
-
-		if (d_relationsModel.contains(Relation.TRANSITIVE)) {
-			addTransitivity(r1);
+		if (isSymmetric() && isTransitive()) {
+			closeSymmetryAndTransitivity(r1);
+		} else if (isSymmetric()) {
+			closeSymmetry(r1);
+		} else if (isTransitive()) {
+			closeTransitivity(r1);
 		}
 
 		return true;
 	}
 
-	/**
-	 * Convenience function for adding new arrows.
-	 */
 	public boolean addArrow(AgentId agent, World source, World target) {
 		return addArrow(new Arrow(agent, source, target));
 	}
+	
+	@Override
+	public void closeModel() {
+		if (isSerial()) {
+			closeSeriality();
+		}
+	}
 
-	public boolean addReflexive(World w) {
+	private boolean isReflexive() {
+		return d_relationsModel.contains(Relation.REFLEXIVE);
+	}
+
+	private boolean isSymmetric() {
+		return d_relationsModel.contains(Relation.SYMMETRIC);
+	}
+
+	private boolean isTransitive() {
+		return d_relationsModel.contains(Relation.TRANSITIVE);
+	}
+
+	private boolean isSerial() {
+		return d_relationsModel.contains(Relation.SERIAL);
+	}
+
+	private void closeReflexivity(World w) {
 		for (AgentId agent : d_agents) {
 			super.addArrow(agent, w, w);
 		}
-
-		return true;
 	}
 
-	public boolean addSymmetry(Arrow r1) {
+	private void closeSymmetryAndTransitivity(Arrow r1) {
 		Arrow r2 = new Arrow(r1.getAgent(), r1.getTarget(), r1.getSource());
 		super.addArrow(r2);
-
-		return true;
-	}
-
-	public boolean addTransitivity(Arrow r1) {
-		Arrow r2 = new Arrow(r1.getAgent(), r1.getTarget(), r1.getSource());
-		super.addArrow(r2);
-
+		
 		LinkedList<Arrow> fringe = new LinkedList<Arrow>();
 		fringe.add(r1);
 		fringe.add(r2);
+		closeTransitivity(fringe);
+	}
 
+	private void closeSymmetry(Arrow r1) {
+		Arrow r2 = new Arrow(r1.getAgent(), r1.getTarget(), r1.getSource());
+		super.addArrow(r2);
+	}
+
+	/**
+	 * Incrementally close relations under transitivity, given a newly added
+	 * arrow to an otherwise transitively closed set.
+	 */
+	private void closeTransitivity(Arrow r1) {
+		LinkedList<Arrow> fringe = new LinkedList<Arrow>();
+		fringe.add(r1);
+		closeTransitivity(fringe);
+	}
+	
+	private void closeTransitivity(LinkedList<Arrow> fringe) {
 		Arrow r = null;
 		while ((r = fringe.poll()) != null) {
 			// get all outgoing arrows from the target
@@ -128,33 +156,16 @@ public class ConfigurableModel extends KripkeModel {
 				}
 			}
 		}
-
-		return true;
 	}
 	
-	// Check serial, if world doesn't have outgoing arrow, make an new arrow pointing to it self. 
-	public boolean checkSerial()
-	{
-		if(d_relationsModel.contains(Relation.SERIAL))
-		{
-			Set<World> worlds = getWorlds();
-			Set<Arrow> arrows; 
-			
-			for(World world: worlds)
-			{
-				
-				for(AgentId agent: d_agents)
-				{
-					arrows = getArrowsFrom(agent, world);
-					
-					if(arrows.isEmpty())
-					{
-						super.addArrow(agent, world, world);
-					}
-				}			
+	private void closeSeriality() {
+		for(World world: getWorlds()) {
+			for(AgentId agent: d_agents) {
+				Set<Arrow> arrows = getArrowsFrom(agent, world);
+				if(arrows.isEmpty()) {
+					super.addArrow(agent, world, world);
+				}
 			}
 		}
-		
-		return true;
 	}
 }

@@ -60,6 +60,12 @@ public class KripkeModel {
 		}
 		return true;
 	}
+	
+	/**
+	 * Close the model under the properties of the logical frame.
+	 */
+	public void closeModel() {
+	}
 
 	/**
 	 * @return true if the Arrow was not already in the model.
@@ -125,12 +131,6 @@ public class KripkeModel {
 		return graph;
 	}
 	
-	public boolean checkSerial() // Check serial relations
-	{
-		return checkSerial();
-	}
-
-	
 	/**
 	 * Construct an empty Kripke Model having a set of agents. In effect, the
 	 * current model is used as a prototype.
@@ -142,10 +142,8 @@ public class KripkeModel {
 	
 	public String toString() {
 		String str = this.getClass().getSimpleName() + ":\n";
-		for (Map.Entry<AgentId, DefaultDirectedGraph<World, Arrow>> e :
-				d_graphs.entrySet()) {
-			str += e.getKey().toString() + " -> " + e.getValue().toString() +
-				"\n";
+		for (Map.Entry<AgentId, DefaultDirectedGraph<World, Arrow>> e : d_graphs.entrySet()) {
+			str += e.getKey().toString() + " -> " + e.getValue().toString() + "\n";
 		}
 		return str;
 	}

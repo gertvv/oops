@@ -32,6 +32,7 @@ import nl.rug.ai.mas.oops.tableau.Label;
 import nl.rug.ai.mas.oops.tableau.LabelInstance;
 import nl.rug.ai.mas.oops.tableau.Tableau;
 import nl.rug.ai.mas.oops.tableau.TableauEvent;
+import nl.rug.ai.mas.oops.tableau.TableauFinishedEvent;
 import nl.rug.ai.mas.oops.tableau.TableauObserver;
 import nl.rug.ai.mas.oops.tableau.TableauStartedEvent;
 
@@ -91,8 +92,8 @@ public class ModelConstructingObserver implements TableauObserver {
 				World w2 = labelMap.get(l);
 				d_model.addArrow((AgentId)l.getAgent(), w1, w2);
 			}
-			
-			d_model.checkSerial(); // Edit, check for serial relations after the model is made. 
+		} else if (e instanceof TableauFinishedEvent) {
+			d_model.closeModel();
 		}
 	}
 }
