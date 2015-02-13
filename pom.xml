@@ -4,7 +4,7 @@
 
 	<groupId>nl.rug.ai.mas</groupId>
 	<artifactId>oops-pom</artifactId>
-	<version>0.8-SNAPSHOT</version>
+	<version>0.8</version>
 	<packaging>pom</packaging>
 	<name>OOPS project</name>
 
