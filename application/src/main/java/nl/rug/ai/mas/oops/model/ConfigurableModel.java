@@ -19,23 +19,24 @@
 
 package nl.rug.ai.mas.oops.model;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import nl.rug.ai.mas.oops.formula.AgentId;
 
 public class ConfigurableModel extends KripkeModel {
-	List<Relation> d_relationsModel;
+	Set<Relation> d_relationsModel;
 
 	public enum Relation {
 		TRANSITIVE, REFLEXIVE, SYMMETRIC, SERIAL;
 	}
 
-	public ConfigurableModel(Set<AgentId> agents, List<Relation> relationsModel) {
+	public ConfigurableModel(Set<AgentId> agents, Collection<Relation> relationsModel) {
 		super(agents);
-		d_relationsModel = Collections.unmodifiableList(relationsModel);
+		d_relationsModel = Collections.unmodifiableSet(new HashSet<Relation>(relationsModel));
 	}
 
 	@Override
