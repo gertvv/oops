@@ -21,14 +21,14 @@ License
 
     OOPS - Object Oriented Prover for S5n
     Copyright (C) 2007-2009 Elske van der Vaart and Gert van Valkenhoef
-		  2012 Gert van Valkenhoef, Wouter Reckman, Lourens Elzinga,
+                  2012 Gert van Valkenhoef, Wouter Reckman, Lourens Elzinga,
                        and Rik Timmers.
                   2014 Gert van Valkenhoef
 
     This program is free software; you can redistribute it and/or modify it
     under the terms of the GNU General Public License version 2 as published
     by the Free Software Foundation.
-	
+        
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -48,7 +48,7 @@ To run OOPS from the provided ZIP file, you need Java version 1.5 or higher.
 
 Example:
 
-	$ java -jar oops.jar
+        $ java -jar oops.jar
 
 Or simply double-click on oops.jar.
 
@@ -84,7 +84,7 @@ Building the JAR
 
 Do the following:
 
-	$ mvn package
+        $ mvn package
 
 This will create application/target/oops-$VERSION-jar-with-dependencies.jar,
 which you can use to run OOPS.
