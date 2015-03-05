@@ -2,12 +2,167 @@
 <head>
 <meta charset="UTF-8">
 <title>Propositional logic</title>
+<link rel="stylesheet" type="text/css" href="../oops.css">
 </head>
 <body>
 
 <h1>Propositional logic</h1>
 
-<p>TO BE WRITTEN.</p>
+<p>Ordinary propositional logic is not a modal logic, but is also supported because it forms the basis for all the modal logics supported by OOPS.</p>
+
+
+<h2>Tableau rules</h2>
+
+<h3>Double negation rule</h3>
+
+<table>
+  <tr class="name">
+    <td colspan=2>¬¬</td>
+  </tr>
+  <tr class="match">
+    <td>σ</td><td class="f">¬¬φ</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td><td class="f">φ</td>
+  </tr>
+</table>
+
+<h3>Conjunctive rules</h3>
+
+<table>
+  <tr class="name">
+    <td colspan=2>∧<sub>∧</sub></td>
+  </tr>
+  <tr class="match">
+    <td>σ</td><td class="f">φ∧ψ</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td><td class="f">φ</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td><td class="f">ψ</td>
+  </tr>
+</table>
+
+<table>
+  <tr class="name">
+    <td colspan=2>∧<sub>∨</sub></td>
+  </tr>
+  <tr class="match">
+    <td>σ</td><td class="f">¬(φ∨ψ)</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td><td class="f">¬φ</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td><td class="f">¬ψ</td>
+  </tr>
+</table>
+
+<table>
+  <tr class="name">
+    <td colspan=2>∧<sub>→</sub></td>
+  </tr>
+  <tr class="match">
+    <td>σ</td><td class="f">¬(φ→ψ)</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td><td class="f">φ</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td><td class="f">¬ψ</td>
+  </tr>
+</table>
+<!--  useful unicode: φψ∀∃∈∧∨¬→↔□◊σ -->
+
+<table>
+  <tr class="name">
+    <td colspan=2>∧<sub>↔</sub></td>
+  </tr>
+  <tr class="match">
+    <td>σ</td><td class="f">¬(φ↔ψ)</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td><td class="f">¬(¬φ∧¬ψ)</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td><td class="f">¬(φ∧ψ)</td>
+  </tr>
+</table>
+
+<h3>Disjunctive rules</h3>
+
+<table>
+  <tr class="name">
+    <td colspan=4>∨<sub>∧</sub></td>
+  </tr>
+  <tr class="match">
+    <td>σ</td>
+    <td colspan="3" class="f">¬(φ∧ψ)</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td>
+    <td class="f">¬φ</td>
+    <td class="s">σ</td>
+    <td class="f">¬ψ</td>
+  </tr>
+</table>
+
+<table>
+  <tr class="name">
+    <td colspan=4>∨<sub>∨</sub></td>
+  </tr>
+  <tr class="match">
+    <td>σ</td>
+    <td colspan="3" class="f">φ∨ψ</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td>
+    <td class="f">φ</td>
+    <td class="s">σ</td>
+    <td class="f">ψ</td>
+  </tr>
+</table>
+
+
+<table>
+  <tr class="name">
+    <td colspan=4>∨<sub>→</sub></td>
+  </tr>
+  <tr class="match">
+    <td>σ</td>
+    <td colspan="3" class="f">φ→ψ</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td>
+    <td class="f">¬φ</td>
+    <td class="s">σ</td>
+    <td class="f">ψ</td>
+  </tr>
+</table>
+
+<table>
+  <tr class="name">
+    <td colspan=4>∨<sub>↔</sub></td>
+  </tr>
+  <tr class="match">
+    <td>σ</td>
+    <td colspan="3" class="f">φ↔ψ</td>
+  </tr>
+  <tr class="rewrite">
+    <td>σ</td>
+    <td class="f">¬φ∧¬ψ</td>
+    <td class="s">σ</td>
+    <td class="f">φ∧ψ</td>
+  </tr>
+</table>
+    
+<h2>Frame properties</h2>
+
+<p>
+Because propositional logic is not a modal logic, formally it does not have Kripke semantics.
+For the purpose of uniformity, we can consider a Kripke model to be a propositional model if it has a single world and all relations are empty.
+</p>
 
 </body>
 </html>

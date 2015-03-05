@@ -1,0 +1,16 @@
+table {
+  width: 200px;
+}
+tr.name {
+  text-align: center;
+  font-weight: bold;
+}
+tr.match {
+  border-bottom: 1px solid black;
+}
+.f {
+  text-align: right;
+}
+td.s {
+  border-left: 1px solid black;
+}

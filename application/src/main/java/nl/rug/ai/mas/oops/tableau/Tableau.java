@@ -41,8 +41,6 @@ public class Tableau {
 
 	private static final String s_errorInvalidRules = 
 		"Default case reached in tableau: invalid rules";
-	private static final String s_errorNoMatch = 
-		" is not simple, and does not match any rules";
 
 	/**
 	 * Constructor.
